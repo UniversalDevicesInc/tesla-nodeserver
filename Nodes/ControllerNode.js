@@ -76,7 +76,7 @@ module.exports = function(Polyglot) {
           }).length,
         );
         this.clearCredentialsError();
-      } catch(err) {
+      } catch (err) {
         this.displayCredentialsError(err);
         logger.errorStack(err, 'Error discovering vehicles:');
       }

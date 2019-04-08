@@ -128,7 +128,8 @@ module.exports = function(Polyglot) {
     async onSunroofOpen() {
       const id = this.vehicleId();
       logger.info('SUNROOF_OPEN (%s)', this.address);
-      await this.tesla.cmdSunRoof(id, 'vent');    }
+      await this.tesla.cmdSunRoof(id, 'vent');
+    }
 
     async onSunroofClose() {
       const id = this.vehicleId();
