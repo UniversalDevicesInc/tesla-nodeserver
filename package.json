@@ -1,0 +1,22 @@
+{
+  "name": "tesla",
+  "description": "Tesla NodeServer",
+  "version": "1.0.0",
+  "author": "Benoit Mercier",
+  "license": "MIT",
+  "main": "nodeserver.js",
+  "scripts": {
+    "linter": "eslint --ignore-path .gitignore ."
+  },
+  "dependencies": {
+    "async-lock": "^1.1.4",
+    "markdown": "^0.5.0",
+    "polyinterface": "^1.0.0",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.7"
+  },
+  "devDependencies": {
+    "eslint": "^5.12.0",
+    "eslint-config-strongloop": "^2.1.0"
+  }
+}

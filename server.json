@@ -1,0 +1,22 @@
+{
+  "name": "Tesla",
+  "docs": "https://github.com/UniversalDevicesInc/tesla",
+  "type": "node",
+  "executable": "nodeserver.js",
+  "install": "install.sh",
+  "description": "Tesla NodeServer",
+  "notice": "",
+  "shortPoll": "5",
+  "longPoll": "60",
+  "profile_version": "0.0.1",
+  "credits": [
+    {
+      "title": "Example Node.js based NodeServer",
+      "author": "Benoit Mercier",
+      "version": "1.1.0",
+      "date": "March 15th, 2019",
+      "source": "https://github.com/UniversalDevicesInc/poly-template-nodejs",
+      "license": "MIT"
+    }
+  ]
+}
