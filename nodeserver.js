@@ -8,9 +8,8 @@ const AsyncLock = require('async-lock');
 
 // Loads the appropriate Polyglot interface module.
 const Polyglot = useCloud() ?
-  require('pgc_interface') : // Cloud module
+  require('pgc_interface') : // Cloud Polyglot
   require('polyinterface'); // Polyglot V2 module (On-Premise)
-  // require('../polyglot-v2-nodejs-interface');
 
 const logger = Polyglot.logger;
 const lock = new AsyncLock({ timeout: 500 });
@@ -18,10 +17,14 @@ const lock = new AsyncLock({ timeout: 500 });
 const ControllerNode = require('./Nodes/ControllerNode.js')(Polyglot);
 const Vehicle = require('./Nodes/Vehicle.js')(Polyglot);
 
+// Must be the same as in tesla.js
+const emailParam = 'Tesla account email';
+const pwParam = 'Tesla account password';
+
 // UI customParams (param:defaultValue)
 const defaultParams = {
-  'Tesla account email': '',
-  'Tesla account password': '',
+  [emailParam]: ' ',
+  [pwParam]: ' ',
 };
 
 const controllerAddress = 'controller';
@@ -111,7 +114,13 @@ poly.on('config', function(config) {
       const controllerNode = poly.getNode(controllerAddress);
 
       // Automatically try to discover vehicles if user changed his creds
-      if (controllerNode && nodesCount === 1) {
+      if (controllerNode &&
+        nodesCount === 1 &&
+        config.customParams[emailParam] &&
+        /[^@]+@[^\.]+\..+/.test(config.customParams[emailParam]) &&
+        config.customParams[pwParam] &&
+        config.customParams[pwParam].length > 1
+      ) {
         controllerNode.onDiscover();
       }
     }
@@ -157,6 +166,12 @@ poly.on('messageReceived', function(message) {
   // }
 });
 
+// Triggered for every message received from polyglot.
+// Can be used for troubleshooting.
+// poly.on('messageSent', function(message) {
+//   logger.debug('Message sent: %o', message);
+// });
+
 // This is being triggered based on the short and long poll parameters in the UI
 async function doPoll(longPoll) {
   // Prevents polling logic reentry if an existing poll is underway
@@ -200,7 +215,6 @@ async function autoCreateController() {
 }
 
 
-// TODO: Add this to the template
 // Sets the custom params as we want them. Keeps existing params values.
 function initializeCustomParams(currentParams) {
   const defaultParamKeys = Object.keys(defaultParams);
@@ -242,6 +256,9 @@ function callAsync(promise) {
 function trapUncaughExceptions() {
   // If we get an uncaugthException...
   process.on('uncaughtException', function(err) {
+    // Used in dev. Useful when logger is not yet defined.
+    console.log('err', err);
+
     logger.error(`uncaughtException REPORT THIS!: ${err.stack}`);
   });
 }

@@ -1,7 +1,7 @@
 {
   "name": "tesla",
   "description": "Tesla NodeServer",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Benoit Mercier",
   "license": "MIT",
   "main": "nodeserver.js",
@@ -11,7 +11,8 @@
   "dependencies": {
     "async-lock": "^1.1.4",
     "markdown": "^0.5.0",
-    "polyinterface": "^1.0.0",
+    "polyinterface": "^1.2.1",
+    "pgc_interface": "^1.0.3",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7"
   },

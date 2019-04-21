@@ -46,17 +46,13 @@ module.exports = function(Polyglot) {
       this.isController = true;
     }
 
-    // Here you could discover devices from a 3rd party API
-    onDiscover() {
-      this.callAsync(this.discoverVehicles());
-    }
-
     // Sends the profile files to ISY
     onUpdateProfile() {
       this.polyInterface.updateProfile();
     }
 
-    async discoverVehicles() {
+    // Discover vehicles
+    async onDiscover() {
       const _this = this;
       try {
         logger.info('Discovering new vehicles');
@@ -106,6 +102,9 @@ module.exports = function(Polyglot) {
 
       if (!node) {
         try {
+          logger.info('Adding vehicle node %s: %s',
+            deviceAddress, vehicle.display_name);
+
           const result = await this.polyInterface.addNode(
             new Vehicle(
               this.polyInterface,
