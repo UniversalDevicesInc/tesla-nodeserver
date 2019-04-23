@@ -4,6 +4,7 @@
   "type": "node",
   "executable": "nodeserver.js",
   "install": "install.sh",
+  "install_cloud": "install_cloud.sh",
   "description": "Tesla NodeServer",
   "notice": "",
   "shortPoll": "5",
