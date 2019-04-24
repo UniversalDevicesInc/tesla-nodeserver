@@ -11,7 +11,7 @@
   "dependencies": {
     "async-lock": "^1.1.4",
     "markdown": "^0.5.0",
-    "polyinterface": "^1.2.2",
+    "polyinterface": "^1.2.3",
     "pgc_interface": "^1.0.3",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.7"

@@ -23,8 +23,8 @@ const pwParam = 'Tesla account password';
 
 // UI customParams (param:defaultValue)
 const defaultParams = {
-  [emailParam]: ' ',
-  [pwParam]: ' ',
+  [emailParam]: 'Tesla email',
+  [pwParam]: 'password',
 };
 
 const controllerAddress = 'controller';
@@ -118,8 +118,10 @@ poly.on('config', function(config) {
         nodesCount === 1 &&
         config.customParams[emailParam] &&
         /[^@]+@[^\.]+\..+/.test(config.customParams[emailParam]) &&
+        config.customParams[emailParam] !== defaultParams [emailParam] &&
         config.customParams[pwParam] &&
-        config.customParams[pwParam].length > 1
+        config.customParams[pwParam].length > 1 &&
+        config.customParams[pwParam] !== defaultParams [pwParam]
       ) {
         controllerNode.onDiscover();
       }
