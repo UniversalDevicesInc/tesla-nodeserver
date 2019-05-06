@@ -12,11 +12,11 @@
   "profile_version": "0.0.2",
   "credits": [
     {
-      "title": "Example Node.js based NodeServer",
+      "title": "Tesla NodeServer",
       "author": "Benoit Mercier",
-      "version": "1.1.0",
-      "date": "March 15th, 2019",
-      "source": "https://github.com/UniversalDevicesInc/poly-template-nodejs",
+      "version": "1.0.2",
+      "date": "May 5th, 2019",
+      "source": "https://github.com/UniversalDevicesInc/tesla",
       "license": "MIT"
     }
   ]
