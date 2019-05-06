@@ -9,7 +9,7 @@
   "notice": "",
   "shortPoll": "5",
   "longPoll": "60",
-  "profile_version": "0.0.1",
+  "profile_version": "0.0.2",
   "credits": [
     {
       "title": "Example Node.js based NodeServer",

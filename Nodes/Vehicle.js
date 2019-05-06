@@ -51,8 +51,7 @@ module.exports = function(Polyglot) {
       // Should match the 'sts' section of the nodedef.
       // Must all be strings
       this.drivers = {
-        ST: { value: '', uom: 2 }, // Online?
-        BATLVL: { value: '', uom: 51 }, // SOC%
+        ST: { value: '', uom: 51 }, // SOC%
         GV1: { value: '', uom: 56 }, // Battery range
         GV2: { value: '', uom: 2 }, // Charge port door open
         GV3: { value: '', uom: 2 }, // Charge port latch engaged
@@ -63,6 +62,10 @@ module.exports = function(Polyglot) {
         CC: { value: '', uom: 1 }, // Charger actual current
         CV: { value: '', uom: 72 }, // Charger voltage
         CPW: { value: '', uom: 73 }, // Charger power
+        GV8: { value: '', uom: 2 }, // Locked?
+        GV9: { value: '', uom: 51 }, // Sunroof open%
+        GV10: { value: '', uom: 56 }, // Odometer
+        GV18: { value: '', uom: 2 }, // Online?
         GV19: { value: '', uom: 56 }, // Last updated unix timestamp
         GV20: { value: id, uom: 56 }, // ID used for the Tesla API
         ERR: { value: '', uom: 2 }, // In error?
@@ -190,12 +193,14 @@ module.exports = function(Polyglot) {
       // vehicleData.response.charge_state = chargeState.response;
 
       if (vehicleData && vehicleData.response &&
-        vehicleData.response.charge_state) {
+        vehicleData.response.charge_state &&
+        vehicleData.response.vehicle_state) {
 
         // logger.info('This vehicle Data %o', vehicleData);
 
         const response = vehicleData.response;
         const chargeState = vehicleData.response.charge_state;
+        const vehiculeState = vehicleData.response.vehicle_state;
         const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
 
         // We know the 'Stopped' status, but what are the others?
@@ -204,10 +209,7 @@ module.exports = function(Polyglot) {
           logger.info('Charging state: %s', chargeState.charging_state);
         }
 
-        this.setDriver('ST',
-          response.state.toLowerCase() === 'online', false);
-
-        this.setDriver('BATLVL', chargeState.battery_level, false);
+        this.setDriver('ST', chargeState.battery_level, false);
         this.setDriver('GV1', chargeState.battery_range, false);
         this.setDriver('GV2', chargeState.charge_port_door_open, false);
         this.setDriver('GV3',
@@ -221,7 +223,14 @@ module.exports = function(Polyglot) {
         this.setDriver('GV7', chargeState.charge_limit_soc, false);
         this.setDriver('CC', chargeState.charger_actual_current, false);
         this.setDriver('CV', chargeState.charger_voltage, false);
-        this.setDriver('CPW', chargeState.charger_power, false);
+        this.setDriver('CPW', chargeState.charger_power * 1000, false);
+        this.setDriver('GV8', vehiculeState.locked, false);
+        this.setDriver('GV9', vehiculeState.sun_roof_percent_open, false);
+        this.setDriver('GV10', parseInt(vehiculeState.odometer, 10), false);
+
+        this.setDriver('GV18',
+          response.state.toLowerCase() === 'online', false);
+
         this.setDriver('GV19', timestamp, false);
         // GV20 is not updated. This is the id we use to find this vehicle.
         // It must be already correct.

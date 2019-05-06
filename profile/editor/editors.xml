@@ -1,34 +1,35 @@
-<!-- Version 0.0.1 -->
+<!-- Version 0.0.2 -->
 <editors>
-
   <editor id="BOOLEAN">
     <!-- 2 is boolean -->
-    <range uom="2"/>
-  </editor>
-  <editor id="TIMESTAMP">
-    <!-- 56 is raw value as reported by the device -->
-    <range uom="56"/>
+    <range uom="2" subset="0-1"/>
   </editor>
   <editor id="I_AMP">
     <!-- 1 is Ampere -->
-    <range uom="1"/>
+    <range uom="1" subset="0-100000"/>
   </editor>
   <editor id="I_VOLT">
     <!-- 72 is volt -->
-    <range uom="72"/>
+    <range uom="72" subset="0-1000"/>
   </editor>
   <editor id="I_WATT">
     <!-- 73 is watt -->
-    <range uom="73"/>
+    <range uom="73" subset="0-100000"/>
+  </editor>
+  <editor id="I_MILES">
+    <!-- 56 is raw value as reported by the device -->
+    <range uom="56" subset="0-1000"/>
+  </editor>
+  <editor id="I_ODO">
+    <!-- 56 is raw value as reported by the device -->
+    <range uom="56" min="0" max="1000000" step="100" prec="0"/>
   </editor>
   <editor id="I_RAW">
     <!-- 56 is raw value as reported by the device -->
-    <range uom="56"/>
+    <range uom="56" subset="0"/>
   </editor>
   <editor id="I_PERCENT">
     <!-- 51 is percent -->
     <range uom="51" subset="0-100" />
   </editor>
-
-
 </editors>

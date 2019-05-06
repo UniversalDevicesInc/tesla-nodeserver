@@ -1,10 +1,10 @@
-<!-- Version 0.0.1 -->
+<!-- Version 0.0.2 -->
 <nodeDefs>
 
-  <!-- Node server node - KEEP THIS. This will create a nodeserver node showing if the node server is active or not -->
+  <!-- The Tesla controller node -->
   <nodedef id="CONTROLLER" nls="CONTROLLER">
     <sts>
-      <st id="ST" editor="CONTROLLER"/>
+      <st id="ST" editor="BOOLEAN"/>
     </sts>
     <cmds>
       <sends/>
@@ -19,9 +19,8 @@
   <!-- Vehicle info -->
   <nodedef id="VEHICLE" nls="V">
     <sts>
-      <st id="ST" editor="BOOLEAN"/> <!-- Online? -->
-      <st id="BATLVL" editor="I_PERCENT"/> <!-- SOC% -->
-      <st id="GV1" editor="I_RAW"/> <!-- Battery Range -->
+      <st id="ST" editor="I_PERCENT"/> <!-- SOC% -->
+      <st id="GV1" editor="I_MILES"/> <!-- Battery Range -->
       <st id="GV2" editor="BOOLEAN"/> <!-- Charge port door open -->
       <st id="GV3" editor="BOOLEAN"/> <!-- Charge port latch engaged -->
       <st id="GV4" editor="BOOLEAN"/> <!-- Charge enable request -->
@@ -31,6 +30,10 @@
       <st id="CC" editor="I_AMP"/> <!-- Charger actual current -->
       <st id="CV" editor="I_VOLT"/> <!-- Charger voltage -->
       <st id="CPW" editor="I_WATT"/> <!-- Charger power -->
+      <st id="GV8" editor="BOOLEAN"/> <!-- Locked -->
+      <st id="GV9" editor="I_PERCENT"/> <!-- Sunroof opened -->
+      <st id="GV10" editor="I_ODO"/> <!-- Odometer -->
+      <st id="GV18" editor="BOOLEAN"/> <!-- Online? -->
       <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
       <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
       <st id="ERR" editor="BOOLEAN" hide="T" />
