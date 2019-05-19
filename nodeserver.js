@@ -249,8 +249,8 @@ function callAsync(promise) {
     try {
       await promise;
     } catch (err) {
-      logger.error('Error with async function: %s %s',
-        err.message, err.stack ? err.stack : '');
+      logger.error('Error with async function: %s',
+        err.stack ? err.stack : err.message);
     }
   })();
 }

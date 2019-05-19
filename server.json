@@ -1,6 +1,6 @@
 {
   "name": "Tesla",
-  "docs": "https://github.com/UniversalDevicesInc/tesla",
+  "docs": "https://github.com/UniversalDevicesInc/tesla-nodeserver",
   "type": "node",
   "executable": "nodeserver.js",
   "install": "install.sh",
@@ -16,7 +16,7 @@
       "author": "Benoit Mercier",
       "version": "1.0.2",
       "date": "May 5th, 2019",
-      "source": "https://github.com/UniversalDevicesInc/tesla",
+      "source": "https://github.com/UniversalDevicesInc/tesla-nodeserver",
       "license": "MIT"
     }
   ]
