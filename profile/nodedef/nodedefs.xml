@@ -34,6 +34,7 @@
       <st id="GV9" editor="I_PERCENT"/> <!-- Sunroof opened -->
       <st id="GV10" editor="I_ODO"/> <!-- Odometer -->
       <st id="GV18" editor="BOOLEAN"/> <!-- Online? -->
+      <st id="CLITEMP" editor="I_TEMP_DEG"/> <!-- Interior temperature -->
       <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
       <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
       <st id="ERR" editor="BOOLEAN" hide="T" />
@@ -61,6 +62,8 @@
           <p id="" editor="I_PERCENT" optional="F"/>
         </cmd>
         <cmd id="QUERY"/>
+        <cmd id="CLIMATE_ON"/>
+        <cmd id="CLIMATE_OFF"/>
       </accepts>
     </cmds>
   </nodedef>

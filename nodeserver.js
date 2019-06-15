@@ -261,7 +261,10 @@ function trapUncaughExceptions() {
     // Used in dev. Useful when logger is not yet defined.
     console.log('err', err);
 
-    logger.error(`uncaughtException REPORT THIS!: ${err.stack}`);
+    // avoid the edge case where an exception is thrown before the logger is available
+    if ( !(typeof myval === 'undefined')) {
+    	logger.error(`uncaughtException REPORT THIS!: ${err.stack}`);
+    }
   });
 }
 

@@ -45,6 +45,8 @@ module.exports = function(Polyglot) {
         PORT_CLOSE: this.onPortClose,
         CHARGE_SET_TO: this.onChargeSetTo,
         QUERY: this.query, // Query function from the base class
+        CLIMATE_OFF: this.onClimateOff, // stop pre-heat or pre-cool of the car
+        CLIMATE_ON: this.onClimateOn, // pre-heat or pre-cool the car
       };
 
       // Status that this node has.
@@ -68,6 +70,7 @@ module.exports = function(Polyglot) {
         GV18: { value: '', uom: 2 }, // Online?
         GV19: { value: '', uom: 56 }, // Last updated unix timestamp
         GV20: { value: id, uom: 56 }, // ID used for the Tesla API
+        CLITEMP: { value: '', uom: 4 }, // Interior temperature
         ERR: { value: '', uom: 2 }, // In error?
       };
     }
@@ -160,15 +163,27 @@ module.exports = function(Polyglot) {
     }
 
     async onChargeSetTo(message) {
-      const id = this.vehicleId();
+        const id = this.vehicleId();
 
-      logger.info('CHARGE_SET_TO (%s): %s', this.address,
-        message.value ? message.value : 'No value');
+        logger.info('CHARGE_SET_TO (%s): %s', this.address,
+          message.value ? message.value : 'No value');
 
-      await this.tesla.cmdChargeLimitSetTo(id, message.value);
-      await this.query();
-    }
+        await this.tesla.cmdChargeLimitSetTo(id, message.value);
+        await this.query();
+      }
 
+	async onClimateOn() {
+        const id = this.vehicleId();
+        logger.info('CLIMATE_ON (%s)', this.address);
+        await this.tesla.cmdHvacStart(id);
+      }
+
+	async onClimateOff() {
+        const id = this.vehicleId();
+        logger.info('CLIMATE_OFF (%s)', this.address);
+        await this.tesla.cmdHvacStop(id);
+      }
+   
     async query() {
       const _this = this;
 
@@ -201,6 +216,7 @@ module.exports = function(Polyglot) {
         const response = vehicleData.response;
         const chargeState = vehicleData.response.charge_state;
         const vehiculeState = vehicleData.response.vehicle_state;
+        const climateState = vehicleData.response.climate_state;
         const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
 
         // We know the 'Stopped' status, but what are the others?
@@ -225,7 +241,9 @@ module.exports = function(Polyglot) {
         this.setDriver('CV', chargeState.charger_voltage, false);
         this.setDriver('CPW', chargeState.charger_power * 1000, false);
         this.setDriver('GV8', vehiculeState.locked, false);
-        this.setDriver('GV9', vehiculeState.sun_roof_percent_open, false);
+        if (vehiculeState.sun_roof_percent_open != null) {
+        	this.setDriver('GV9', vehiculeState.sun_roof_percent_open, false);
+        }
         this.setDriver('GV10', parseInt(vehiculeState.odometer, 10), false);
 
         this.setDriver('GV18',
@@ -234,6 +252,10 @@ module.exports = function(Polyglot) {
         this.setDriver('GV19', timestamp, false);
         // GV20 is not updated. This is the id we use to find this vehicle.
         // It must be already correct.
+        
+        // Current temperature inside the vehicle.
+        this.setDriver('CLITEMP', climateState.inside_temp, false);
+
         this.setDriver('ERR', '0', false);
         this.reportDrivers(); // Reports only changed values
       } else {

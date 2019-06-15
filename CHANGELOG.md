@@ -1,5 +1,12 @@
 # Change Log
 
+v1.0.3 (2019-06-14)
+* Added CLITEMP internal temperature
+* Added cmd CLIMATE_ON to start conditioning the vehicle
+* Added cmd CLIMATE_OFF to stop conditioning the vehicle
+* Fixed spelling of vehicle.
+* Fixed sunroof data parsing when the vehicle does not have a sunroof. 
+
 v1.0.2 (2019-05-05)
 * Fixed ability to use properties in programs
 * Added GV8 Locked state

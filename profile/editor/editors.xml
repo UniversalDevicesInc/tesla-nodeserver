@@ -1,4 +1,5 @@
 <!-- Version 0.0.2 -->
+<!-- Ref: units of measure from https://wiki.universal-devices.com/index.php?title=ISY_Developers:API:V5:Appendix:Units_of_Measure -->
 <editors>
   <editor id="BOOLEAN">
     <!-- 2 is boolean -->
@@ -32,4 +33,9 @@
     <!-- 51 is percent -->
     <range uom="51" subset="0-100" />
   </editor>
+  <editor id="I_TEMP_DEG">
+    <!-- 4 is celsius (C) -->
+    <range uom="4" min="-40" max="60" step="1" prec="0" />
+  </editor>
+
 </editors>
