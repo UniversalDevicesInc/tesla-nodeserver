@@ -25,7 +25,8 @@ ST-V-CC-NAME = Charger actual current
 ST-V-CV-NAME = Charger voltage
 ST-V-CPW-NAME = Charger power
 ST-V-ERR-NAME = Error
-ST-V-CLITEMP-NAME = Interior Temperature
+ST-V-CLITEMP-NAME = Interior temperature
+ST-V-CLIEMD-NAME = Climate conditioning on
 
 CMD-V-DON-NAME = Charge On
 CMD-V-DOF-NAME = Charge Off
@@ -40,5 +41,5 @@ CMD-V-PORT_OPEN-NAME = Open port
 CMD-V-PORT_CLOSE-NAME = Close port
 CMD-V-CHARGE_SET_TO-NAME = Set charge limit
 CMD-V-QUERY-NAME = Query
-CMD-V-CLIMATE_ON-NAME = Condition interior
-CMD-V-CLIMATE_OFF-NAME = Stop conditioning interior
+CMD-V-CLIMATE_ON-NAME = Conditioning On
+CMD-V-CLIMATE_OFF-NAME = Conditioning Off

@@ -35,6 +35,7 @@
       <st id="GV10" editor="I_ODO"/> <!-- Odometer -->
       <st id="GV18" editor="BOOLEAN"/> <!-- Online? -->
       <st id="CLITEMP" editor="I_TEMP_DEG"/> <!-- Interior temperature -->
+      <st id="CLIEMD" editor="BOOLEAN"/> <!-- Climate Conditioning On -->
       <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
       <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
       <st id="ERR" editor="BOOLEAN" hide="T" />

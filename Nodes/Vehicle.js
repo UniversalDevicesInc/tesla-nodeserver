@@ -71,6 +71,7 @@ module.exports = function(Polyglot) {
         GV19: { value: '', uom: 56 }, // Last updated unix timestamp
         GV20: { value: id, uom: 56 }, // ID used for the Tesla API
         CLITEMP: { value: '', uom: 4 }, // Interior temperature
+        CLIEMD: { value: '', uom: 2 }, // Climate conditioning on
         ERR: { value: '', uom: 2 }, // In error?
       };
     }
@@ -176,12 +177,14 @@ module.exports = function(Polyglot) {
         const id = this.vehicleId();
         logger.info('CLIMATE_ON (%s)', this.address);
         await this.tesla.cmdHvacStart(id);
+        await this.query();
       }
 
 	async onClimateOff() {
         const id = this.vehicleId();
         logger.info('CLIMATE_OFF (%s)', this.address);
         await this.tesla.cmdHvacStop(id);
+        await this.query();
       }
    
     async query() {
@@ -209,7 +212,8 @@ module.exports = function(Polyglot) {
 
       if (vehicleData && vehicleData.response &&
         vehicleData.response.charge_state &&
-        vehicleData.response.vehicle_state) {
+        vehicleData.response.vehicle_state &&
+        vehicleData.response.climate_state) {
 
         // logger.info('This vehicle Data %o', vehicleData);
 
@@ -255,6 +259,8 @@ module.exports = function(Polyglot) {
         
         // Current temperature inside the vehicle.
         this.setDriver('CLITEMP', climateState.inside_temp, false);
+        // Status of climate conditioning.
+        this.setDriver('CLIEMD', climateState.is_climate_on, false);
 
         this.setDriver('ERR', '0', false);
         this.reportDrivers(); // Reports only changed values
