@@ -47,6 +47,22 @@ module.exports = function(Polyglot) {
         QUERY: this.query, // Query function from the base class
         CLIMATE_OFF: this.onClimateOff, // stop pre-heat or pre-cool of the car
         CLIMATE_ON: this.onClimateOn, // pre-heat or pre-cool the car
+        WINDOWS_VENT: this.onWindowsVent, // vent all the windows
+        WINDOWS_CLOSE: this.onWindowsClose, // close all the windows
+        TRUNK_OPEN: this.onTrunkOpen, // open the rear trunk
+        FRUNK_OPEN: this.onFrunkOpen, // open the front trunk (frunk)
+        HEATED_SEAT_LEVEL_DRIVER: this.onHeatedSeatDriver, // set the level on the heated seat for the driver
+        HEATED_SEAT_LEVEL_PASSENGER: this.onHeatedSeatPassenger, // set the level on the heated seat for the passenger
+        HEATED_SEAT_LEVEL_REAR_LEFT: this.onHeatedSeatRearLeft, // set the level on the heated seat for the rear left seat
+        HEATED_SEAT_LEVEL_REAR_CENTER: this.onHeatedSeatRearCenter, // set the level on the heated seat for the rear center seat
+        HEATED_SEAT_LEVEL_REAR_RIGHT: this.onHeatedSeatRearRight, // set the level on the heated seat for the rear right seat
+        SENTRY_MODE_ON: this.onSentryModeOn, // turn on Sentry Mode
+        SENTRY_MODE_OFF: this.onSentryModeOff, // turn off Sentry Mode
+        START_SOFTWARE_UPDATE: this.onStartSoftwareUpdate, // will start the car's software update if one is available.
+        MAX_DEFROST_ON: this.onMaxDefrostOn, // turns the climate control to max defrost
+        MAX_DEFROST_OFF: this.onMaxDefrostOff, // turns the climate control to the previous setting
+        CLIMATE_TEMP_SETTING_DRIVER: this.onSetClimateTempDriver, // sets the climate control temp for the drivers side
+        CLIMATE_TEMP_SETTING_PASSENGER: this.onSetClimateTempPassenger, // sets the climate control temp for the passengers side
       };
 
       // Status that this node has.
@@ -67,6 +83,10 @@ module.exports = function(Polyglot) {
         GV8: { value: '', uom: 2 }, // Locked?
         GV9: { value: '', uom: 51 }, // Sunroof open%
         GV10: { value: '', uom: 56 }, // Odometer
+        GV11:  { value: '', uom: 2 }, // Sentry mode on
+        GV12:  { value: '', uom: 4 }, // Drivers side temp
+        GV13:  { value: '', uom: 4 }, // Passenger side temp
+        GV14:  { value: '', uom: 4 }, // Exterior temp
         GV18: { value: '', uom: 2 }, // Online?
         GV19: { value: '', uom: 56 }, // Last updated unix timestamp
         GV20: { value: id, uom: 56 }, // ID used for the Tesla API
@@ -74,7 +94,13 @@ module.exports = function(Polyglot) {
         CLIEMD: { value: '', uom: 2 }, // Climate conditioning on
         ERR: { value: '', uom: 2 }, // In error?
       };
+
+      this.unit = 'mi'; // defaults to miles. Pulls data from vehicle GUI to change to KM if needed.
+      this.drivers_temp = '15'; // need to keep these in memory for when we set one or the other
+      this.passengers_temp = '15'; // since setting one to null means the temp goes to LO
     }
+
+
 
     // The id is stored in GV20
     vehicleId() {
@@ -186,7 +212,137 @@ module.exports = function(Polyglot) {
         await this.tesla.cmdHvacStop(id);
         await this.query();
       }
-   
+
+    async onWindowsVent() {
+      const id = this.vehicleId();
+      logger.info('WINDOWS VENT (%s)', this.address);
+      await this.tesla.cmdWindows(id, 'vent');
+      await this.query();
+    }
+
+    async onWindowsClose() {
+      const id = this.vehicleId();
+      logger.info('WINDOWS CLOSE (%s)', this.address);
+      await this.tesla.cmdWindows(id, 'close');
+      await this.query();
+    }
+
+    async onTrunkOpen() {
+      const id = this.vehicleId();
+      logger.info('TRUNK OPEN (%s)', this.address);
+      await this.tesla.cmdActuateTrunk(id, 'rear');
+      await this.query();
+    }
+
+    async onFrunkOpen() {
+      const id = this.vehicleId();
+      logger.info('FRUNK OPEN (%s)', this.address);
+      await this.tesla.cmdActuateTrunk(id, 'front');
+      await this.query();
+    }
+
+    async onHeatedSeatDriver(message) {
+      const id = this.vehicleId();
+
+      logger.info('SET DRIVERS HEATED SEAT (%s): %s', this.address,
+          message.value ? message.value : 'No value');
+
+      await this.tesla.cmdHeatedSeats(id, '0', message.value);
+      await this.query();
+    }
+
+    async onHeatedSeatPassenger(message) {
+      const id = this.vehicleId();
+
+      logger.info('SET PASSENGER HEATED SEAT (%s): %s', this.address,
+          message.value ? message.value : 'No value');
+
+      await this.tesla.cmdHeatedSeats(id, '1', message.value);
+      await this.query();
+    }
+
+    async onHeatedSeatRearLeft(message) {
+      const id = this.vehicleId();
+
+      logger.info('SET REAR LEFT HEATED SEAT (%s): %s', this.address,
+          message.value ? message.value : 'No value');
+
+      await this.tesla.cmdHeatedSeats(id, '2', message.value);
+      await this.query();
+    }
+
+    async onHeatedSeatRearCenter(message) {
+      const id = this.vehicleId();
+
+      logger.info('SET REAR CENTER HEATED SEAT (%s): %s', this.address,
+          message.value ? message.value : 'No value');
+
+      await this.tesla.cmdHeatedSeats(id, '4', message.value);
+      await this.query();
+    }
+
+    async onHeatedSeatRearRight(message) {
+      const id = this.vehicleId();
+
+      logger.info('SET REAR RIGHT HEATED SEAT (%s): %s', this.address,
+          message.value ? message.value : 'No value');
+
+      await this.tesla.cmdHeatedSeats(id, '5', message.value);
+      await this.query();
+    }
+
+    async onSentryModeOn() {
+      const id = this.vehicleId();
+      logger.info('SENTRY MODE ON (%s)', this.address);
+      await this.tesla.cmdSentryMode(id, 'on');
+      await this.query();
+    }
+
+    async onSentryModeOff() {
+      const id = this.vehicleId();
+      logger.info('SENTRY MODE OFF (%s)', this.address);
+      await this.tesla.cmdSentryMode(id, 'off');
+      await this.query();
+    }
+
+    async onStartSoftwareUpdate() {
+      const id = this.vehicleId();
+      logger.info('STARTING SOFTWARE UPDATE (%s)', this.address);
+      await this.tesla.cmdStartSoftwareUpdate(id);
+      await this.query();
+    }
+
+    async onMaxDefrostOn() {
+      const id = this.vehicleId();
+      logger.info('MAX DEFROST MODE ON (%s)', this.address);
+      await this.tesla.cmdMaxDefrost(id, 'on');
+      await this.query();
+    }
+
+    async onMaxDefrostOff() {
+      const id = this.vehicleId();
+      logger.info('MAX DEFROST OFF (%s)', this.address);
+      await this.tesla.cmdMaxDefrost(id, 'off');
+      await this.query();
+    }
+
+    async onSetClimateTempDriver(message) {
+      const id = this.vehicleId();
+      logger.info('SETTING DRIVERS SIDE CLIMATE TEMP (%s): %s', this.address,
+        message.value ? message.value : 'No value');
+      this.drivers_temp = message.value;
+      await this.tesla.cmdSetClimateTemp(id, message.value, this.passengers_temp);
+      await this.query();
+    }
+    async onSetClimateTempPassenger(message) {
+      const id = this.vehicleId();
+      logger.info('SETTING PASSENGERS SIDE CLIMATE TEMP (%s): %s', this.address,
+          message.value ? message.value : 'No value');
+      this.passengers_temp = message.value;
+      await this.tesla.cmdSetClimateTemp(id, this.drivers_temp, message.value);
+      await this.query();
+    }
+
     async query() {
       const _this = this;
 
@@ -213,7 +369,8 @@ module.exports = function(Polyglot) {
       if (vehicleData && vehicleData.response &&
         vehicleData.response.charge_state &&
         vehicleData.response.vehicle_state &&
-        vehicleData.response.climate_state) {
+        vehicleData.response.climate_state &&
+        vehicleData.response.gui_settings) {
 
         // logger.info('This vehicle Data %o', vehicleData);
 
@@ -221,7 +378,29 @@ module.exports = function(Polyglot) {
         const chargeState = vehicleData.response.charge_state;
         const vehiculeState = vehicleData.response.vehicle_state;
         const climateState = vehicleData.response.climate_state;
+        const guisettings = vehicleData.response.gui_settings;
         const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
+
+        // this will take the units set from the Tesla GUI in the vehicle and we'll use that to display the correct ones
+        if (guisettings.gui_distance_units) {
+          if (guisettings.gui_distance_units.includes('mi')) {
+            this.unit = 'mi';
+          } else {
+            this.unit = 'km';
+          }
+          logger.info('Units set to: %s', this.unit);
+        } else {
+          logger.error('GUI Distance Units missing from vehiculeState');
+        }
+
+        if (climateState.driver_temp_setting && climateState.passenger_temp_setting) {
+          this.drivers_temp = climateState.driver_temp_setting;
+          logger.info('Drivers temp currently set to: %s', this.drivers_temp);
+          this.passengers_temp = climateState.passenger_temp_setting;
+          logger.info('Passengers temp currently set to: %s', this.passengers_temp);
+        } else {
+          logger.error('Missing drivers or passenger temp from from climate state');
+        }
 
         // We know the 'Stopped' status, but what are the others?
         if (chargeState.charging_state !== 'Stopped' &&
@@ -230,6 +409,9 @@ module.exports = function(Polyglot) {
         }
 
         this.setDriver('ST', chargeState.battery_level, false);
+        if (this.unit === 'km') {
+          chargeState.battery_range = (Math.round(parseInt(chargeState.battery_range) * 1.609344, 1)).toString();
+        }
         this.setDriver('GV1', chargeState.battery_range, false);
         this.setDriver('GV2', chargeState.charge_port_door_open, false);
         this.setDriver('GV3',
@@ -248,7 +430,22 @@ module.exports = function(Polyglot) {
         if (vehiculeState.sun_roof_percent_open != null) {
         	this.setDriver('GV9', vehiculeState.sun_roof_percent_open, false);
         }
+        if (this.unit === 'km') {
+          vehiculeState.odometer = (Math.round(parseInt(vehiculeState.odometer) * 1.609344, 1)).toString();
+        }
         this.setDriver('GV10', parseInt(vehiculeState.odometer, 10), false);
+
+        // Status of sentry mode.
+        this.setDriver('GV11', climateState.sentry_mode, false);
+
+        // Drivers side temp
+        this.setDriver('GV12', climateState.driver_temp_setting, false);
+
+        // Passengers side temp
+        this.setDriver('GV13', climateState.passenger_temp_setting, false);
+
+        // Exterior temp
+        this.setDriver('GV14', climateState.outside_temp, false);
 
         this.setDriver('GV18',
           response.state.toLowerCase() === 'online', false);
