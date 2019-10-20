@@ -1,11 +1,12 @@
 # Change Log
 
-v1.0.4 (2019-09-08)
+v1.0.4 (2019-09-19)
 
 * Added GV11 for Sentry Mode
 * Added GV12 for drivers side climate control temperature (celsius only)
 * Added GV13 for passengers side climate control temperature (celsius only)
 * Added GV14 for outside temperature (celsius only)
+* Added GV17 for software update availability status (not confirmed workings since no updates from Tesla yet)
 * Added cmd WINDOWS_VENT to vent all the windows (requires Tesla V10 firmware)
 * Added cmd WINDOWS_CLOSE to close all the windows (requires Tesla V10 firmware)
 * Added cmd TRUNK_OPEN to open the rear trunk
@@ -22,7 +23,12 @@ v1.0.4 (2019-09-08)
 * Added cmd MAX_DEFROST_OFF to turn off the Max Defrost
 * Added cmd CLIMATE_TEMP_SETTING_DRIVER to set the climate control temperature for the drivers side (celsius only)
 * Added cmd CLIMATE_TEMP_SETTING_PASSENGER to set the climate control temperature for the passengers side (celsius only)
+* Added cmd LETSLEEP to allow the vehicle to sleep. This disables short polling from contacting the Tesla API
 * Added check for distance units. Will display KMs if the vehicle GUI is in KM/HR
+* Will now use both the short poll and long poll. Short poll off unless WAKE cmd called first.
+* Changed the default short poll time to 15 seconds
+* Changed the default long poll time to 2700 seconds (45 minutes) to let the car sleep
+* Properly sets online status by catching error returned from API if car is sleeping and sets GV18 to false
 
 v1.0.3 (2019-06-14)
 * Added CLITEMP internal temperature

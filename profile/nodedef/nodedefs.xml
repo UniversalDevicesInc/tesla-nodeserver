@@ -38,6 +38,7 @@
       <st id="GV13" editor="I_TEMP_DEG"/> <!-- Passengerss side temp -->
       <st id="GV14" editor="I_TEMP_DEG"/> <!-- Exterior temp -->
       <st id="GV18" editor="BOOLEAN"/> <!-- Online? -->
+      <st id="GV17" editor="I_SOFTWARE_UPDATE_STATUS"/> <!-- Software update availability status -->
       <st id="CLITEMP" editor="I_TEMP_DEG"/> <!-- Interior temperature -->
       <st id="CLIEMD" editor="BOOLEAN"/> <!-- Climate Conditioning On -->
       <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
@@ -55,6 +56,7 @@
         </cmd>
         <cmd id="DOF"/> <!-- Charge Off -->
         <cmd id="WAKE"/>
+        <cmd id="LETSLEEP"/>
         <cmd id="HORN"/>
         <cmd id="FLASH"/>
         <cmd id="LOCK"/>

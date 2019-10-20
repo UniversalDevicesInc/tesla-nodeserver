@@ -35,6 +35,7 @@ module.exports = function(Polyglot) {
         DON: this.onDON, // Charge On, up to
         DOF: this.onDOF, // Charge off
         WAKE: this.onWake,
+        LETSLEEP: this.onLetSleep, // call to let the vehicle sleep (disables short polling)
         HORN: this.onHorn,
         FLASH: this.onFlash,
         LOCK: this.onLock,
@@ -98,6 +99,7 @@ module.exports = function(Polyglot) {
       this.unit = 'mi'; // defaults to miles. Pulls data from vehicle GUI to change to KM if needed.
       this.drivers_temp = '15'; // need to keep these in memory for when we set one or the other
       this.passengers_temp = '15'; // since setting one to null means the temp goes to LO
+      this.let_sleep = true; // this will be used to disable short polling
     }
 
 
@@ -131,7 +133,14 @@ module.exports = function(Polyglot) {
     async onWake() {
       const id = this.vehicleId();
       logger.info('WAKE (%s)', this.address);
+      this.let_sleep = false;
       await this.tesla.wakeUp(id);
+    }
+
+    async onLetSleep() {
+      logger.info('LET SLEEP (%s)', this.address);
+      this.let_sleep = true;
+      this.setDriver('GV18', false, true); // this way we know if we have to wake up the car or not
     }
 
     async onHorn() {
@@ -343,22 +352,33 @@ module.exports = function(Polyglot) {
       await this.query();
     }
 
-    async query() {
+    async query(longPoll) {
       const _this = this;
-
-      try {
-        // Run query only one at a time
-        await lock.acquire('query', function() {
-          return _this.queryVehicle();
-        });
-      } catch (err) {
-        logger.error('Error while querying vehicle: %s', err.message);
+      if (!this.let_sleep || longPoll) {
+        try {
+          // Run query only one at a time
+          await lock.acquire('query', function() {
+            return _this.queryVehicle(longPoll);
+          });
+        } catch (err) {
+          logger.error('Error while querying vehicle: %s', err.message);
+        }
+      } else {
+        logger.info('SKIPPING POLL TO LET THE VEHICLE SLEEP - ISSUE WAKE CMD TO VEHICLE TO ENABLE SHORT POLLING');
       }
+
     }
 
-    async queryVehicle() {
+    async queryVehicle(longPoll) {
       const id = this.vehicleId();
       const vehicleData = await this.tesla.getVehicleData(id);
+
+      // check if Tesla is sleeping and sent an error code 408
+      if (vehicleData === 408) {
+          this.setDriver('GV18', 'false', false); // car is offline
+          logger.info('API ERROR CAUGHT: %s', vehicleData);
+          return 0;
+      }
 
       // Gather basic vehicle & charge state
       // (same as getVehicleData with less clutter)
@@ -436,7 +456,7 @@ module.exports = function(Polyglot) {
         this.setDriver('GV10', parseInt(vehiculeState.odometer, 10), false);
 
         // Status of sentry mode.
-        this.setDriver('GV11', climateState.sentry_mode, false);
+        this.setDriver('GV11', vehiculeState.sentry_mode, false);
 
         // Drivers side temp
         this.setDriver('GV12', climateState.driver_temp_setting, false);
@@ -447,8 +467,16 @@ module.exports = function(Polyglot) {
         // Exterior temp
         this.setDriver('GV14', climateState.outside_temp, false);
 
-        this.setDriver('GV18',
-          response.state.toLowerCase() === 'online', false);
+        // Software Update Availability Status
+        //if (vehiculeState.software_update.status) {
+          this.setDriver('GV17', vehiculeState.software_update.status, false);
+        //}
+        if (this.let_sleep && !longPoll) {
+          this.setDriver('GV18', 'false', false); // this way we know if we have to wake up the car or not
+        } else {
+          this.setDriver('GV18',
+              response.state.toLowerCase() === 'online', false);
+        }
 
         this.setDriver('GV19', timestamp, false);
         // GV20 is not updated. This is the id we use to find this vehicle.

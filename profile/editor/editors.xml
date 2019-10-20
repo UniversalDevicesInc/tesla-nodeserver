@@ -45,4 +45,7 @@
     <!-- 15 to 28 degrees C -->
     <range uom="56" min="15" max="28" step="1" prec="0" />
   </editor>
+  <editor id="I_SOFTWARE_UPDATE_STATUS">
+    <range uom="25" min="0" max="10" nls="EN_I_SOFTWARE_UPDATE_STATUS" />
+  </editor>
 </editors>
