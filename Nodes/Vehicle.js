@@ -375,7 +375,7 @@ module.exports = function(Polyglot) {
 
       // check if Tesla is sleeping and sent an error code 408
       if (vehicleData === 408) {
-          this.setDriver('GV18', 'false', false); // car is offline
+          this.setDriver('GV18', false, true); // car is offline
           logger.info('API ERROR CAUGHT: %s', vehicleData);
           return 0;
       }
