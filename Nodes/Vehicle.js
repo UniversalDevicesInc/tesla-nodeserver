@@ -472,7 +472,7 @@ module.exports = function(Polyglot) {
           this.setDriver('GV17', vehiculeState.software_update.status, false);
         //}
         if (this.let_sleep && !longPoll) {
-          this.setDriver('GV18', 'false', false); // this way we know if we have to wake up the car or not
+          this.setDriver('GV18', false, false); // this way we know if we have to wake up the car or not
         } else {
           this.setDriver('GV18',
               response.state.toLowerCase() === 'online', false);
