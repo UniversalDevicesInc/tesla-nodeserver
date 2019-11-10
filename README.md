@@ -28,5 +28,11 @@ Go to Nodeservers|Nodeserver Store, and add the Tesla Nodeserver.
 
 1. Login to Polyglot and go to your Tesla nodeserver.
 2. Enter your Tesla account user ID and password
-3. You should see a "Tesla Controller" node appear in the ISY admin console, and your vehicule(s) underneat. You may need to restart the admin console.
-4. You can adjust in Polyglot the short poll value which represents how frequent data is refreshed, in seconds. The long poll is not used. 
+3. You should see a "Tesla Controller" node appear in the ISY admin console, and your vehicle(s) underneath. You may need to restart the admin console.
+4. As of version 1.0.4 polling behaviour has changed. The short poll value is defaulted to 15 seconds and is intended to give near real time updates without letting the vehicle go to sleep. By default short polling will not be active so you may not see data populate in the ISY admin area at first launch. Issuing the "Wake" command will enable the short poll to call the Tesla API. Issuing the "Let vehicle sleep" command will again disable short polling. Note that if you do not issue the "Let vehicle sleep" command then the Tesla will not go to sleep as the polling rate is fairly high and accessing the Tesla API will keep the vehicle awake. 
+
+Long polling is now defaulted to 2700 seconds (45 minutes) to allow the Tesla time to fall asleep but still periodically gather data from it if it happens to be awake.
+
+The use case intended for more real time short term polling with the ability to enable/disable it programmatically is so you could issue a command to the vehicle (e.g. start the climate control system) and then get a notification when the vehicle is now up to temperature. 
+
+You can adjust in Polyglot the short and long poll values which represents how frequently data is refreshed, in seconds.

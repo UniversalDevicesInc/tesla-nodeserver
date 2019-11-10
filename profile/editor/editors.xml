@@ -37,5 +37,15 @@
     <!-- 4 is celsius (C) -->
     <range uom="4" min="-40" max="60" step="1" prec="0" />
   </editor>
-
+  <editor id="I_HEATED_SEAT_LEVEL_RANGE">
+    <!-- 0 is off 4 is full heat -->
+    <range uom="56" min="0" max="3" step="1" prec="0" />
+  </editor>
+  <editor id="I_CLIMATE_TEMP_RANGE">
+    <!-- 15 to 28 degrees C -->
+    <range uom="56" min="15" max="28" step="1" prec="0" />
+  </editor>
+  <editor id="I_SOFTWARE_UPDATE_STATUS">
+    <range uom="25" min="0" max="10" nls="EN_I_SOFTWARE_UPDATE_STATUS" />
+  </editor>
 </editors>
