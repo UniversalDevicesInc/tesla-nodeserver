@@ -1,5 +1,9 @@
 # Change Log
 
+v1.0.5 (2019-11-17)
+* Fixed GV17 for software update
+* Updated displayed server version to 1.0.5
+
 v1.0.4 (2019-09-19)
 
 * Added GV11 for Sentry Mode

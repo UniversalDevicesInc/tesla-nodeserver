@@ -88,6 +88,7 @@ module.exports = function(Polyglot) {
         GV12:  { value: '', uom: 4 }, // Drivers side temp
         GV13:  { value: '', uom: 4 }, // Passenger side temp
         GV14:  { value: '', uom: 4 }, // Exterior temp
+        GV17: { value: '', uom: 26 }, // Software Update Availability Status
         GV18: { value: '', uom: 2 }, // Online?
         GV19: { value: '', uom: 56 }, // Last updated unix timestamp
         GV20: { value: id, uom: 56 }, // ID used for the Tesla API
