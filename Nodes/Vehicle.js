@@ -431,7 +431,7 @@ module.exports = function(Polyglot) {
 
         this.setDriver('ST', chargeState.battery_level, false);
         if (this.unit === 'km') {
-          chargeState.battery_range = (Math.round(parseInt(chargeState.battery_range) * 1.609344, 1)).toString();
+          chargeState.battery_range = (Math.round(parseFloat(chargeState.battery_range) * 1.609344, 1)).toString();
         }
         this.setDriver('GV1', chargeState.battery_range, false);
         this.setDriver('GV2', chargeState.charge_port_door_open, false);
@@ -452,9 +452,9 @@ module.exports = function(Polyglot) {
         	this.setDriver('GV9', vehiculeState.sun_roof_percent_open, false);
         }
         if (this.unit === 'km') {
-          vehiculeState.odometer = (Math.round(parseInt(vehiculeState.odometer) * 1.609344, 1)).toString();
+          vehiculeState.odometer = (Math.round(parseFloat(vehiculeState.odometer) * 1.609344, 1)).toString();
         }
-        this.setDriver('GV10', parseInt(vehiculeState.odometer, 10), false);
+        this.setDriver('GV10', parseFloat(vehiculeState.odometer), false);
 
         // Status of sentry mode.
         this.setDriver('GV11', vehiculeState.sentry_mode, false);
