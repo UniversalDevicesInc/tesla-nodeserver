@@ -181,16 +181,13 @@ async function doPoll(longPoll) {
     await lock.acquire('poll', function() {
       logger.info('%s', longPoll ? 'Long poll' : 'Short poll');
 
-      // We poll during short poll only. long polls are ignored.
-      if (!longPoll) {
-        const nodes = poly.getNodes();
+      const nodes = poly.getNodes();
 
-        Object.keys(nodes).forEach(function(address) {
-          if ('query' in nodes[address]) {
-            nodes[address].query();
-          }
-        });
-      }
+      Object.keys(nodes).forEach(function(address) {
+        if ('query' in nodes[address]) {
+          nodes[address].query(longPoll);
+        }
+      });
     });
   } catch (err) {
     logger.error('Error while polling: %s', err.message);

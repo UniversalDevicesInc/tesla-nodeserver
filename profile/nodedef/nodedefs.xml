@@ -33,7 +33,12 @@
       <st id="GV8" editor="BOOLEAN"/> <!-- Locked -->
       <st id="GV9" editor="I_PERCENT"/> <!-- Sunroof opened -->
       <st id="GV10" editor="I_ODO"/> <!-- Odometer -->
+      <st id="GV11" editor="BOOLEAN"/> <!-- Sentry Mode On -->
+      <st id="GV12" editor="I_TEMP_DEG"/> <!-- Drivers side temp -->
+      <st id="GV13" editor="I_TEMP_DEG"/> <!-- Passengerss side temp -->
+      <st id="GV14" editor="I_TEMP_DEG"/> <!-- Exterior temp -->
       <st id="GV18" editor="BOOLEAN"/> <!-- Online? -->
+      <st id="GV17" editor="I_SOFTWARE_UPDATE_STATUS"/> <!-- Software update availability status -->
       <st id="CLITEMP" editor="I_TEMP_DEG"/> <!-- Interior temperature -->
       <st id="CLIEMD" editor="BOOLEAN"/> <!-- Climate Conditioning On -->
       <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
@@ -51,6 +56,7 @@
         </cmd>
         <cmd id="DOF"/> <!-- Charge Off -->
         <cmd id="WAKE"/>
+        <cmd id="LETSLEEP"/>
         <cmd id="HORN"/>
         <cmd id="FLASH"/>
         <cmd id="LOCK"/>
@@ -65,6 +71,36 @@
         <cmd id="QUERY"/>
         <cmd id="CLIMATE_ON"/>
         <cmd id="CLIMATE_OFF"/>
+        <cmd id="WINDOWS_VENT"/>
+        <cmd id="WINDOWS_CLOSE"/>
+        <cmd id="TRUNK_OPEN"/>
+        <cmd id="FRUNK_OPEN"/>
+        <cmd id="HEATED_SEAT_LEVEL_DRIVER">
+          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
+        </cmd>
+        <cmd id="HEATED_SEAT_LEVEL_PASSENGER">
+          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
+        </cmd>
+        <cmd id="HEATED_SEAT_LEVEL_REAR_LEFT">
+          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
+        </cmd>
+        <cmd id="HEATED_SEAT_LEVEL_REAR_CENTER">
+          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
+        </cmd>
+        <cmd id="HEATED_SEAT_LEVEL_REAR_RIGHT">
+          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
+        </cmd>
+        <cmd id="CLIMATE_TEMP_SETTING_DRIVER">
+          <p id="" editor="I_CLIMATE_TEMP_RANGE" optional="F"/>
+        </cmd>
+        <cmd id="CLIMATE_TEMP_SETTING_PASSENGER">
+          <p id="" editor="I_CLIMATE_TEMP_RANGE" optional="F"/>
+        </cmd>
+        <cmd id="SENTRY_MODE_ON"/>
+        <cmd id="SENTRY_MODE_OFF"/>
+        <cmd id="START_SOFTWARE_UPDATE"/>
+        <cmd id="MAX_DEFROST_ON"/>
+        <cmd id="MAX_DEFROST_OFF"/>
       </accepts>
     </cmds>
   </nodedef>

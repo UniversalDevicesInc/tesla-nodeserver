@@ -7,8 +7,8 @@
   "install_cloud": "install_cloud.sh",
   "description": "Tesla NodeServer",
   "notice": "",
-  "shortPoll": "5",
-  "longPoll": "60",
+  "shortPoll": "15",
+  "longPoll": "2700",
   "profile_version": "0.0.2",
   "credits": [
     {
