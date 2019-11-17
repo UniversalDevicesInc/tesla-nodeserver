@@ -454,7 +454,7 @@ module.exports = function(Polyglot) {
         if (this.unit === 'km') {
           vehiculeState.odometer = (Math.round(parseFloat(vehiculeState.odometer) * 1.609344, 1)).toString();
         }
-        this.setDriver('GV10', parseFloat(vehiculeState.odometer), false);
+        this.setDriver('GV10', Math.round(parseFloat(vehiculeState.odometer)).toString(), false);
 
         // Status of sentry mode.
         this.setDriver('GV11', vehiculeState.sentry_mode, false);
