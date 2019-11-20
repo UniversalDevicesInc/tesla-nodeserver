@@ -443,10 +443,14 @@ module.exports = function(Polyglot) {
         }
 
         this.setDriver('ST', chargeState.battery_level, false);
+
+        // Battery range
         if (this.distance_uom === 'km') {
-          chargeState.battery_range = (Math.round(parseFloat(chargeState.battery_range) * 1.609344, 1)).toString();
+          this.setDriver('GV1', Math.round(parseFloat(chargeState.battery_range) * 1.609344, 1).toString(), true, false, 8);
+        } else {
+          this.setDriver('GV1', Math.round(parseFloat(chargeState.battery_range), 1).toString(), true, false, 116);
         }
-        this.setDriver('GV1', chargeState.battery_range, false);
+
         this.setDriver('GV2', chargeState.charge_port_door_open, false);
         this.setDriver('GV3',
           chargeState.charge_port_latch.toLowerCase() === 'engaged',
