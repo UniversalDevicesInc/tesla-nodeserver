@@ -425,7 +425,7 @@ module.exports = function(Polyglot) {
         const guisettings = vehicleData.response.gui_settings;
         const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
 
-        vehicleUOM(guisettings)
+        this.vehicleUOM(guisettings)
 
         if (climateState.driver_temp_setting && climateState.passenger_temp_setting) {
           this.drivers_temp = climateState.driver_temp_setting;
