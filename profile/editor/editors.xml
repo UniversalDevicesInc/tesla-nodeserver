@@ -23,7 +23,8 @@
   </editor>
   <editor id="I_ODO">
     <!-- 56 is raw value as reported by the device -->
-    <range uom="56" min="0" max="1000000" step="100" prec="0"/>
+    <range uom="116" min="0" max="1000000" step="100" prec="0"/>
+    <range uom="83"  min="0" max="1609344" step="100" prec="0"/>
   </editor>
   <editor id="I_RAW">
     <!-- 56 is raw value as reported by the device -->

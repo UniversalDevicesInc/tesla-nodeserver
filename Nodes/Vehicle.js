@@ -83,7 +83,7 @@ module.exports = function(Polyglot) {
         CPW: { value: '', uom: 73 }, // Charger power
         GV8: { value: '', uom: 2 }, // Locked?
         GV9: { value: '', uom: 51 }, // Sunroof open%
-        GV10: { value: '', uom: 56 }, // Odometer
+        GV10: { value: '', uom: 116 }, // Odometer (default mile, but multi-editor supports kilometer too)
         GV11:  { value: '', uom: 2 }, // Sentry mode on
         GV12:  { value: '', uom: 4 }, // Drivers side temp
         GV13:  { value: '', uom: 4 }, // Passenger side temp
@@ -451,22 +451,33 @@ module.exports = function(Polyglot) {
         if (vehiculeState.sun_roof_percent_open != null) {
         	this.setDriver('GV9', vehiculeState.sun_roof_percent_open, false);
         }
+
+        // Odometer reading
         if (this.unit === 'km') {
-          vehiculeState.odometer = (Math.round(parseFloat(vehiculeState.odometer) * 1.609344, 1)).toString();
+          this.setDriver('GV10', Math.round(parseFloat(vehiculeState.odometer) * 1.609344, 1).toString(), true, false, 8);
+        } else {
+          this.setDriver('GV10', Math.round(parseFloat(vehiculeState.odometer), 1).toString(), true, false, 116);
         }
-        this.setDriver('GV10', Math.round(parseFloat(vehiculeState.odometer)).toString(), false);
 
         // Status of sentry mode.
-        this.setDriver('GV11', vehiculeState.sentry_mode, false);
+        if (vehiculeState.sentry_mode) {
+          this.setDriver('GV11', vehiculeState.sentry_mode, false);
+        }
 
         // Drivers side temp
-        this.setDriver('GV12', climateState.driver_temp_setting, false);
+        if (climateState.driver_temp_setting) {
+          this.setDriver('GV12', climateState.driver_temp_setting, false);
+        }
 
         // Passengers side temp
-        this.setDriver('GV13', climateState.passenger_temp_setting, false);
+        if (climateState.driver_temp_setting) {
+          this.setDriver('GV13', climateState.passenger_temp_setting, false);
+        }
 
         // Exterior temp
-        this.setDriver('GV14', climateState.outside_temp, false);
+        if (climateState.driver_temp_setting) {
+          this.setDriver('GV14', climateState.outside_temp, false);
+        }
 
         // Software Update Availability Status
         //if (vehiculeState.software_update.status) {
