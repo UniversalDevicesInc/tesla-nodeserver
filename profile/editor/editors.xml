@@ -17,12 +17,13 @@
     <!-- 73 is watt -->
     <range uom="73" subset="0-100000"/>
   </editor>
-  <editor id="I_MILES">
-    <!-- 56 is raw value as reported by the device -->
-    <range uom="56" subset="0-1000"/>
+  <editor id="I_BATTERY_RANGE">
+    <!-- uom is gathered from the vehicle -->
+    <range uom="116" subset="0-1000"/>
+    <range uom="83" subset="0-1609"/>
   </editor>
   <editor id="I_ODO">
-    <!-- 56 is raw value as reported by the device -->
+    <!-- uom is gathered from the vehicle -->
     <range uom="116" min="0" max="1000000" step="100" prec="0"/>
     <range uom="83"  min="0" max="1609344" step="100" prec="0"/>
   </editor>

@@ -20,7 +20,7 @@
   <nodedef id="VEHICLE" nls="V">
     <sts>
       <st id="ST" editor="I_PERCENT"/> <!-- SOC% -->
-      <st id="GV1" editor="I_MILES"/> <!-- Battery Range -->
+      <st id="GV1" editor="I_BATTERY_RANGE"/> <!-- Battery Range -->
       <st id="GV2" editor="BOOLEAN"/> <!-- Charge port door open -->
       <st id="GV3" editor="BOOLEAN"/> <!-- Charge port latch engaged -->
       <st id="GV4" editor="BOOLEAN"/> <!-- Charge enable request -->

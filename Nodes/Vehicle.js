@@ -71,7 +71,7 @@ module.exports = function(Polyglot) {
       // Must all be strings
       this.drivers = {
         ST: { value: '', uom: 51 }, // SOC%
-        GV1: { value: '', uom: 56 }, // Battery range
+        GV1: { value: '', uom: 116 }, // Battery range (default mile, but UOM gathered from the vehicle)
         GV2: { value: '', uom: 2 }, // Charge port door open
         GV3: { value: '', uom: 2 }, // Charge port latch engaged
         GV4: { value: '', uom: 2 }, // Charge enable request
@@ -97,7 +97,9 @@ module.exports = function(Polyglot) {
         ERR: { value: '', uom: 2 }, // In error?
       };
 
-      this.unit = 'mi'; // defaults to miles. Pulls data from vehicle GUI to change to KM if needed.
+      this.distance_uom = 'mi'; // defaults to miles. Pulls data from vehicle GUI to change to KM where appropriate.
+      this.temperature_uom = 'F'; // defaults to Fahrenheit. Pulls data from vehicle GUI to change to C where appropriate.
+      
       this.drivers_temp = '15'; // need to keep these in memory for when we set one or the other
       this.passengers_temp = '15'; // since setting one to null means the temp goes to LO
       this.let_sleep = true; // this will be used to disable short polling
@@ -370,6 +372,27 @@ module.exports = function(Polyglot) {
 
     }
 
+    vehicleUOM(guisettings) {
+	    // this will take the units set from the Tesla GUI in the vehicle and we'll use that to display the correct ones
+	    if (guisettings.gui_distance_units) {
+	      if (guisettings.gui_distance_units.includes('mi')) {
+	        this.distance_uom = 'mi';
+	      } else {
+	        this.distance_uom = 'km';
+	      }
+	      logger.info('Distance Units set to: %s', this.distance_uom);
+	    } else {
+	      logger.error('GUI Distance Units missing from vehicleData');
+	    }
+	      
+	    if (guisettings.gui_temperature_units) {
+	      this.temperature_uom = guisettings.gui_temperature_units;
+	      logger.info('Temperature Units set to: %s', this.temperature_uom);
+	    } else {
+	      logger.error('GUI Temperature Units missing from vehicleData');
+	    }
+    }
+
     async queryVehicle(longPoll) {
       const id = this.vehicleId();
       const vehicleData = await this.tesla.getVehicleData(id);
@@ -402,17 +425,7 @@ module.exports = function(Polyglot) {
         const guisettings = vehicleData.response.gui_settings;
         const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
 
-        // this will take the units set from the Tesla GUI in the vehicle and we'll use that to display the correct ones
-        if (guisettings.gui_distance_units) {
-          if (guisettings.gui_distance_units.includes('mi')) {
-            this.unit = 'mi';
-          } else {
-            this.unit = 'km';
-          }
-          logger.info('Units set to: %s', this.unit);
-        } else {
-          logger.error('GUI Distance Units missing from vehiculeState');
-        }
+        vehicleUOM(guisettings)
 
         if (climateState.driver_temp_setting && climateState.passenger_temp_setting) {
           this.drivers_temp = climateState.driver_temp_setting;
@@ -430,7 +443,7 @@ module.exports = function(Polyglot) {
         }
 
         this.setDriver('ST', chargeState.battery_level, false);
-        if (this.unit === 'km') {
+        if (this.distance_uom === 'km') {
           chargeState.battery_range = (Math.round(parseFloat(chargeState.battery_range) * 1.609344, 1)).toString();
         }
         this.setDriver('GV1', chargeState.battery_range, false);
@@ -453,7 +466,7 @@ module.exports = function(Polyglot) {
         }
 
         // Odometer reading
-        if (this.unit === 'km') {
+        if (this.distance_uom === 'km') {
           this.setDriver('GV10', Math.round(parseFloat(vehiculeState.odometer) * 1.609344, 1).toString(), true, false, 8);
         } else {
           this.setDriver('GV10', Math.round(parseFloat(vehiculeState.odometer), 1).toString(), true, false, 116);
