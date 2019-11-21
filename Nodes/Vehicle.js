@@ -501,6 +501,10 @@ module.exports = function(Polyglot) {
           this.setDriver('GV11', vehiculeState.sentry_mode, false);
         }
 
+        logger.info('##debug##');
+        logger.info('translateTemp: %s', this.translateTemp(climateState.driver_temp_setting));
+        logger.info('decodeTempUOM: %s', this.decodeTempUOM());
+
         // Drivers side temp
         if (climateState.driver_temp_setting) {
           this.setDriver('GV12', this.translateTemp(climateState.driver_temp_setting), true, false, this.decodeTempUOM());
