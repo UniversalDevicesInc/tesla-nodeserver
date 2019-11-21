@@ -38,6 +38,7 @@
   <editor id="I_TEMP_DEG">
     <!-- 4 is celsius (C) -->
     <range uom="4" min="-40" max="60" step="1" prec="0" />
+    <range uom="17" min="-40" max="140" step="1" prec="0" />
   </editor>
   <editor id="I_HEATED_SEAT_LEVEL_RANGE">
     <!-- 0 is off 4 is full heat -->

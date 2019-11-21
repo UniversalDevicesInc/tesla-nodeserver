@@ -98,7 +98,7 @@ module.exports = function(Polyglot) {
       };
 
       this.distance_uom = 'mi'; // defaults to miles. Pulls data from vehicle GUI to change to KM where appropriate.
-      this.temperature_uom = 'F'; // defaults to Fahrenheit. Pulls data from vehicle GUI to change to C where appropriate.
+      this.temperature_uom = 'C'; // defaults to Celsius. Pulls data from vehicle GUI to change to C where appropriate.
       
       this.drivers_temp = '15'; // need to keep these in memory for when we set one or the other
       this.passengers_temp = '15'; // since setting one to null means the temp goes to LO
@@ -393,6 +393,26 @@ module.exports = function(Polyglot) {
 	    }
     }
 
+    celsiusToFahrenheit(celsiusDeg) {
+      return (celsiusDeg * 1.8) + 32;
+    }
+
+    translateTemp(celsiusDeg) {
+      if (this.temperature_uom === 'F') {
+        return this.celsiusToFahrenheit(celsiusDeg);
+      } else {
+        return celsiusDeg;
+      }
+    }
+
+    decodeTempUOM() {
+      if (this.temperature_uom === 'F') {
+        return 17;
+      } else {
+        return 4;
+      }
+    }
+
     async queryVehicle(longPoll) {
       const id = this.vehicleId();
       const vehicleData = await this.tesla.getVehicleData(id);
@@ -483,7 +503,7 @@ module.exports = function(Polyglot) {
 
         // Drivers side temp
         if (climateState.driver_temp_setting) {
-          this.setDriver('GV12', climateState.driver_temp_setting, false);
+          this.setDriver('GV12', this.translateTemp(climateState.driver_temp_setting), true, false, this.decodeTempUOM());
         }
 
         // Passengers side temp
