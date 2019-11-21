@@ -501,10 +501,6 @@ module.exports = function(Polyglot) {
           this.setDriver('GV11', vehiculeState.sentry_mode, false);
         }
 
-        logger.info('##debug##');
-        logger.info('translateTemp: %s', this.translateTemp(climateState.driver_temp_setting));
-        logger.info('decodeTempUOM: %s', this.decodeTempUOM());
-
         // Drivers side temp
         if (climateState.driver_temp_setting) {
           this.setDriver('GV12', this.translateTemp(climateState.driver_temp_setting), true, false, this.decodeTempUOM());
@@ -512,12 +508,12 @@ module.exports = function(Polyglot) {
 
         // Passengers side temp
         if (climateState.driver_temp_setting) {
-          this.setDriver('GV13', climateState.passenger_temp_setting, false);
+          this.setDriver('GV13', this.translateTemp(climateState.passenger_temp_setting), true, false, this.decodeTempUOM());
         }
 
         // Exterior temp
         if (climateState.driver_temp_setting) {
-          this.setDriver('GV14', climateState.outside_temp, false);
+          this.setDriver('GV14', this.translateTemp(climateState.outside_temp), true, false, this.decodeTempUOM());
         }
 
         // Software Update Availability Status
@@ -536,7 +532,7 @@ module.exports = function(Polyglot) {
         // It must be already correct.
         
         // Current temperature inside the vehicle.
-        this.setDriver('CLITEMP', climateState.inside_temp, false);
+        this.setDriver('CLITEMP', this.translateTemp(climateState.inside_temp), true, false, this.decodeTempUOM());
         // Status of climate conditioning.
         this.setDriver('CLIEMD', climateState.is_climate_on, false);
 
