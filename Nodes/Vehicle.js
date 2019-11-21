@@ -399,9 +399,9 @@ module.exports = function(Polyglot) {
 
     translateTemp(celsiusDeg) {
       if (this.temperature_uom === 'F') {
-        return this.celsiusToFahrenheit(celsiusDeg);
+        return Math.round(this.celsiusToFahrenheit(celsiusDeg)).toString();
       } else {
-        return celsiusDeg;
+        return Math.round(celsiusDeg).toString();
       }
     }
 
