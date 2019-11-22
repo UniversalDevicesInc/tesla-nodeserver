@@ -46,8 +46,8 @@
   </editor>
   <editor id="I_CLIMATE_TEMP_RANGE">
     <!-- 15 to 28 degrees C -->
-    <range uom="4" min="15" max="28" step="1" prec="0" />
     <range uom="17" min="60" max="82" step="1" prec="0" />
+    <range uom="4" min="15" max="28" step="1" prec="0" />
   </editor>
   <editor id="I_SOFTWARE_UPDATE_STATUS">
     <range uom="25" min="0" max="10" nls="EN_I_SOFTWARE_UPDATE_STATUS" />
