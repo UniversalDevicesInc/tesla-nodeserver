@@ -521,12 +521,12 @@ module.exports = function(Polyglot) {
         }
 
         // Passengers side temp
-        if (climateState.driver_temp_setting) {
+        if (climateState.passenger_temp_setting) {
           this.setDriver('GV13', this.fromStdTemp(climateState.passenger_temp_setting), true, false, this.decodeTempUOM());
         }
 
         // Exterior temp
-        if (climateState.driver_temp_setting) {
+        if (climateState.outside_temp) {
           this.setDriver('GV14', this.fromStdTemp(climateState.outside_temp), true, false, this.decodeTempUOM());
         }
 
