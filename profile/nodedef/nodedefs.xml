@@ -91,10 +91,10 @@
           <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
         </cmd>
         <cmd id="CLIMATE_TEMP_SETTING_DRIVER">
-          <p id="" editor="I_CLIMATE_TEMP_RANGE" optional="F"/>
+          <p id="" editor="I_CLIMATE_TEMP_RANGE" init="GV12" optional="F"/>
         </cmd>
         <cmd id="CLIMATE_TEMP_SETTING_PASSENGER">
-          <p id="" editor="I_CLIMATE_TEMP_RANGE" optional="F"/>
+          <p id="" editor="I_CLIMATE_TEMP_RANGE" init="GV13" optional="F"/>
         </cmd>
         <cmd id="SENTRY_MODE_ON"/>
         <cmd id="SENTRY_MODE_OFF"/>
