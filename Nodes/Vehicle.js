@@ -340,18 +340,20 @@ module.exports = function(Polyglot) {
 
     async onSetClimateTempDriver(message) {
       const id = this.vehicleId();
+      const celsiusDeg = this.toStdTemp(message.value);
       logger.info('SETTING DRIVERS SIDE CLIMATE TEMP (%s): %s', this.address,
-        message.value ? message.value : 'No value');
-      this.drivers_temp = message.value;
-      await this.tesla.cmdSetClimateTemp(id, message.value, this.passengers_temp);
+        message.value ? celsiusDeg : 'No value');
+      this.drivers_temp = celsiusDeg;
+      await this.tesla.cmdSetClimateTemp(id, celsiusDeg, this.passengers_temp);
       await this.query();
     }
     async onSetClimateTempPassenger(message) {
       const id = this.vehicleId();
+      const celsiusDeg = this.toStdTemp(message.value);
       logger.info('SETTING PASSENGERS SIDE CLIMATE TEMP (%s): %s', this.address,
-          message.value ? message.value : 'No value');
-      this.passengers_temp = message.value;
-      await this.tesla.cmdSetClimateTemp(id, this.drivers_temp, message.value);
+          message.value ? celsiusDeg : 'No value');
+      this.passengers_temp = celsiusDeg;
+      await this.tesla.cmdSetClimateTemp(id, this.celsiusDeg, message.value);
       await this.query();
     }
 
@@ -397,11 +399,23 @@ module.exports = function(Polyglot) {
       return (celsiusDeg * 1.8) + 32;
     }
 
-    translateTemp(celsiusDeg) {
+    fahrenheitToCelsius(fDeg) {
+      return (fDeg - 32) * 5/9;
+    }
+
+    fromStdTemp(celsiusDeg) {
       if (this.temperature_uom === 'F') {
         return Math.round(this.celsiusToFahrenheit(celsiusDeg)).toString();
       } else {
         return Math.round(celsiusDeg).toString();
+      }
+    }
+
+    toStdTemp(localDeg) {
+      if (this.temperature_uom === 'F') {
+        return Math.round(this.fahrenheitToCelsius(localDeg)).toString();
+      } else {
+        return Math.round(localDeg).toString();
       }
     }
 
@@ -503,17 +517,17 @@ module.exports = function(Polyglot) {
 
         // Drivers side temp
         if (climateState.driver_temp_setting) {
-          this.setDriver('GV12', this.translateTemp(climateState.driver_temp_setting), true, false, this.decodeTempUOM());
+          this.setDriver('GV12', this.fromStdTemp(climateState.driver_temp_setting), true, false, this.decodeTempUOM());
         }
 
         // Passengers side temp
         if (climateState.driver_temp_setting) {
-          this.setDriver('GV13', this.translateTemp(climateState.passenger_temp_setting), true, false, this.decodeTempUOM());
+          this.setDriver('GV13', this.fromStdTemp(climateState.passenger_temp_setting), true, false, this.decodeTempUOM());
         }
 
         // Exterior temp
         if (climateState.driver_temp_setting) {
-          this.setDriver('GV14', this.translateTemp(climateState.outside_temp), true, false, this.decodeTempUOM());
+          this.setDriver('GV14', this.fromStdTemp(climateState.outside_temp), true, false, this.decodeTempUOM());
         }
 
         // Software Update Availability Status
@@ -532,7 +546,7 @@ module.exports = function(Polyglot) {
         // It must be already correct.
         
         // Current temperature inside the vehicle.
-        this.setDriver('CLITEMP', this.translateTemp(climateState.inside_temp), true, false, this.decodeTempUOM());
+        this.setDriver('CLITEMP', this.fromStdTemp(climateState.inside_temp), true, false, this.decodeTempUOM());
         // Status of climate conditioning.
         this.setDriver('CLIEMD', climateState.is_climate_on, false);
 
