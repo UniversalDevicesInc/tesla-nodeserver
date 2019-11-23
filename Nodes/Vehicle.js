@@ -390,23 +390,24 @@ module.exports = function(Polyglot) {
     }
 
     vehicleUOM(guisettings) {
+      const response = guisettings.response;
 	    // this will take the units set from the Tesla GUI in the vehicle and we'll use that to display the correct ones
-	    if (guisettings.gui_distance_units) {
-	      if (guisettings.gui_distance_units.includes('mi')) {
+	    if (response.gui_distance_units) {
+	      if (response.gui_distance_units.includes('mi')) {
 	        this.distance_uom = 'mi';
 	      } else {
 	        this.distance_uom = 'km';
 	      }
-	      logger.info('Distance Units set to: %s', this.distance_uom);
+	      logger.info('Distance Units from vehicle: %s', this.distance_uom);
 	    } else {
-	      logger.error('GUI Distance Units missing from vehicleData');
+	      logger.error('GUI Distance Units missing from gui_settings');
 	    }
 	      
-	    if (guisettings.gui_temperature_units) {
-	      this.temperature_uom = guisettings.gui_temperature_units;
-	      logger.info('Temperature Units set to: %s', this.temperature_uom);
+	    if (response.gui_temperature_units) {
+	      this.temperature_uom = response.gui_temperature_units;
+	      logger.info('Temperature Units from vehicle: %s', this.temperature_uom);
 	    } else {
-	      logger.error('GUI Temperature Units missing from vehicleData');
+	      logger.error('GUI Temperature Units missing from gui_settings');
 	    }
     }
 
