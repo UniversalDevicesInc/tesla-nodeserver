@@ -110,6 +110,12 @@ module.exports = function(Polyglot) {
     async initializeUOM() {
       const id = this.vehicleId();
       const vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
+      if (vehicleGuiSettings === 408) {
+        logger.info('initializeUOM waking vehicle');
+        await this.tesla.wakeUp(id);
+        await delay(5000); // Wait 5 seconds before trying again.
+        vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
+      }
       this.vehicleUOM(vehicleGuiSettings)
       logger.info('initializeUOM (%s)', this.temperature_uom);
       if (this.temperature_uom === 'C') {
