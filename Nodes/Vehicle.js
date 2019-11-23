@@ -113,12 +113,10 @@ module.exports = function(Polyglot) {
       this.vehicleUOM(vehicleGuiSettings)
       logger.info('initializeUOM (%s)', this.temperature_uom);
       if (this.temperature_uom === 'C') {
-        this.drivers.GV12.value = '';
-        this.drivers.GV12.uom = 4 ;
+        this.drivers.GV12 = { value: '', uom: 4 };
         this.commands.CLIMATE_TEMP_SETTING_DRIVER_C = this.onSetClimateTempDriver;
       } else {
-        this.drivers.GV12.value = '';
-        this.drivers.GV12.uom = 17 ;
+        this.drivers.GV12 = { value: '', uom: 17 };
         this.commands.CLIMATE_TEMP_SETTING_DRIVER_F = this.onSetClimateTempDriver;
       }
       logger.info('initializeUOM done');
