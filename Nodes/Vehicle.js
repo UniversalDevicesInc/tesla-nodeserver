@@ -29,7 +29,7 @@ module.exports = function(Polyglot) {
       // If you don't care about the hint, just comment the line.
       this.hint = '0x01130101'; // See hints.yaml
       
-      const vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
+      const vehicleGuiSettings = this.tesla.getVehicleGuiSettings(id);
 
       // Commands that this node can handle.
       // Should match the 'accepts' section of the nodedef.
