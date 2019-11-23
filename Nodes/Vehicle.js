@@ -87,7 +87,7 @@ module.exports = function(Polyglot) {
         GV9: { value: '', uom: 51 }, // Sunroof open%
         GV10: { value: '', uom: 116 }, // Odometer (default mile, but multi-editor supports kilometer too)
         GV11:  { value: '', uom: 2 }, // Sentry mode on
-        GV12:  { value: '', uom: 4 }, // Drivers side temp
+//        GV12:  { value: '', uom: 4 }, // Drivers side temp
         GV13:  { value: '', uom: 4 }, // Passenger side temp
         GV14:  { value: '', uom: 4 }, // Exterior temp
         GV17: { value: '', uom: 26 }, // Software Update Availability Status
@@ -112,8 +112,12 @@ module.exports = function(Polyglot) {
       const vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
       this.vehicleUOM(vehicleGuiSettings)
       if (this.temperature_uom === 'C') {
+        this.drivers.GV12.value = '';
+        this.drivers.GV12.uom = 4 ;
         this.commands.CLIMATE_TEMP_SETTING_DRIVER_C = this.onSetClimateTempDriver;
       } else {
+        this.drivers.GV12.value = '';
+        this.drivers.GV12.uom = 17 ;
         this.commands.CLIMATE_TEMP_SETTING_DRIVER_F = this.onSetClimateTempDriver;
       }
     }
