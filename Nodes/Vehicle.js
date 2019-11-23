@@ -29,8 +29,6 @@ module.exports = function(Polyglot) {
       // If you don't care about the hint, just comment the line.
       this.hint = '0x01130101'; // See hints.yaml
       
-      const vehicleGuiSettings = this.tesla.getVehicleGuiSettings(id);
-
       // Commands that this node can handle.
       // Should match the 'accepts' section of the nodedef.
       this.commands = {
@@ -68,16 +66,7 @@ module.exports = function(Polyglot) {
         CLIMATE_TEMP_SETTING_PASSENGER: this.onSetClimateTempPassenger, // sets the climate control temp for the passengers side
       };
 
-      this.temperature_uom = 'C'; // defaults to Celsius. Pulls data from vehicle GUI to change to C where appropriate.
-      if (vehicleGuiSettings.gui_temperature_units) {
-        this.temperature_uom = vehicleGuiSettings.gui_temperature_units;
-      }
       
-      if (this.temperature_uom = 'C') {
-        commands.CLIMATE_TEMP_SETTING_DRIVER_C = this.onSetClimateTempDriver;
-      } else {
-        commands.CLIMATE_TEMP_SETTING_DRIVER_F = this.onSetClimateTempDriver;
-      }
 
       // Status that this node has.
       // Should match the 'sts' section of the nodedef.
@@ -111,13 +100,23 @@ module.exports = function(Polyglot) {
       };
 
       this.distance_uom = 'mi'; // defaults to miles. Pulls data from vehicle GUI to change to KM where appropriate.
+      this.temperature_uom = 'C'; // defaults to Celsius. Pulls data from vehicle GUI to change to C where appropriate.
       
       this.drivers_temp = '15'; // need to keep these in memory for when we set one or the other
       this.passengers_temp = '15'; // since setting one to null means the temp goes to LO
       this.let_sleep = true; // this will be used to disable short polling
     }
 
-
+    async initializeUOM() {
+      const id = this.vehicleId();
+      const vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
+      this.vehicleUOM(vehicleGuiSettings)
+      if (this.temperature_uom === 'C') {
+        this.commands.CLIMATE_TEMP_SETTING_DRIVER_C = this.onSetClimateTempDriver;
+      } else {
+        this.commands.CLIMATE_TEMP_SETTING_DRIVER_F = this.onSetClimateTempDriver;
+      }
+    }
 
     // The id is stored in GV20
     vehicleId() {
@@ -468,10 +467,8 @@ module.exports = function(Polyglot) {
         const chargeState = vehicleData.response.charge_state;
         const vehiculeState = vehicleData.response.vehicle_state;
         const climateState = vehicleData.response.climate_state;
-        const guisettings = vehicleData.response.gui_settings;
         const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
 
-        this.vehicleUOM(guisettings)
 
         if (climateState.driver_temp_setting && climateState.passenger_temp_setting) {
           this.drivers_temp = climateState.driver_temp_setting;
