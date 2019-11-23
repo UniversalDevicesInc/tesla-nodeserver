@@ -28,6 +28,8 @@ module.exports = function(Polyglot) {
       // Must be a string in this format
       // If you don't care about the hint, just comment the line.
       this.hint = '0x01130101'; // See hints.yaml
+      
+      const vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
 
       // Commands that this node can handle.
       // Should match the 'accepts' section of the nodedef.
@@ -62,9 +64,20 @@ module.exports = function(Polyglot) {
         START_SOFTWARE_UPDATE: this.onStartSoftwareUpdate, // will start the car's software update if one is available.
         MAX_DEFROST_ON: this.onMaxDefrostOn, // turns the climate control to max defrost
         MAX_DEFROST_OFF: this.onMaxDefrostOff, // turns the climate control to the previous setting
-        CLIMATE_TEMP_SETTING_DRIVER: this.onSetClimateTempDriver, // sets the climate control temp for the drivers side
+//        CLIMATE_TEMP_SETTING_DRIVER: this.onSetClimateTempDriver, // sets the climate control temp for the drivers side
         CLIMATE_TEMP_SETTING_PASSENGER: this.onSetClimateTempPassenger, // sets the climate control temp for the passengers side
       };
+
+      this.temperature_uom = 'C'; // defaults to Celsius. Pulls data from vehicle GUI to change to C where appropriate.
+      if (vehicleGuiSettings.gui_temperature_units) {
+        this.temperature_uom = vehicleGuiSettings.gui_temperature_units;
+      }
+      
+      if (this.temperature_uom = 'C') {
+        commands.CLIMATE_TEMP_SETTING_DRIVER_C = this.onSetClimateTempDriver;
+      } else {
+        commands.CLIMATE_TEMP_SETTING_DRIVER_F = this.onSetClimateTempDriver;
+      }
 
       // Status that this node has.
       // Should match the 'sts' section of the nodedef.
@@ -98,7 +111,6 @@ module.exports = function(Polyglot) {
       };
 
       this.distance_uom = 'mi'; // defaults to miles. Pulls data from vehicle GUI to change to KM where appropriate.
-      this.temperature_uom = 'C'; // defaults to Celsius. Pulls data from vehicle GUI to change to C where appropriate.
       
       this.drivers_temp = '15'; // need to keep these in memory for when we set one or the other
       this.passengers_temp = '15'; // since setting one to null means the temp goes to LO
