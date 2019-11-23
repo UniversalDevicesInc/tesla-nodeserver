@@ -73,7 +73,7 @@ module.exports = function(Polyglot) {
       // Must all be strings
       this.drivers = {
         ST: { value: '', uom: 51 }, // SOC%
-        GV1: { value: '', uom: 116 }, // Battery range (default mile, but UOM gathered from the vehicle)
+//        GV1: { value: '', uom: 116 }, // Battery range (default mile, but UOM gathered from the vehicle)
         GV2: { value: '', uom: 2 }, // Charge port door open
         GV3: { value: '', uom: 2 }, // Charge port latch engaged
         GV4: { value: '', uom: 2 }, // Charge enable request
@@ -85,16 +85,16 @@ module.exports = function(Polyglot) {
         CPW: { value: '', uom: 73 }, // Charger power
         GV8: { value: '', uom: 2 }, // Locked?
         GV9: { value: '', uom: 51 }, // Sunroof open%
-        GV10: { value: '', uom: 116 }, // Odometer (default mile, but multi-editor supports kilometer too)
+//        GV10: { value: '', uom: 116 }, // Odometer (default mile, but multi-editor supports kilometer too)
         GV11:  { value: '', uom: 2 }, // Sentry mode on
 //        GV12:  { value: '', uom: 4 }, // Drivers side temp
-        GV13:  { value: '', uom: 4 }, // Passenger side temp
-        GV14:  { value: '', uom: 4 }, // Exterior temp
-        GV17: { value: '', uom: 26 }, // Software Update Availability Status
+//        GV13:  { value: '', uom: 4 }, // Passenger side temp
+//        GV14:  { value: '', uom: 4 }, // Exterior temp
+        GV17: { value: '', uom: 27 }, // Software Update Availability Status
         GV18: { value: '', uom: 2 }, // Online?
         GV19: { value: '', uom: 56 }, // Last updated unix timestamp
         GV20: { value: id, uom: 56 }, // ID used for the Tesla API
-        CLITEMP: { value: '', uom: 4 }, // Interior temperature
+//        CLITEMP: { value: '', uom: 4 }, // Interior temperature
         CLIEMD: { value: '', uom: 2 }, // Climate conditioning on
         ERR: { value: '', uom: 2 }, // In error?
       };
@@ -114,10 +114,24 @@ module.exports = function(Polyglot) {
       logger.info('initializeUOM (%s)', this.temperature_uom);
       if (this.temperature_uom === 'C') {
         this.drivers.GV12 = { value: '', uom: 4 };
+        this.drivers.GV13 = { value: '', uom: 4 };
+        this.drivers.GV14 = { value: '', uom: 4 };
+        this.drivers.CLITEMP = { value: '', uom: 4 };
         this.commands.CLIMATE_TEMP_SETTING_DRIVER_C = this.onSetClimateTempDriver;
       } else {
         this.drivers.GV12 = { value: '', uom: 17 };
+        this.drivers.GV13 = { value: '', uom: 17 };
+        this.drivers.GV14 = { value: '', uom: 17 };
+        this.drivers.CLITEMP = { value: '', uom: 17 };
         this.commands.CLIMATE_TEMP_SETTING_DRIVER_F = this.onSetClimateTempDriver;
+      }
+      
+      if (this.distance_uom === 'mi') {
+        this.drivers.GV1 = { value: '', uom: 116 };
+        this.drivers.GV10 = { value: '', uom: 116 };
+      } else {
+        this.drivers.GV1 = { value: '', uom: 83 };
+        this.drivers.GV10 = { value: '', uom: 83 };
       }
       logger.info('initializeUOM done');
     }
