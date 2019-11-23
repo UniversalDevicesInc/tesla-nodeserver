@@ -66,4 +66,5 @@ CMD-V-MAX_DEFROST_OFF-NAME = Max defrost off
 CMD-V-START_SOFTWARE_UPDATE-NAME = Start software update
 CMD-V-CLIMATE_TEMP_SETTING_DRIVER_C-NAME = Driver's climate control temp C
 CMD-V-CLIMATE_TEMP_SETTING_DRIVER_F-NAME = Driver's climate control temp F
-CMD-V-CLIMATE_TEMP_SETTING_PASSENGER-NAME = Passenger's climate control temperature
+CMD-V-CLIMATE_TEMP_SETTING_PASSENGER_C-NAME = Passenger's climate control temp C
+CMD-V-CLIMATE_TEMP_SETTING_PASSENGER_F-NAME = Passenger's climate control temp F
