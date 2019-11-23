@@ -111,6 +111,7 @@ module.exports = function(Polyglot) {
       const id = this.vehicleId();
       const vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
       this.vehicleUOM(vehicleGuiSettings)
+      logger.info('initializeUOM (%s)', this.temperature_uom);
       if (this.temperature_uom === 'C') {
         this.drivers.GV12.value = '';
         this.drivers.GV12.uom = 4 ;
@@ -120,6 +121,7 @@ module.exports = function(Polyglot) {
         this.drivers.GV12.uom = 17 ;
         this.commands.CLIMATE_TEMP_SETTING_DRIVER_F = this.onSetClimateTempDriver;
       }
+      logger.info('initializeUOM done');
     }
 
     // The id is stored in GV20
