@@ -573,7 +573,7 @@ module.exports = function(Polyglot) {
         }
 
         // Max Defrost
-        if (climateState.defrost_mode === '2' && climateState.is_front_defroster_on && climateState.is_auto_conditioning_on) {
+        if (climateState.defrost_mode === '2' && climateState.is_front_defroster_on === 'true' && climateState.is_auto_conditioning_on === 'true') {
           this.setDriver('GV15', true, true);
         } else {
           this.setDriver('GV15', false, true);
