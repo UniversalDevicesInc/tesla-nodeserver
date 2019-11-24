@@ -116,7 +116,7 @@ module.exports = function(Polyglot) {
         await this.tesla.delay(5000); // Wait 5 seconds before trying again.
         vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
       }
-      this.vehicleUOM(vehicleGuiSettings)
+      this.vehicleUOM(vehicleGuiSettings.response);
       logger.info('initializeUOM (%s)', this.temperature_uom);
       if (this.temperature_uom === 'C') {
         this.drivers.GV12 = { value: '', uom: 4 };
@@ -410,10 +410,10 @@ module.exports = function(Polyglot) {
     }
 
     vehicleUOM(guisettings) {
-      const response = guisettings.response;
-	    // this will take the units set from the Tesla GUI in the vehicle and we'll use that to display the correct ones
-	    if (response.gui_distance_units) {
-	      if (response.gui_distance_units.includes('mi')) {
+	    // this will take the units set from the Tesla GUI in the vehicle
+      // and we'll use that to match what is displayed by the nodeserver 
+	    if (guisettings.gui_distance_units) {
+	      if (guisettings.gui_distance_units.includes('mi')) {
 	        this.distance_uom = 'mi';
 	      } else {
 	        this.distance_uom = 'km';
@@ -423,8 +423,8 @@ module.exports = function(Polyglot) {
 	      logger.error('GUI Distance Units missing from gui_settings');
 	    }
 	      
-	    if (response.gui_temperature_units) {
-	      this.temperature_uom = response.gui_temperature_units;
+	    if (guisettings.gui_temperature_units) {
+	      this.temperature_uom = guisettings.gui_temperature_units;
 	      logger.info('Temperature Units from vehicle: %s', this.temperature_uom);
 	    } else {
 	      logger.error('GUI Temperature Units missing from gui_settings');
@@ -494,6 +494,7 @@ module.exports = function(Polyglot) {
         const climateState = vehicleData.response.climate_state;
         const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
 
+        this.vehicleUOM(vehicleData.response.gui_settings);
 
         if (climateState.driver_temp_setting && climateState.passenger_temp_setting) {
           this.drivers_temp = climateState.driver_temp_setting;
