@@ -6,6 +6,12 @@ const lock = new AsyncLock({ timeout: 500 });
 // nodeDefId must match the nodedef in the profile
 const nodeDefId = 'VEHICLE';
 
+function delay(delay) {
+  return new Promise(function(waitforit) {
+    setTimeout(waitforit, delay);
+  });
+}
+
 module.exports = function(Polyglot) {
   // Utility function provided to facilitate logging.
   const logger = Polyglot.logger;
@@ -109,11 +115,11 @@ module.exports = function(Polyglot) {
 
     async initializeUOM() {
       const id = this.vehicleId();
-      const vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
+      let vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
       if (vehicleGuiSettings === 408) {
         logger.info('initializeUOM waking vehicle');
         await this.tesla.wakeUp(id);
-        await this.tesla.delay(5000); // Wait 5 seconds before trying again.
+        await delay(5000); // Wait 5 seconds before trying again.
         vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
       }
       this.vehicleUOM(vehicleGuiSettings.response);
@@ -515,9 +521,9 @@ module.exports = function(Polyglot) {
 
         // Battery range
         if (this.distance_uom === 'km') {
-          this.setDriver('GV1', Math.round(parseFloat(chargeState.battery_range) * 1.609344, 1).toString(), true, false, 8);
+          this.setDriver('GV1', Math.round(parseFloat(chargeState.battery_range) * 1.609344).toString(), true, false, 8);
         } else {
-          this.setDriver('GV1', Math.round(parseFloat(chargeState.battery_range), 1).toString(), true, false, 116);
+          this.setDriver('GV1', Math.round(parseFloat(chargeState.battery_range)).toString(), true, false, 116);
         }
 
         this.setDriver('GV2', chargeState.charge_port_door_open, false);
@@ -540,9 +546,9 @@ module.exports = function(Polyglot) {
 
         // Odometer reading
         if (this.distance_uom === 'km') {
-          this.setDriver('GV10', Math.round(parseFloat(vehiculeState.odometer) * 1.609344, 1).toString(), true, false, 8);
+          this.setDriver('GV10', Math.round(parseFloat(vehiculeState.odometer) * 1.609344).toString(), true, false, 8);
         } else {
-          this.setDriver('GV10', Math.round(parseFloat(vehiculeState.odometer), 1).toString(), true, false, 116);
+          this.setDriver('GV10', Math.round(parseFloat(vehiculeState.odometer)).toString(), true, false, 116);
         }
 
         // Status of sentry mode.
