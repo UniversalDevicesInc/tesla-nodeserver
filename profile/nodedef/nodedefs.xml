@@ -91,10 +91,10 @@
           <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
         </cmd>
         <cmd id="CLIMATE_TEMP_SETTING_DRIVER_C">
-          <p id="" editor="I_CLIMATE_TEMP_RANGE_C" optional="T"/>
+          <p id="" editor="I_CLIMATE_TEMP_RANGE_C" optional="F"/>
         </cmd>
         <cmd id="CLIMATE_TEMP_SETTING_DRIVER_F">
-          <p id="" editor="I_CLIMATE_TEMP_RANGE_F" optional="T"/>
+          <p id="" editor="I_CLIMATE_TEMP_RANGE_F" optional="F"/>
         </cmd>
         <cmd id="CLIMATE_TEMP_SETTING_PASSENGER_C">
           <p id="" editor="I_CLIMATE_TEMP_RANGE_C" optional="T"/>
