@@ -37,11 +37,11 @@
       <st id="GV12" editor="I_TEMP_DEG"/> <!-- Drivers side temp -->
       <st id="GV13" editor="I_TEMP_DEG"/> <!-- Passengerss side temp -->
       <st id="GV14" editor="I_TEMP_DEG"/> <!-- Exterior temp -->
-      <st id="GV15" editor="BOOLEAN"/> <!-- Max Defrost -->
       <st id="GV18" editor="BOOLEAN"/> <!-- Online? -->
       <st id="GV17" editor="I_SOFTWARE_UPDATE_STATUS"/> <!-- Software update availability status -->
       <st id="CLITEMP" editor="I_TEMP_DEG"/> <!-- Interior temperature -->
       <st id="CLIEMD" editor="BOOLEAN"/> <!-- Climate Conditioning On -->
+      <st id="GV15" editor="BOOLEAN"/> <!-- Max Defrost -->
       <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
       <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
       <st id="ERR" editor="BOOLEAN" hide="T" />
