@@ -37,6 +37,7 @@
       <st id="GV12" editor="I_TEMP_DEG"/> <!-- Drivers side temp -->
       <st id="GV13" editor="I_TEMP_DEG"/> <!-- Passengerss side temp -->
       <st id="GV14" editor="I_TEMP_DEG"/> <!-- Exterior temp -->
+      <st id="GV15" editor="BOOLEAN"/> <!-- Max Defrost -->
       <st id="GV18" editor="BOOLEAN"/> <!-- Online? -->
       <st id="GV17" editor="I_SOFTWARE_UPDATE_STATUS"/> <!-- Software update availability status -->
       <st id="CLITEMP" editor="I_TEMP_DEG"/> <!-- Interior temperature -->

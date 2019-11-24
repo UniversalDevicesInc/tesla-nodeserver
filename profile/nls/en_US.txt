@@ -6,7 +6,7 @@ CMD-CONTROLLER-UPDATE_PROFILE-NAME = Update node server profile
 CMD-CONTROLLER-QUERY-NAME = Query node server
 
 ND-VEHICLE-NAME = Vehicle
-ND-VEHICLE-ICON = GenericRspCtl
+ND-VEHICLE-ICON = Electricity
 ST-V-ST-NAME = % State of charge
 ST-V-GV1-NAME = Battery range
 ST-V-GV2-NAME = Charge port door open
@@ -22,6 +22,7 @@ ST-V-GV11-NAME = Sentry mode on
 ST-V-GV12-NAME = Drivers side temp
 ST-V-GV13-NAME = Passengers side temp
 ST-V-GV14-NAME = Outside temp
+ST-V-GV15-NAME = Max Defrost
 ST-V-GV17-NAME = Software Update Status
 ST-V-GV18-NAME = Vehicle Online
 ST-V-GV19-NAME = Timestamp

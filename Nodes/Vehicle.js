@@ -95,7 +95,8 @@ module.exports = function(Polyglot) {
         GV11:  { value: '', uom: 2 }, // Sentry mode on
 //        GV12:  { value: '', uom: 4 }, // Drivers side temp
 //        GV13:  { value: '', uom: 4 }, // Passenger side temp
-//        GV14:  { value: '', uom: 4 }, // Exterior temp
+//      GV14:  { value: '', uom: 4 }, // Exterior temp
+        GV15:  { value: '', uom: 2 }, // Max Defrost
         GV17: { value: '', uom: 27 }, // Software Update Availability Status
         GV18: { value: '', uom: 2 }, // Online?
         GV19: { value: '', uom: 56 }, // Last updated unix timestamp
@@ -569,6 +570,13 @@ module.exports = function(Polyglot) {
         // Exterior temp
         if (climateState.outside_temp) {
           this.setDriver('GV14', this.fromStdTemp(climateState.outside_temp), true, false, this.decodeTempUOM());
+        }
+
+        // Max Defrost
+        if (climateState.defrost_mode === '2' && climateState.is_front_defroster_on && climateState.is_auto_conditioning_on) {
+          this.setDriver('GV15', true, true);
+        } else {
+          this.setDriver('GV15', false, true);
         }
 
         // Software Update Availability Status
