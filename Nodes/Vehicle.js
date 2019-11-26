@@ -582,6 +582,7 @@ module.exports = function(Polyglot) {
 
         // Software Update Availability Status
         //if (vehiculeState.software_update.status) {
+        logger.debug("software_update.status %s", vehiculeState.software_update.status);
           this.setDriver('GV17', vehiculeState.software_update.status, false);
         //}
         if (this.let_sleep && !longPoll) {
