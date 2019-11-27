@@ -69,3 +69,8 @@ CMD-V-CLIMATE_TEMP_SETTING_DRIVER_C-NAME = Driver's climate control temp C
 CMD-V-CLIMATE_TEMP_SETTING_DRIVER_F-NAME = Driver's climate control temp F
 CMD-V-CLIMATE_TEMP_SETTING_PASSENGER_C-NAME = Passenger's climate control temp C
 CMD-V-CLIMATE_TEMP_SETTING_PASSENGER_F-NAME = Passenger's climate control temp F
+
+EN_I_SOFTWARE_UPDATE_STATUS-0 = None Pending
+EN_I_SOFTWARE_UPDATE_STATUS-1 = Available 
+EN_I_SOFTWARE_UPDATE_STATUS-2 = Installing
+

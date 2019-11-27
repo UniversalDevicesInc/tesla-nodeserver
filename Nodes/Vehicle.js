@@ -97,7 +97,7 @@ module.exports = function(Polyglot) {
 //        GV13:  { value: '', uom: 4 }, // Passenger side temp
 //      GV14:  { value: '', uom: 4 }, // Exterior temp
         GV15:  { value: '', uom: 2 }, // Max Defrost
-        GV17: { value: '', uom: 56 }, // Software Update Availability Status
+        GV17: { value: '', uom: 25 }, // Software Update Availability Status
         GV18: { value: '', uom: 2 }, // Online?
         GV19: { value: '', uom: 56 }, // Last updated unix timestamp
         GV20: { value: id, uom: 56 }, // ID used for the Tesla API
@@ -470,6 +470,17 @@ module.exports = function(Polyglot) {
       }
     }
 
+    // I_SOFTWARE_UPDATE_STATUS index
+    decodSoftwareUpdateStatus(status) {
+      if (status === '') {
+        return 0
+      } else if (status === 'available') {
+        return 1
+      } else if (status === 'installing') {
+        return 2
+      }
+    }
+
     async queryVehicle(longPoll) {
       const id = this.vehicleId();
       const vehicleData = await this.tesla.getVehicleData(id);
@@ -583,7 +594,7 @@ module.exports = function(Polyglot) {
         // Software Update Availability Status
         //if (vehiculeState.software_update.status) {
         logger.debug("software_update.status %s", vehiculeState.software_update.status);
-          this.setDriver('GV17', vehiculeState.software_update.status, false);
+          this.setDriver('GV17', decodSoftwareUpdateStatus(vehiculeState.software_update.status), false);
         //}
         if (this.let_sleep && !longPoll) {
           this.setDriver('GV18', false, false); // this way we know if we have to wake up the car or not
