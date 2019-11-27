@@ -476,8 +476,10 @@ module.exports = function(Polyglot) {
         return 0
       } else if (status === 'available') {
         return 1
-      } else if (status === 'installing') {
+      } else if (status === 'scheduled') {
         return 2
+      } else if (status === 'installing') {
+        return 3
       }
     }
 
