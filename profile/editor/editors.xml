@@ -53,6 +53,6 @@
     <range uom="17" min="60" max="82" step="1" prec="0" />
   </editor>
   <editor id="I_SOFTWARE_UPDATE_STATUS">
-    <range uom="27" />
+    <range uom="56" />
   </editor>
 </editors>
