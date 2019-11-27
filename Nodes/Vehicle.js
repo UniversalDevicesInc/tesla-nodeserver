@@ -594,7 +594,7 @@ module.exports = function(Polyglot) {
         // Software Update Availability Status
         //if (vehiculeState.software_update.status) {
         logger.debug("software_update.status %s", vehiculeState.software_update.status);
-          this.setDriver('GV17', decodSoftwareUpdateStatus(vehiculeState.software_update.status), false);
+          this.setDriver('GV17', this.decodSoftwareUpdateStatus(vehiculeState.software_update.status), true);
         //}
         if (this.let_sleep && !longPoll) {
           this.setDriver('GV18', false, false); // this way we know if we have to wake up the car or not
