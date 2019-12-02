@@ -68,8 +68,10 @@ module.exports = function(Polyglot) {
         START_SOFTWARE_UPDATE: this.onStartSoftwareUpdate, // will start the car's software update if one is available.
         MAX_DEFROST_ON: this.onMaxDefrostOn, // turns the climate control to max defrost
         MAX_DEFROST_OFF: this.onMaxDefrostOff, // turns the climate control to the previous setting
-//        CLIMATE_TEMP_SETTING_DRIVER: this.onSetClimateTempDriver, // sets the climate control temp for the drivers side
-        CLIMATE_TEMP_SETTING_PASSENGER: this.onSetClimateTempPassenger, // sets the climate control temp for the passengers side
+        CLIMATE_TEMP_SETTING_DRIVER_C: this.onSetClimateTempDriver, // sets the climate control temp for the drivers side
+        CLIMATE_TEMP_SETTING_DRIVER_F: this.onSetClimateTempDriver, // sets the climate control temp for the drivers side
+        CLIMATE_TEMP_SETTING_PASSENGER_C: this.onSetClimateTempPassenger, // sets the climate control temp for the passengers side
+        CLIMATE_TEMP_SETTING_PASSENGER_F: this.onSetClimateTempPassenger, // sets the climate control temp for the passengers side
       };
 
       
@@ -130,13 +132,11 @@ module.exports = function(Polyglot) {
         this.drivers.GV13 = { value: '', uom: 4 };
         this.drivers.GV14 = { value: '', uom: 4 };
         this.drivers.CLITEMP = { value: '', uom: 4 };
-        this.commands.CLIMATE_TEMP_SETTING_DRIVER_C = this.onSetClimateTempDriver;
       } else {
         this.drivers.GV12 = { value: '', uom: 17 };
         this.drivers.GV13 = { value: '', uom: 17 };
         this.drivers.GV14 = { value: '', uom: 17 };
         this.drivers.CLITEMP = { value: '', uom: 17 };
-        this.commands.CLIMATE_TEMP_SETTING_DRIVER_F = this.onSetClimateTempDriver;
       }
       
       if (this.distance_uom === 'mi') {
