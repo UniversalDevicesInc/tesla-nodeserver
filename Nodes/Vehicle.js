@@ -415,8 +415,8 @@ module.exports = function(Polyglot) {
     async onSetClimateTempPassenger(message, uom) {
       const id = this.vehicleId();
       const celsiusDeg = this.toStdTemp(message.value, uom);
-      logger.info('SETTING PASSENGERS SIDE CLIMATE TEMP (%s): %s', this.address,
-          message.value ? celsiusDeg : 'No value');
+      logger.info('SETTING PASSENGERS SIDE CLIMATE TEMP (%s): raw %s, value %s, driver %s', this.address,
+          message.value, celsiusDeg, this.stdDriverTemp());
       this.passengers_temp = celsiusDeg;
       await this.tesla.cmdSetClimateTemp(id, this.stdDriverTemp(), celsiusDeg);
       await this.query();
