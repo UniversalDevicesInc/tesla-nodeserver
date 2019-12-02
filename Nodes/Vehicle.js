@@ -68,10 +68,10 @@ module.exports = function(Polyglot) {
         START_SOFTWARE_UPDATE: this.onStartSoftwareUpdate, // will start the car's software update if one is available.
         MAX_DEFROST_ON: this.onMaxDefrostOn, // turns the climate control to max defrost
         MAX_DEFROST_OFF: this.onMaxDefrostOff, // turns the climate control to the previous setting
-        CLIMATE_TEMP_SETTING_DRIVER_C: this.onSetClimateTempDriver, // sets the climate control temp for the drivers side
-        CLIMATE_TEMP_SETTING_DRIVER_F: this.onSetClimateTempDriver, // sets the climate control temp for the drivers side
-        CLIMATE_TEMP_SETTING_PASSENGER_C: this.onSetClimateTempPassenger, // sets the climate control temp for the passengers side
-        CLIMATE_TEMP_SETTING_PASSENGER_F: this.onSetClimateTempPassenger, // sets the climate control temp for the passengers side
+        CLIMATE_TEMP_SETTING_DRIVER_C: this.onSetClimateTempDriverC, // sets the climate control temp for the drivers side
+        CLIMATE_TEMP_SETTING_DRIVER_F: this.onSetClimateTempDriverF, // sets the climate control temp for the drivers side
+        CLIMATE_TEMP_SETTING_PASSENGER_C: this.onSetClimateTempPassengerC, // sets the climate control temp for the passengers side
+        CLIMATE_TEMP_SETTING_PASSENGER_F: this.onSetClimateTempPassengerF, // sets the climate control temp for the passengers side
       };
 
       
@@ -380,18 +380,35 @@ module.exports = function(Polyglot) {
       await this.query();
     }
 
-    async onSetClimateTempDriver(message) {
+    async onSetClimateTempDriverC(message) {
+      await this.onSetClimateTempDriver(message, 'C')
+    }
+
+    async onSetClimateTempDriverF(message) {
+      await this.onSetClimateTempDriver(message, 'F')
+    }
+
+    async onSetClimateTempDriver(message, uom) {
       const id = this.vehicleId();
-      const celsiusDeg = this.toStdTemp(message.value);
+      const celsiusDeg = this.toStdTemp(message.value, uom);
       logger.info('SETTING DRIVERS SIDE CLIMATE TEMP (%s): %s', this.address,
         message.value ? celsiusDeg : 'No value');
       this.drivers_temp = celsiusDeg;
       await this.tesla.cmdSetClimateTemp(id, celsiusDeg, this.passengers_temp);
       await this.query();
     }
-    async onSetClimateTempPassenger(message) {
+
+    async onSetClimateTempPassengerC(message) {
+      await this.onSetClimateTempPassenger(message, 'C')
+    }
+
+    async onSetClimateTempPassengerF(message) {
+      await this.onSetClimateTempPassenger(message, 'F')
+    }
+
+    async onSetClimateTempPassenger(message, uom) {
       const id = this.vehicleId();
-      const celsiusDeg = this.toStdTemp(message.value);
+      const celsiusDeg = this.toStdTemp(message.value, uom);
       logger.info('SETTING PASSENGERS SIDE CLIMATE TEMP (%s): %s', this.address,
           message.value ? celsiusDeg : 'No value');
       this.passengers_temp = celsiusDeg;
@@ -454,8 +471,8 @@ module.exports = function(Polyglot) {
       }
     }
 
-    toStdTemp(localDeg) {
-      if (this.temperature_uom === 'F') {
+    toStdTemp(localDeg, uom) {
+      if (uom === 'F') {
         return Math.round(this.fahrenheitToCelsius(localDeg)).toString();
       } else {
         return Math.round(localDeg).toString();
