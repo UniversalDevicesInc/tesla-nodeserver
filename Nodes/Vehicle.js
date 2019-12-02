@@ -418,8 +418,14 @@ module.exports = function(Polyglot) {
       logger.info('SETTING PASSENGERS SIDE CLIMATE TEMP (%s): %s', this.address,
           message.value ? celsiusDeg : 'No value');
       this.passengers_temp = celsiusDeg;
-      await this.tesla.cmdSetClimateTemp(id, this.celsiusDeg, message.value);
+      await this.tesla.cmdSetClimateTemp(id, this.stdDriverTemp(), celsiusDeg);
       await this.query();
+    }
+
+    // The driver temperature is stored in GV12
+    stdDriverTemp() {
+      const gv12 = this.getDriver('GV12'); // id used for storing the driver temp
+      return this.toStdTemp(gv12 ? gv12.value : null, this.temperature_uom);
     }
 
     async query(longPoll) {
