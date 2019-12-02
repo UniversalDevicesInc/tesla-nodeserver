@@ -479,9 +479,9 @@ module.exports = function(Polyglot) {
 
     toStdTemp(localDeg, uom) {
       if (uom === 'F') {
-        return Math.round(this.fahrenheitToCelsius(localDeg)).toString();
+        return this.fahrenheitToCelsius(localDeg).toString();
       } else {
-        return Math.round(localDeg).toString();
+        return localDeg;
       }
     }
 
