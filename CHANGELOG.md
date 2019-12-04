@@ -1,5 +1,8 @@
 # Change Log
 
+v1.0.6 (2019-12-04)
+* Split up the vehicle node for a more compact interface.
+
 v1.0.5 (2019-11-17)
 * Fixed GV17 for software update status values
 * Updated displayed server version to 1.0.5
