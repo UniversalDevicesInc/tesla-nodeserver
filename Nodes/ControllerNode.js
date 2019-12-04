@@ -104,15 +104,16 @@ module.exports = function(Polyglot) {
         try {
           logger.info('Adding vehicle node %s: %s',
             deviceAddress, vehicle.display_name);
-
-          const result = await this.polyInterface.addNode(
-            new Vehicle(
+          const newVehicle = new Vehicle(
               this.polyInterface,
               this.address, // primary
               deviceAddress,
               vehicle.display_name,
-              id) // We save the ID in GV20 for eventual API calls
-          );
+              id); // We save the ID in GV20 for eventual API calls
+
+          await newVehicle.initializeUOM();
+
+          const result = await this.polyInterface.addNode(newVehicle);
 
           logger.info('Vehicle added: %s', result);
           this.polyInterface.addNoticeTemp(
