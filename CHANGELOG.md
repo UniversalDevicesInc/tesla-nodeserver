@@ -1,13 +1,14 @@
 # Change Log
 
 v1.0.5 (2019-11-17)
-* Fixed GV17 for software update
+* Fixed GV17 for software update status values
 * Updated displayed server version to 1.0.5
 * Fixed precision for Odometer reading
 * Support for temperature and distance UOM matching the settings in the vehicle
 ** GV12, GV13, GV14 now support both celsius and fahrenheit
 ** GV1 and GV10 support both kilometers and miles
 * Added GV15 for Max Defrost status (it is COLD in the Northland)
+* Separate commands for setting driver/passenger temperature in both C and F
 
 v1.0.4 (2019-09-19)
 
