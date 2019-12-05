@@ -16,6 +16,7 @@ module.exports = function(Polyglot) {
   // In this example, we also need to have our custom node because we create
   // nodes from this controller. See onCreateNew
   const Vehicle = require('./Vehicle.js')(Polyglot);
+  const VehicleSecurity = require('./VehicleSecurity.js')(Polyglot);
 
   class Controller extends Polyglot.Node {
     // polyInterface: handle to the interface
@@ -91,6 +92,7 @@ module.exports = function(Polyglot) {
       this.polyInterface.removeNotice('credsError');
     }
 
+    // pass the Tesla API vehicle object
     async autoAddVehicle(vehicle) {
       // id is the vehicle ID for the purpose of calling APIs.
       // I have seen cases where the good number is id_s, not id (?)
@@ -121,6 +123,26 @@ module.exports = function(Polyglot) {
             'New node created: ' + vehicle.display_name,
             5
           );
+          
+          const vehicleSecurityName = vehicle.display_name + "-Security";
+          const vehicleSecurityAddress = deviceAddress + "S";
+          logger.info('Adding vehicleSecurity node %s: %s',
+              vehicleSecurityAddress, vehicleSecurityName);
+            const newVehicleSecurity = new VehicleSecurity(
+                this.polyInterface,
+                this.address, // primary
+                vehicleSecurityAddress,
+                vehicleSecurityName,
+                id); // We save the ID in GV20 for eventual API calls
+
+            const resultSecurity = await this.polyInterface.addNode(newVehicleSecurity);
+
+            logger.info('VehicleSecurity added: %s', resultSecurity);
+            this.polyInterface.addNoticeTemp(
+              'newVehicleSecurity-' + vehicleSecurityAddress,
+              'New node created: ' + vehicleSecurityName,
+              5
+            );
 
           return { added: true };
 

@@ -44,28 +44,15 @@ module.exports = function(Polyglot) {
         LETSLEEP: this.onLetSleep, // call to let the vehicle sleep (disables short polling)
         HORN: this.onHorn,
         FLASH: this.onFlash,
-        LOCK: this.onLock,
-        UNLOCK: this.onUnlock,
-        SUNROOF_OPEN: this.onSunroofOpen,
-        SUNROOF_CLOSE: this.onSunroofClose,
-        PORT_OPEN: this.onPortOpen,
-        PORT_CLOSE: this.onPortClose,
         CHARGE_SET_TO: this.onChargeSetTo,
         QUERY: this.query, // Query function from the base class
         CLIMATE_OFF: this.onClimateOff, // stop pre-heat or pre-cool of the car
         CLIMATE_ON: this.onClimateOn, // pre-heat or pre-cool the car
-        WINDOWS_VENT: this.onWindowsVent, // vent all the windows
-        WINDOWS_CLOSE: this.onWindowsClose, // close all the windows
-        TRUNK_OPEN: this.onTrunkOpen, // open the rear trunk
-        FRUNK_OPEN: this.onFrunkOpen, // open the front trunk (frunk)
         HEATED_SEAT_LEVEL_DRIVER: this.onHeatedSeatDriver, // set the level on the heated seat for the driver
         HEATED_SEAT_LEVEL_PASSENGER: this.onHeatedSeatPassenger, // set the level on the heated seat for the passenger
         HEATED_SEAT_LEVEL_REAR_LEFT: this.onHeatedSeatRearLeft, // set the level on the heated seat for the rear left seat
         HEATED_SEAT_LEVEL_REAR_CENTER: this.onHeatedSeatRearCenter, // set the level on the heated seat for the rear center seat
         HEATED_SEAT_LEVEL_REAR_RIGHT: this.onHeatedSeatRearRight, // set the level on the heated seat for the rear right seat
-        SENTRY_MODE_ON: this.onSentryModeOn, // turn on Sentry Mode
-        SENTRY_MODE_OFF: this.onSentryModeOff, // turn off Sentry Mode
-        START_SOFTWARE_UPDATE: this.onStartSoftwareUpdate, // will start the car's software update if one is available.
         MAX_DEFROST_ON: this.onMaxDefrostOn, // turns the climate control to max defrost
         MAX_DEFROST_OFF: this.onMaxDefrostOff, // turns the climate control to the previous setting
         CLIMATE_TEMP_SETTING_DRIVER_C: this.onSetClimateTempDriverC, // sets the climate control temp for the drivers side
@@ -82,8 +69,6 @@ module.exports = function(Polyglot) {
       this.drivers = {
         ST: { value: '', uom: 51 }, // SOC%
 //        GV1: { value: '', uom: 116 }, // Battery range (default mile, but UOM gathered from the vehicle)
-        GV2: { value: '', uom: 2 }, // Charge port door open
-        GV3: { value: '', uom: 2 }, // Charge port latch engaged
         GV4: { value: '', uom: 2 }, // Charge enable request
         GV5: { value: '', uom: 2 }, // Charging state
         GV6: { value: '', uom: 2 }, // Fast charger present
@@ -91,10 +76,7 @@ module.exports = function(Polyglot) {
         CC: { value: '', uom: 1 }, // Charger actual current
         CV: { value: '', uom: 72 }, // Charger voltage
         CPW: { value: '', uom: 73 }, // Charger power
-        GV8: { value: '', uom: 2 }, // Locked?
-        GV9: { value: '', uom: 51 }, // Sunroof open%
 //        GV10: { value: '', uom: 116 }, // Odometer (default mile, but multi-editor supports kilometer too)
-        GV11:  { value: '', uom: 2 }, // Sentry mode on
 //        GV12:  { value: '', uom: 4 }, // Drivers side temp
 //        GV13:  { value: '', uom: 4 }, // Passenger side temp
 //      GV14:  { value: '', uom: 4 }, // Exterior temp
@@ -200,42 +182,6 @@ module.exports = function(Polyglot) {
       await this.tesla.cmdFlashLights(id);
     }
 
-    async onLock() {
-      const id = this.vehicleId();
-      logger.info('LOCK (%s)', this.address);
-      await this.tesla.cmdDoorLock(id);
-    }
-
-    async onUnlock() {
-      const id = this.vehicleId();
-      logger.info('UNLOCK (%s)', this.address);
-      await this.tesla.cmdDoorUnlock(id);
-    }
-
-    async onSunroofOpen() {
-      const id = this.vehicleId();
-      logger.info('SUNROOF_OPEN (%s)', this.address);
-      await this.tesla.cmdSunRoof(id, 'vent');
-    }
-
-    async onSunroofClose() {
-      const id = this.vehicleId();
-      logger.info('SUNROOF_CLOSE (%s)', this.address);
-      await this.tesla.cmdSunRoof(id, 'close');
-    }
-
-    async onPortOpen() {
-      const id = this.vehicleId();
-      logger.info('PORT_OPEN (%s)', this.address);
-      await this.tesla.cmdChargePortOpen(id);
-    }
-
-    async onPortClose() {
-      const id = this.vehicleId();
-      logger.info('PORT_CLOSE (%s)', this.address);
-      await this.tesla.cmdChargePortClose(id);
-    }
-
     async onChargeSetStd() {
       const id = this.vehicleId();
       logger.info('CHARGE_SET_STD (%s)', this.address);
@@ -266,34 +212,6 @@ module.exports = function(Polyglot) {
         await this.tesla.cmdHvacStop(id);
         await this.query();
       }
-
-    async onWindowsVent() {
-      const id = this.vehicleId();
-      logger.info('WINDOWS VENT (%s)', this.address);
-      await this.tesla.cmdWindows(id, 'vent');
-      await this.query();
-    }
-
-    async onWindowsClose() {
-      const id = this.vehicleId();
-      logger.info('WINDOWS CLOSE (%s)', this.address);
-      await this.tesla.cmdWindows(id, 'close');
-      await this.query();
-    }
-
-    async onTrunkOpen() {
-      const id = this.vehicleId();
-      logger.info('TRUNK OPEN (%s)', this.address);
-      await this.tesla.cmdActuateTrunk(id, 'rear');
-      await this.query();
-    }
-
-    async onFrunkOpen() {
-      const id = this.vehicleId();
-      logger.info('FRUNK OPEN (%s)', this.address);
-      await this.tesla.cmdActuateTrunk(id, 'front');
-      await this.query();
-    }
 
     async onHeatedSeatDriver(message) {
       const id = this.vehicleId();
@@ -342,27 +260,6 @@ module.exports = function(Polyglot) {
           message.value ? message.value : 'No value');
 
       await this.tesla.cmdHeatedSeats(id, '5', message.value);
-      await this.query();
-    }
-
-    async onSentryModeOn() {
-      const id = this.vehicleId();
-      logger.info('SENTRY MODE ON (%s)', this.address);
-      await this.tesla.cmdSentryMode(id, 'on');
-      await this.query();
-    }
-
-    async onSentryModeOff() {
-      const id = this.vehicleId();
-      logger.info('SENTRY MODE OFF (%s)', this.address);
-      await this.tesla.cmdSentryMode(id, 'off');
-      await this.query();
-    }
-
-    async onStartSoftwareUpdate() {
-      const id = this.vehicleId();
-      logger.info('STARTING SOFTWARE UPDATE (%s)', this.address);
-      await this.tesla.cmdStartSoftwareUpdate(id);
       await this.query();
     }
 
@@ -569,11 +466,6 @@ module.exports = function(Polyglot) {
           this.setDriver('GV1', Math.round(parseFloat(chargeState.battery_range)).toString(), true, false, 116);
         }
 
-        this.setDriver('GV2', chargeState.charge_port_door_open, false);
-        this.setDriver('GV3',
-          chargeState.charge_port_latch.toLowerCase() === 'engaged',
-          false);
-
         this.setDriver('GV4', chargeState.charge_enable_request, false);
         this.setDriver('GV5',
           chargeState.charging_state.toLowerCase() === 'charging', false);
@@ -582,21 +474,12 @@ module.exports = function(Polyglot) {
         this.setDriver('CC', chargeState.charger_actual_current, false);
         this.setDriver('CV', chargeState.charger_voltage, false);
         this.setDriver('CPW', chargeState.charger_power * 1000, false);
-        this.setDriver('GV8', vehiculeState.locked, false);
-        if (vehiculeState.sun_roof_percent_open != null) {
-        	this.setDriver('GV9', vehiculeState.sun_roof_percent_open, false);
-        }
 
         // Odometer reading
         if (this.distance_uom === 'km') {
           this.setDriver('GV10', Math.round(parseFloat(vehiculeState.odometer) * 1.609344).toString(), true, false, 8);
         } else {
           this.setDriver('GV10', Math.round(parseFloat(vehiculeState.odometer)).toString(), true, false, 116);
-        }
-
-        // Status of sentry mode.
-        if (vehiculeState.sentry_mode) {
-          this.setDriver('GV11', vehiculeState.sentry_mode, false);
         }
 
         // Drivers side temp
@@ -622,11 +505,6 @@ module.exports = function(Polyglot) {
           this.setDriver('GV15', false, true);
         }
 
-        // Software Update Availability Status
-        //if (vehiculeState.software_update.status) {
-        logger.debug("software_update.status %s", vehiculeState.software_update.status);
-          this.setDriver('GV17', this.decodSoftwareUpdateStatus(vehiculeState.software_update.status), true);
-        //}
         if (this.let_sleep && !longPoll) {
           this.setDriver('GV18', false, false); // this way we know if we have to wake up the car or not
         } else {
