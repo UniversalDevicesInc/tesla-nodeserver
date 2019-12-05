@@ -6,7 +6,7 @@ CMD-CONTROLLER-UPDATE_PROFILE-NAME = Update node server profile
 CMD-CONTROLLER-QUERY-NAME = Query node server
 
 ND-VEHICLE-NAME = Vehicle
-ND-VEHICLE-ICON = GenericRspCtl
+ND-VEHICLE-ICON = Electricity
 ST-V-ST-NAME = % State of charge
 ST-V-GV1-NAME = Battery range
 ST-V-GV2-NAME = Charge port door open
@@ -22,6 +22,7 @@ ST-V-GV11-NAME = Sentry mode on
 ST-V-GV12-NAME = Drivers side temp
 ST-V-GV13-NAME = Passengers side temp
 ST-V-GV14-NAME = Outside temp
+ST-V-GV15-NAME = Max Defrost
 ST-V-GV17-NAME = Software Update Status
 ST-V-GV18-NAME = Vehicle Online
 ST-V-GV19-NAME = Timestamp
@@ -64,5 +65,13 @@ CMD-V-SENTRY_MODE_OFF-NAME = Sentry mode off
 CMD-V-MAX_DEFROST_ON-NAME = Max defrost on
 CMD-V-MAX_DEFROST_OFF-NAME = Max defrost off
 CMD-V-START_SOFTWARE_UPDATE-NAME = Start software update
-CMD-V-CLIMATE_TEMP_SETTING_DRIVER-NAME = Driver's climate control temperature
-CMD-V-CLIMATE_TEMP_SETTING_PASSENGER-NAME = Passenger's climate control temperature
+CMD-V-CLIMATE_TEMP_SETTING_DRIVER_C-NAME = Driver's climate control temp C
+CMD-V-CLIMATE_TEMP_SETTING_DRIVER_F-NAME = Driver's climate control temp F
+CMD-V-CLIMATE_TEMP_SETTING_PASSENGER_C-NAME = Passenger's climate control temp C
+CMD-V-CLIMATE_TEMP_SETTING_PASSENGER_F-NAME = Passenger's climate control temp F
+
+EN_I_SOFTWARE_UPDATE_STATUS-0 = None Pending
+EN_I_SOFTWARE_UPDATE_STATUS-1 = Available 
+EN_I_SOFTWARE_UPDATE_STATUS-2 = Scheduled
+EN_I_SOFTWARE_UPDATE_STATUS-3 = Installing
+
