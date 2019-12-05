@@ -94,7 +94,7 @@
   </nodedef>
 
   <!-- Vehicle Security info -->
-  <nodedef id="VEHICLE-SECURITY" nls="S">
+  <nodedef id="VEHICLESECURITY" nls="S">
     <sts>
       <st id="GV2" editor="BOOLEAN"/> <!-- Charge port door open -->
       <st id="GV3" editor="BOOLEAN"/> <!-- Charge port latch engaged -->
