@@ -396,19 +396,6 @@ module.exports = function(Polyglot) {
       }
     }
 
-    // I_SOFTWARE_UPDATE_STATUS index
-    decodSoftwareUpdateStatus(status) {
-      if (status === '') {
-        return 0
-      } else if (status === 'available') {
-        return 1
-      } else if (status === 'scheduled') {
-        return 2
-      } else if (status === 'installing') {
-        return 3
-      }
-    }
-
     async queryVehicle(longPoll) {
       const id = this.vehicleId();
       const vehicleData = await this.tesla.getVehicleData(id);
