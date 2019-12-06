@@ -42,15 +42,15 @@ module.exports = function(Polyglot) {
         UNLOCK: this.onUnlock,
         SUNROOF_OPEN: this.onSunroofOpen,
         SUNROOF_CLOSE: this.onSunroofClose,
-        PORT_OPEN: this.onPortOpen,
-        PORT_CLOSE: this.onPortClose,
         WINDOWS_VENT: this.onWindowsVent, // vent all the windows
         WINDOWS_CLOSE: this.onWindowsClose, // close all the windows
         TRUNK_OPEN: this.onTrunkOpen, // open the rear trunk
         FRUNK_OPEN: this.onFrunkOpen, // open the front trunk (frunk)
+        PORT_OPEN: this.onPortOpen,
+        PORT_CLOSE: this.onPortClose,
         SENTRY_MODE_ON: this.onSentryModeOn, // turn on Sentry Mode
         SENTRY_MODE_OFF: this.onSentryModeOff, // turn off Sentry Mode
-        START_SOFTWARE_UPDATE: this.onStartSoftwareUpdate, // will start the car's software update if one is available.
+        START_SOFTWARE_UPDATE: this.onStartSoftwareUpdate // will start the car's software update if one is available.
       };
 
       
@@ -67,7 +67,7 @@ module.exports = function(Polyglot) {
         GV17: { value: '', uom: 25 }, // Software Update Availability Status
         GV19: { value: '', uom: 56 }, // Last updated unix timestamp
         GV20: { value: id, uom: 56 }, // ID used for the Tesla API
-        ERR: { value: '', uom: 2 }, // In error?
+        ERR: { value: '', uom: 2 } // In error?
       };
 
       this.let_sleep = true; // this will be used to disable short polling

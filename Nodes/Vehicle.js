@@ -58,7 +58,7 @@ module.exports = function(Polyglot) {
         CLIMATE_TEMP_SETTING_DRIVER_C: this.onSetClimateTempDriverC, // sets the climate control temp for the drivers side
         CLIMATE_TEMP_SETTING_DRIVER_F: this.onSetClimateTempDriverF, // sets the climate control temp for the drivers side
         CLIMATE_TEMP_SETTING_PASSENGER_C: this.onSetClimateTempPassengerC, // sets the climate control temp for the passengers side
-        CLIMATE_TEMP_SETTING_PASSENGER_F: this.onSetClimateTempPassengerF, // sets the climate control temp for the passengers side
+        CLIMATE_TEMP_SETTING_PASSENGER_F: this.onSetClimateTempPassengerF // sets the climate control temp for the passengers side
       };
 
       
@@ -87,7 +87,7 @@ module.exports = function(Polyglot) {
         GV20: { value: id, uom: 56 }, // ID used for the Tesla API
 //        CLITEMP: { value: '', uom: 4 }, // Interior temperature
         CLIEMD: { value: '', uom: 2 }, // Climate conditioning on
-        ERR: { value: '', uom: 2 }, // In error?
+        ERR: { value: '', uom: 2 } // In error?
       };
 
       this.distance_uom = 'mi'; // defaults to miles. Pulls data from vehicle GUI to change to KM where appropriate.
