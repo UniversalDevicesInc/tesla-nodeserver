@@ -58,8 +58,8 @@ EN_I_SOFTWARE_UPDATE_STATUS-3 = Installing
 
 
 
-ND-VEHICLESEC-NAME = Vehicle Security
-ND-VEHICLESEC-ICON = DoorLock
+ND-VEHSEC-NAME = Vehicle Security
+ND-VEHSEC-ICON = DoorLock
 ST-S-GV2-NAME = Charge port door open
 ST-S-GV3-NAME = Charge port latch engaged
 ST-S-GV8-NAME = Locked

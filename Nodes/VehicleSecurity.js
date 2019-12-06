@@ -4,7 +4,7 @@ const AsyncLock = require('async-lock');
 const lock = new AsyncLock({ timeout: 500 });
 
 // nodeDefId must match the nodedef in the profile
-const nodeDefId = 'VEHICLESEC';
+const nodeDefId = 'VEHSEC';
 
 function delay(delay) {
   return new Promise(function(waitforit) {
