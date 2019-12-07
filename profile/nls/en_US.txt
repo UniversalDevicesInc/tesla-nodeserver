@@ -46,7 +46,7 @@ CMD-V-HEATED_SEAT_LEVEL_REAR_CENTER-NAME = Rear center heated seat level
 CMD-V-HEATED_SEAT_LEVEL_REAR_RIGHT-NAME = Rear right heated seat level
 CMD-V-MAX_DEFROST_ON-NAME = Max defrost on
 CMD-V-MAX_DEFROST_OFF-NAME = Max defrost off
-CMD-V-GV12-NAME = Driver's climate control temp
+CMD-V-CLIMATE_TEMP_SETTING_DRIVER-NAME = Driver's climate control temp
 CMD-V-CLIMATE_TEMP_SETTING_PASSENGER-NAME = Passenger's climate control temp
 
 EN_I_SOFTWARE_UPDATE_STATUS-0 = None Pending
