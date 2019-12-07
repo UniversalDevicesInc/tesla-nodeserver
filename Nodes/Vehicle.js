@@ -89,7 +89,7 @@ module.exports = function(Polyglot) {
       };
 
       this.distance_uom = 'mi'; // defaults to miles. Pulls data from vehicle GUI to change to KM where appropriate.
-      this.temperature_uom = 'C'; // defaults to Celsius. Pulls data from vehicle GUI to change to C where appropriate.
+      this.temperature_uom_index = '4'; // defaults to Celsius. Pulls data from vehicle GUI to change to C where appropriate.
       
       this.drivers_temp = '15'; // need to keep these in memory for when we set one or the other
       this.passengers_temp = '15'; // since setting one to null means the temp goes to LO
@@ -106,18 +106,11 @@ module.exports = function(Polyglot) {
         vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
       }
       this.vehicleUOM(vehicleGuiSettings.response);
-      logger.info('initializeUOM (%s)', this.temperature_uom);
-      if (this.temperature_uom === 'C') {
-        this.drivers.GV12 = { value: '', uom: 4 };
-        this.drivers.GV13 = { value: '', uom: 4 };
-        this.drivers.GV14 = { value: '', uom: 4 };
-        this.drivers.CLITEMP = { value: '', uom: 4 };
-      } else {
-        this.drivers.GV12 = { value: '', uom: 17 };
-        this.drivers.GV13 = { value: '', uom: 17 };
-        this.drivers.GV14 = { value: '', uom: 17 };
-        this.drivers.CLITEMP = { value: '', uom: 17 };
-      }
+      logger.info('initializeUOM (%s)', this.decodeTempUOM());
+      this.drivers.GV12 = { value: '', uom: this.temperature_uom_index };
+      this.drivers.GV13 = { value: '', uom: this.temperature_uom_index };
+      this.drivers.GV14 = { value: '', uom: this.temperature_uom_index };
+      this.drivers.CLITEMP = { value: '', uom: this.temperature_uom_index };
       
       if (this.distance_uom === 'mi') {
         this.drivers.GV1 = { value: '', uom: 116 };
@@ -277,7 +270,7 @@ module.exports = function(Polyglot) {
 
     async onSetClimateTempDriver(message) {
       const id = this.vehicleId();
-      const celsiusDeg = this.toStdTemp(message.value, this.temperature_uom);
+      const celsiusDeg = this.toStdTemp(message.value, message.uom);
       logger.info('SETTING DRIVERS SIDE CLIMATE TEMP (%s): %s', this.address,
         message.value ? celsiusDeg : 'No value');
       logger.debug('message uom: %s', message.uom);
@@ -288,13 +281,13 @@ module.exports = function(Polyglot) {
 
     // The passenger temperature is stored in GV13
     stdPassengerTemp() {
-      const gv20 = this.getDriver('GV13'); // id used for storing the passenger temp
-      return this.toStdTemp(gv20 ? gv20.value : null, this.temperature_uom);
+      const gv13 = this.getDriver('GV13'); // id used for storing the passenger temp
+      return this.toStdTemp(gv13 ? gv13.value : null, gv13.uom);
     }
 
     async onSetClimateTempPassenger(message) {
       const id = this.vehicleId();
-      const celsiusDeg = this.toStdTemp(message.value, this.temperature_uom);
+      const celsiusDeg = this.toStdTemp(message.value, message.uom);
       logger.info('SETTING PASSENGERS SIDE CLIMATE TEMP (%s): raw %s, value %s, driver %s', this.address,
           message.value, celsiusDeg, this.stdDriverTemp());
       logger.debug('message uom: %s', message.uom);
@@ -306,7 +299,7 @@ module.exports = function(Polyglot) {
     // The driver temperature is stored in GV12
     stdDriverTemp() {
       const gv12 = this.getDriver('GV12'); // id used for storing the driver temp
-      return this.toStdTemp(gv12 ? gv12.value : null, this.temperature_uom);
+      return this.toStdTemp(gv12 ? gv12.value : null, gv12.uom);
     }
 
     async query(longPoll) {
@@ -341,8 +334,8 @@ module.exports = function(Polyglot) {
 	    }
 	      
 	    if (guisettings.gui_temperature_units) {
-	      this.temperature_uom = guisettings.gui_temperature_units;
-	      logger.info('Temperature Units from vehicle: %s', this.temperature_uom);
+	      this.temperature_uom_index = decodeTempUOM(guisettings.gui_temperature_units);
+	      logger.info('Temperature Units from vehicle: %s', guisettings.gui_temperature_units);
 	    } else {
 	      logger.error('GUI Temperature Units missing from gui_settings');
 	    }
@@ -357,7 +350,7 @@ module.exports = function(Polyglot) {
     }
 
     fromStdTemp(celsiusDeg) {
-      if (this.temperature_uom === 'F') {
+      if (this.temperature_uom_index === '17') {
         return Math.round(this.celsiusToFahrenheit(celsiusDeg)).toString();
       } else {
         return Math.round(celsiusDeg).toString();
@@ -365,15 +358,15 @@ module.exports = function(Polyglot) {
     }
 
     toStdTemp(localDeg, uom) {
-      if (uom === 'F') {
+      if (uom === '17') {
         return this.fahrenheitToCelsius(localDeg).toString();
       } else {
         return localDeg;
       }
     }
 
-    decodeTempUOM() {
-      if (this.temperature_uom === 'F') {
+    decodeTempUOM(uom) {
+      if (uom === 'F') {
         return 17;
       } else {
         return 4;
@@ -455,17 +448,17 @@ module.exports = function(Polyglot) {
 
         // Drivers side temp
         if (climateState.driver_temp_setting) {
-          this.setDriver('GV12', this.fromStdTemp(climateState.driver_temp_setting), true, false, this.decodeTempUOM());
+          this.setDriver('GV12', this.fromStdTemp(climateState.driver_temp_setting), true, false, this.temperature_uom_index);
         }
 
         // Passengers side temp
         if (climateState.passenger_temp_setting) {
-          this.setDriver('GV13', this.fromStdTemp(climateState.passenger_temp_setting), true, false, this.decodeTempUOM());
+          this.setDriver('GV13', this.fromStdTemp(climateState.passenger_temp_setting), true, false, this.temperature_uom_index);
         }
 
         // Exterior temp
         if (climateState.outside_temp) {
-          this.setDriver('GV14', this.fromStdTemp(climateState.outside_temp), true, false, this.decodeTempUOM());
+          this.setDriver('GV14', this.fromStdTemp(climateState.outside_temp), true, false, this.temperature_uom_index);
         }
 
         logger.debug("defrost_mode %s, is_front_defroster_on %s, is_auto_conditioning_on %s", climateState.defrost_mode, climateState.is_front_defroster_on, climateState.is_auto_conditioning_on);
@@ -488,7 +481,7 @@ module.exports = function(Polyglot) {
         // It must be already correct.
         
         // Current temperature inside the vehicle.
-        this.setDriver('CLITEMP', this.fromStdTemp(climateState.inside_temp), true, false, this.decodeTempUOM());
+        this.setDriver('CLITEMP', this.fromStdTemp(climateState.inside_temp), true, false, this.temperature_uom_index);
         // Status of climate conditioning.
         this.setDriver('CLIEMD', climateState.is_climate_on, false);
 
