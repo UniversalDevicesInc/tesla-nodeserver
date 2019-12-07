@@ -1,8 +1,10 @@
 # Change Log
 
 v2.0.0 (2019-12-06)
-* Split up the vehicle node for a more compact interface.
-* Set charge limit now reflects the current setting.
+* Split up the vehicle node for a more compact interface.  A General node and a Security node
+* Set charge limit now reflects the current setting
+* Moved display of status values that also have setters to only display in the setter
+* Combined the celsius and fahrenheit settings for driver/passenger temp into a single setter
 
 v1.0.5 (2019-11-17)
 * Fixed GV17 for software update status values

@@ -24,13 +24,13 @@
       <st id="GV4" editor="BOOLEAN"/> <!-- Charge enable request -->
       <st id="GV5" editor="BOOLEAN"/> <!-- Charging state -->
       <st id="GV6" editor="BOOLEAN"/> <!-- Fast charger present -->
-      <st id="GV7" editor="I_PERCENT"/> <!-- charge limit soc -->
+      <st id="GV7" editor="I_PERCENT" hide="T"/> <!-- charge limit soc -->
       <st id="CC" editor="I_AMP"/> <!-- Charger actual current -->
       <st id="CV" editor="I_VOLT"/> <!-- Charger voltage -->
       <st id="CPW" editor="I_WATT"/> <!-- Charger power -->
       <st id="GV10" editor="I_ODO"/> <!-- Odometer -->
-      <st id="GV12" editor="I_CLIMATE_TEMP_RANGE"/> <!-- Driver side temp -->
-      <st id="GV13" editor="I_CLIMATE_TEMP_RANGE"/> <!-- Passenger side temp -->
+      <st id="GV12" editor="I_CLIMATE_TEMP_RANGE" hide="T"/> <!-- Driver side temp -->
+      <st id="GV13" editor="I_CLIMATE_TEMP_RANGE" hide="T"/> <!-- Passenger side temp -->
       <st id="GV14" editor="I_TEMP_DEG"/> <!-- Exterior temp -->
       <st id="GV18" editor="BOOLEAN"/> <!-- Online? -->
       <st id="CLITEMP" editor="I_TEMP_DEG"/> <!-- Interior temperature -->
@@ -80,11 +80,8 @@
         <cmd id="CLIMATE_TEMP_SETTING_DRIVER">
           <p id="" editor="I_CLIMATE_TEMP_RANGE" init="GV12" optional="F"/>
         </cmd>
-        <cmd id="CLIMATE_TEMP_SETTING_PASSENGER_C">
-          <p id="" editor="I_CLIMATE_TEMP_RANGE_C" optional="F"/>
-        </cmd>
-        <cmd id="CLIMATE_TEMP_SETTING_PASSENGER_F">
-          <p id="" editor="I_CLIMATE_TEMP_RANGE_F" optional="F"/>
+        <cmd id="CLIMATE_TEMP_SETTING_PASSENGER">
+          <p id="" editor="I_CLIMATE_TEMP_RANGE" init="GV13" optional="F"/>
         </cmd>
       </accepts>
     </cmds>
