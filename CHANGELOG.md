@@ -1,7 +1,8 @@
 # Change Log
 
-v1.0.6 (2019-12-04)
+v2.0.0 (2019-12-06)
 * Split up the vehicle node for a more compact interface.
+* Set charge limit now reflects the current setting.
 
 v1.0.5 (2019-11-17)
 * Fixed GV17 for software update status values

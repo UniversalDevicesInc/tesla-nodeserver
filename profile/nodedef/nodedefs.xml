@@ -53,7 +53,7 @@
         <cmd id="HORN"/>
         <cmd id="FLASH"/>
         <cmd id="CHARGE_SET_TO">
-          <p id="" editor="I_PERCENT" optional="F"/>
+          <p id="" editor="I_PERCENT" init="GV7" optional="F"/>
         </cmd>
         <cmd id="QUERY"/>
         <cmd id="WAKE"/>
