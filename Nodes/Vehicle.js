@@ -334,7 +334,7 @@ module.exports = function(Polyglot) {
 	    }
 	      
 	    if (guisettings.gui_temperature_units) {
-	      this.temperature_uom_index = decodeTempUOM(guisettings.gui_temperature_units);
+	      this.temperature_uom_index = this.decodeTempUOM(guisettings.gui_temperature_units);
 	      logger.info('Temperature Units from vehicle: %s', guisettings.gui_temperature_units);
 	    } else {
 	      logger.error('GUI Temperature Units missing from gui_settings');
