@@ -106,7 +106,7 @@ module.exports = function(Polyglot) {
         vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
       }
       this.vehicleUOM(vehicleGuiSettings.response);
-      logger.info('initializeUOM (%s)', this.decodeTempUOM());
+      logger.info('initializeUOM (%s)', this.decodeTempUOM(this.temperature_uom_index));
       this.drivers.GV12 = { value: '', uom: this.temperature_uom_index };
       this.drivers.GV13 = { value: '', uom: this.temperature_uom_index };
       this.drivers.GV14 = { value: '', uom: this.temperature_uom_index };
