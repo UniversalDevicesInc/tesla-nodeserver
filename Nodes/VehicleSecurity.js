@@ -171,7 +171,7 @@ module.exports = function(Polyglot) {
       if (longPoll) {
         try {
           // Run query only one at a time
-          logger.info('Vehicle Security long poll');
+          logger.info('VehicleSecurity long poll');
 
           await lock.acquire('query', function() {
             return _this.queryVehicle(longPoll);
@@ -180,7 +180,7 @@ module.exports = function(Polyglot) {
           logger.error('Error while querying vehicle: %s', err.message);
         }
       } else {
-        logger.info('SKIPPING POLL TO LET THE VEHICLE SLEEP');
+        logger.info('VehicleSecurity SKIPPING POLL TO LET THE VEHICLE SLEEP');
       }
 
     }
@@ -230,7 +230,7 @@ module.exports = function(Polyglot) {
           chargeState.charge_port_latch.toLowerCase() === 'engaged',
           false);
 
-        this.setDriver('GV8', vehiculeState.locked, false);
+        this.setDriver('GV8', vehicleState.locked, false);
 
         if (vehicleState.sun_roof_percent_open) {
         	this.setDriver('GV9', vehicleState.sun_roof_percent_open, false);
