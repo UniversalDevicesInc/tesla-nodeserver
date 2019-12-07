@@ -64,6 +64,7 @@ ST-S-GV8-NAME = Locked
 ST-S-GV9-NAME = % Sunroof
 ST-S-GV11-NAME = Sentry mode on
 ST-S-GV17-NAME = Software Update Status
+ST-S-GV18-NAME = Vehicle Online
 ST-S-GV19-NAME = Timestamp
 ST-S-GV20-NAME = Car ID
 ST-S-ERR-NAME = Error
