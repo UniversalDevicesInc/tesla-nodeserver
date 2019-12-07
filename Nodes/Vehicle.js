@@ -55,8 +55,7 @@ module.exports = function(Polyglot) {
         HEATED_SEAT_LEVEL_REAR_RIGHT: this.onHeatedSeatRearRight, // set the level on the heated seat for the rear right seat
         MAX_DEFROST_ON: this.onMaxDefrostOn, // turns the climate control to max defrost
         MAX_DEFROST_OFF: this.onMaxDefrostOff, // turns the climate control to the previous setting
-        CLIMATE_TEMP_SETTING_DRIVER_C: this.onSetClimateTempDriverC, // sets the climate control temp for the drivers side
-        CLIMATE_TEMP_SETTING_DRIVER_F: this.onSetClimateTempDriverF, // sets the climate control temp for the drivers side
+        CLIMATE_TEMP_SETTING_DRIVER: this.onSetClimateTempDriver, // sets the climate control temp for the drivers side
         CLIMATE_TEMP_SETTING_PASSENGER_C: this.onSetClimateTempPassengerC, // sets the climate control temp for the passengers side
         CLIMATE_TEMP_SETTING_PASSENGER_F: this.onSetClimateTempPassengerF // sets the climate control temp for the passengers side
       };
@@ -277,19 +276,12 @@ module.exports = function(Polyglot) {
       await this.query();
     }
 
-    async onSetClimateTempDriverC(message) {
-      await this.onSetClimateTempDriver(message, 'C')
-    }
-
-    async onSetClimateTempDriverF(message) {
-      await this.onSetClimateTempDriver(message, 'F')
-    }
-
-    async onSetClimateTempDriver(message, uom) {
+    async onSetClimateTempDriver(message) {
       const id = this.vehicleId();
-      const celsiusDeg = this.toStdTemp(message.value, uom);
+      const celsiusDeg = this.toStdTemp(message.value, this.temperature_uom);
       logger.info('SETTING DRIVERS SIDE CLIMATE TEMP (%s): %s', this.address,
         message.value ? celsiusDeg : 'No value');
+      logger.debug('message: %s', message);
       this.drivers_temp = celsiusDeg;
       await this.tesla.cmdSetClimateTemp(id, celsiusDeg, this.stdPassengerTemp());
       await this.query();
