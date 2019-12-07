@@ -77,11 +77,8 @@
         <cmd id="HEATED_SEAT_LEVEL_REAR_RIGHT">
           <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
         </cmd>
-        <cmd id="CLIMATE_TEMP_SETTING_DRIVER_C">
-          <p id="" editor="I_CLIMATE_TEMP_RANGE_C" init="GV12" optional="F"/>
-        </cmd>
-        <cmd id="CLIMATE_TEMP_SETTING_DRIVER_F">
-          <p id="" editor="I_CLIMATE_TEMP_RANGE_F" init="GV12" optional="F"/>
+        <cmd id="CLIMATE_TEMP_SETTING_DRIVER">
+          <p id="" editor="I_TEMP_DEG" init="GV12" optional="F"/>
         </cmd>
         <cmd id="CLIMATE_TEMP_SETTING_PASSENGER_C">
           <p id="" editor="I_CLIMATE_TEMP_RANGE_C" optional="F"/>
