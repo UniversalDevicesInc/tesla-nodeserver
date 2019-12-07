@@ -165,11 +165,14 @@ module.exports = function(Polyglot) {
       await this.query();
     }
 
+    // Update Vehicle security only on long poll.
     async query(longPoll) {
       const _this = this;
-      if (!this.let_sleep || longPoll) {
+      if (longPoll) {
         try {
           // Run query only one at a time
+          logger.info('Vehicle Security long poll');
+
           await lock.acquire('query', function() {
             return _this.queryVehicle(longPoll);
           });
@@ -177,7 +180,7 @@ module.exports = function(Polyglot) {
           logger.error('Error while querying vehicle: %s', err.message);
         }
       } else {
-        logger.info('SKIPPING POLL TO LET THE VEHICLE SLEEP - ISSUE WAKE CMD TO VEHICLE TO ENABLE SHORT POLLING');
+        logger.info('SKIPPING POLL TO LET THE VEHICLE SLEEP');
       }
 
     }
