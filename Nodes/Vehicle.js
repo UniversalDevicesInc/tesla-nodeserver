@@ -91,8 +91,6 @@ module.exports = function(Polyglot) {
       this.distance_uom = 'mi'; // defaults to miles. Pulls data from vehicle GUI to change to KM where appropriate.
       this.temperature_uom_index = '4'; // defaults to Celsius. Pulls data from vehicle GUI to change to C where appropriate.
       
-      this.drivers_temp = '15'; // need to keep these in memory for when we set one or the other
-      this.passengers_temp = '15'; // since setting one to null means the temp goes to LO
       this.let_sleep = true; // this will be used to disable short polling
     }
 
@@ -271,10 +269,9 @@ module.exports = function(Polyglot) {
     async onSetClimateTempDriver(message) {
       const id = this.vehicleId();
       const celsiusDeg = this.toStdTemp(message.value, message.uom);
-      logger.info('SETTING DRIVERS SIDE CLIMATE TEMP (%s): %s', this.address,
-        message.value ? celsiusDeg : 'No value');
+      logger.info('SETTING DRIVERS SIDE CLIMATE TEMP (%s): D_Raw %s, D_Value %s, passenger %s', this.address,
+          message.value, celsiusDeg, this.stdPassengerTemp());
       logger.debug('message uom: %s', message.uom);
-      this.drivers_temp = celsiusDeg;
       await this.tesla.cmdSetClimateTemp(id, celsiusDeg, this.stdPassengerTemp());
       await this.query();
     }
@@ -288,10 +285,9 @@ module.exports = function(Polyglot) {
     async onSetClimateTempPassenger(message) {
       const id = this.vehicleId();
       const celsiusDeg = this.toStdTemp(message.value, message.uom);
-      logger.info('SETTING PASSENGERS SIDE CLIMATE TEMP (%s): raw %s, value %s, driver %s', this.address,
+      logger.info('SETTING PASSENGERS SIDE CLIMATE TEMP (%s): D_Raw %s, D_Value %s, driver %s', this.address,
           message.value, celsiusDeg, this.stdDriverTemp());
       logger.debug('message uom: %s', message.uom);
-      this.passengers_temp = celsiusDeg;
       await this.tesla.cmdSetClimateTemp(id, this.stdDriverTemp(), celsiusDeg);
       await this.query();
     }
@@ -405,15 +401,6 @@ module.exports = function(Polyglot) {
         const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
 
         this.vehicleUOM(vehicleData.response.gui_settings);
-
-        if (climateState.driver_temp_setting && climateState.passenger_temp_setting) {
-          this.drivers_temp = climateState.driver_temp_setting;
-          logger.info('Drivers temp currently set to: %s', this.drivers_temp);
-          this.passengers_temp = climateState.passenger_temp_setting;
-          logger.info('Passengers temp currently set to: %s', this.passengers_temp);
-        } else {
-          logger.error('Missing drivers or passenger temp from from climate state');
-        }
 
         // We know the 'Stopped' status, but what are the others?
         if (chargeState.charging_state !== 'Stopped' &&
