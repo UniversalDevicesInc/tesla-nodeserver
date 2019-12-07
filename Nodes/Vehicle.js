@@ -89,7 +89,7 @@ module.exports = function(Polyglot) {
       };
 
       this.distance_uom = 'mi'; // defaults to miles. Pulls data from vehicle GUI to change to KM where appropriate.
-      this.temperature_uom_index = '4'; // defaults to Celsius. Pulls data from vehicle GUI to change to C where appropriate.
+      this.temperature_uom_index = 4; // defaults to Celsius. Pulls data from vehicle GUI to change to C where appropriate.
       
       this.let_sleep = true; // this will be used to disable short polling
     }
@@ -346,7 +346,7 @@ module.exports = function(Polyglot) {
     }
 
     fromStdTemp(celsiusDeg) {
-      if (this.temperature_uom_index === '17') {
+      if (this.temperature_uom_index === 17) {
         return Math.round(this.celsiusToFahrenheit(celsiusDeg)).toString();
       } else {
         return Math.round(celsiusDeg).toString();
@@ -354,7 +354,7 @@ module.exports = function(Polyglot) {
     }
 
     toStdTemp(localDeg, uom) {
-      if (uom === '17') {
+      if (uom === 17) {
         return this.fahrenheitToCelsius(localDeg).toString();
       } else {
         return localDeg;
