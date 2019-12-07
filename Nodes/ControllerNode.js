@@ -125,7 +125,8 @@ module.exports = function(Polyglot) {
           );
           
           const vehicleSecurityName = vehicle.display_name + " Security";
-          const vehicleSecurityAddress =  "S" + deviceAddress.substring(0, Math.min(6,deviceAddress.length));
+//        const vehicleSecurityAddress =  "s" + deviceAddress.substring(0, Math.min(6,deviceAddress.length));
+        const vehicleSecurityAddress =  "s" + deviceAddress;
           logger.info('Adding vehicleSecurity node %s: %s',
               vehicleSecurityAddress, vehicleSecurityName);
             const newVehicleSecurity = new VehicleSecurity(
