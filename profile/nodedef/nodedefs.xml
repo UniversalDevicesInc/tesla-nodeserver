@@ -29,8 +29,8 @@
       <st id="CV" editor="I_VOLT"/> <!-- Charger voltage -->
       <st id="CPW" editor="I_WATT"/> <!-- Charger power -->
       <st id="GV10" editor="I_ODO"/> <!-- Odometer -->
-      <st id="GV12" editor="I_TEMP_DEG"/> <!-- Driver side temp -->
-      <st id="GV13" editor="I_TEMP_DEG"/> <!-- Passenger side temp -->
+      <st id="GV12" editor="I_CLIMATE_TEMP_RANGE"/> <!-- Driver side temp -->
+      <st id="GV13" editor="I_CLIMATE_TEMP_RANGE"/> <!-- Passenger side temp -->
       <st id="GV14" editor="I_TEMP_DEG"/> <!-- Exterior temp -->
       <st id="GV18" editor="BOOLEAN"/> <!-- Online? -->
       <st id="CLITEMP" editor="I_TEMP_DEG"/> <!-- Interior temperature -->
@@ -78,7 +78,7 @@
           <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
         </cmd>
         <cmd id="CLIMATE_TEMP_SETTING_DRIVER">
-          <p id="" editor="I_TEMP_DEG" init="GV12" optional="F"/>
+          <p id="" editor="I_CLIMATE_TEMP_RANGE" init="GV12" optional="F"/>
         </cmd>
         <cmd id="CLIMATE_TEMP_SETTING_PASSENGER_C">
           <p id="" editor="I_CLIMATE_TEMP_RANGE_C" optional="F"/>
