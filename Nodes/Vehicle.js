@@ -56,8 +56,7 @@ module.exports = function(Polyglot) {
         MAX_DEFROST_ON: this.onMaxDefrostOn, // turns the climate control to max defrost
         MAX_DEFROST_OFF: this.onMaxDefrostOff, // turns the climate control to the previous setting
         CLIMATE_TEMP_SETTING_DRIVER: this.onSetClimateTempDriver, // sets the climate control temp for the drivers side
-        CLIMATE_TEMP_SETTING_PASSENGER_C: this.onSetClimateTempPassengerC, // sets the climate control temp for the passengers side
-        CLIMATE_TEMP_SETTING_PASSENGER_F: this.onSetClimateTempPassengerF // sets the climate control temp for the passengers side
+        CLIMATE_TEMP_SETTING_PASSENGER: this.onSetClimateTempPassenger, // sets the climate control temp for the passengers side
       };
 
       
@@ -281,7 +280,7 @@ module.exports = function(Polyglot) {
       const celsiusDeg = this.toStdTemp(message.value, this.temperature_uom);
       logger.info('SETTING DRIVERS SIDE CLIMATE TEMP (%s): %s', this.address,
         message.value ? celsiusDeg : 'No value');
-      logger.debug('message: %s', message);
+      logger.debug('message uom: %s', message.uom);
       this.drivers_temp = celsiusDeg;
       await this.tesla.cmdSetClimateTemp(id, celsiusDeg, this.stdPassengerTemp());
       await this.query();
@@ -293,19 +292,12 @@ module.exports = function(Polyglot) {
       return this.toStdTemp(gv20 ? gv20.value : null, this.temperature_uom);
     }
 
-    async onSetClimateTempPassengerC(message) {
-      await this.onSetClimateTempPassenger(message, 'C')
-    }
-
-    async onSetClimateTempPassengerF(message) {
-      await this.onSetClimateTempPassenger(message, 'F')
-    }
-
-    async onSetClimateTempPassenger(message, uom) {
+    async onSetClimateTempPassenger(message) {
       const id = this.vehicleId();
-      const celsiusDeg = this.toStdTemp(message.value, uom);
+      const celsiusDeg = this.toStdTemp(message.value, this.temperature_uom);
       logger.info('SETTING PASSENGERS SIDE CLIMATE TEMP (%s): raw %s, value %s, driver %s', this.address,
           message.value, celsiusDeg, this.stdDriverTemp());
+      logger.debug('message uom: %s', message.uom);
       this.passengers_temp = celsiusDeg;
       await this.tesla.cmdSetClimateTemp(id, this.stdDriverTemp(), celsiusDeg);
       await this.query();
