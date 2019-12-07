@@ -65,6 +65,7 @@ module.exports = function(Polyglot) {
         GV9: { value: '', uom: 51 }, // Sunroof open%
         GV11:  { value: '', uom: 2 }, // Sentry mode on
         GV17: { value: '', uom: 25 }, // Software Update Availability Status
+        GV18: { value: '', uom: 2 }, // Online?
         GV19: { value: '', uom: 56 }, // Last updated unix timestamp
         GV20: { value: id, uom: 56 }, // ID used for the Tesla API
         ERR: { value: '', uom: 2 } // In error?
