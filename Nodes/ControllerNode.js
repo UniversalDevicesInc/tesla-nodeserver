@@ -135,7 +135,7 @@ module.exports = function(Polyglot) {
                 vehicleSecurityName,
                 id); // We save the ID in GV20 for eventual API calls
 
-            await vehicleSecurityAddress.query(true); // get current values
+            await newVehicleSecurity.query(true); // get current values
             const resultSecurity = await this.polyInterface.addNode(newVehicleSecurity);
 
             logger.info('VehicleSecurity added: %s', resultSecurity);
