@@ -55,7 +55,7 @@
         <cmd id="CHARGE_SET_TO">
           <p id="" editor="I_PERCENT" init="GV7" optional="F"/>
         </cmd>
-        <cmd id="QUERY"/>
+        <cmd id="QUERY_NOW"/>
         <cmd id="WAKE"/>
         <cmd id="LETSLEEP"/>
         <cmd id="CLIMATE_ON"/>

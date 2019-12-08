@@ -45,7 +45,7 @@ module.exports = function(Polyglot) {
         HORN: this.onHorn,
         FLASH: this.onFlash,
         CHARGE_SET_TO: this.onChargeSetTo,
-        QUERY: this.queryNow, // Force a query now to update the status
+        QUERY_NOW: this.queryNow, // Force a query now to update the status
         CLIMATE_OFF: this.onClimateOff, // stop pre-heat or pre-cool of the car
         CLIMATE_ON: this.onClimateOn, // pre-heat or pre-cool the car
         HEATED_SEAT_LEVEL_DRIVER: this.onHeatedSeatDriver, // set the level on the heated seat for the driver
