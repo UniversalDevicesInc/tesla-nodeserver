@@ -60,4 +60,7 @@
   <editor id="I_SOFTWARE_UPDATE_STATUS">
     <range uom="25" subset="0-3" nls="EN_I_SOFTWARE_UPDATE_STATUS" />
   </editor>
+  <editor id="I_OPEN_STATUS">
+    <range uom="25" subset="0-1" nls="EN_I_OPEN_STATUS" />
+  </editor>
 </editors>

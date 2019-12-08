@@ -90,8 +90,10 @@
   <!-- Vehicle Security info -->
   <nodedef id="VEHSEC" nls="S">
     <sts>
-      <st id="GV2" editor="BOOLEAN"/> <!-- Charge port door open -->
-      <st id="GV3" editor="BOOLEAN"/> <!-- Charge port latch engaged -->
+      <st id="GV1" editor="BOOLEAN"/> <!-- Charge port door open -->
+      <st id="GV2" editor="BOOLEAN"/> <!-- Charge port latch engaged -->
+      <st id="GV3" editor="I_OPEN_STATUS"/> <!-- Frunk Status -->
+      <st id="GV4" editor="I_OPEN_STATUS"/> <!-- Trunk Status -->
       <st id="GV8" editor="BOOLEAN"/> <!-- Locked -->
       <st id="GV9" editor="I_PERCENT"/> <!-- Sunroof opened -->
       <st id="GV11" editor="BOOLEAN"/> <!-- Sentry Mode On -->

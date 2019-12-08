@@ -5,7 +5,8 @@ v2.0.0 (2019-12-06)
 * Set charge limit control now reflects the current setting
 * Moved display of status values that also have setters to only display in the control
 * Combined the celsius and fahrenheit settings for driver/passenger temp into a single control
-* Store and use driver and passenger climate values in status fields rather than in instance variables. 
+* Store and use driver and passenger climate values in status fields rather than in instance variables
+* Added frunk and trunk status
 
 v1.0.5 (2019-11-17)
 * Fixed GV17 for software update status values

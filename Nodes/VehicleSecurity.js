@@ -59,8 +59,8 @@ module.exports = function(Polyglot) {
       // Should match the 'sts' section of the nodedef.
       // Must all be strings
       this.drivers = {
-        GV2: { value: '', uom: 2 }, // Charge port door open
-        GV3: { value: '', uom: 2 }, // Charge port latch engaged
+        GV1: { value: '', uom: 2 }, // Charge port door open
+        GV2: { value: '', uom: 2 }, // Charge port latch engaged
         GV8: { value: '', uom: 2 }, // Locked?
         GV9: { value: '', uom: 51 }, // Sunroof open%
         GV11:  { value: '', uom: 2 }, // Sentry mode on
@@ -235,10 +235,13 @@ module.exports = function(Polyglot) {
         const vehicleState = vehicleData.response.vehicle_state;
         const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
 
-        this.setDriver('GV2', chargeState.charge_port_door_open, false);
-        this.setDriver('GV3',
+        this.setDriver('GV1', chargeState.charge_port_door_open, false);
+        this.setDriver('GV2',
           chargeState.charge_port_latch.toLowerCase() === 'engaged',
           false);
+
+        this.setDriver('GV3', vehicleState.ft === 0 ? 0 : 1, false);
+        this.setDriver('GV4', vehicleState.rt === 0 ? 0 : 1, false);
 
         this.setDriver('GV8', vehicleState.locked, false);
 
@@ -252,10 +255,9 @@ module.exports = function(Polyglot) {
         }
 
         // Software Update Availability Status
-        //if (vehicleState.software_update.status) {
         logger.debug("software_update.status %s", vehicleState.software_update.status);
-          this.setDriver('GV17', this.decodSoftwareUpdateStatus(vehicleState.software_update.status), true);
-        //}
+        this.setDriver('GV17', this.decodSoftwareUpdateStatus(vehicleState.software_update.status), true);
+
         if (this.let_sleep && !longPoll) {
           this.setDriver('GV18', false, false); // this way we know if we have to wake up the car or not
         } else {
