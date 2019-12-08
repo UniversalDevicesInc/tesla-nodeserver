@@ -250,8 +250,8 @@ module.exports = function(Polyglot) {
         	this.setDriver('GV9', vehicleState.sun_roof_percent_open, false);
         }
 
-        // Status of sentry mode.
-        this.setDriver('GV11', vehicleState.sentry_mode, false);
+        // Status of sentry mode (displayed with an index).
+        this.setDriver('GV11', vehicleState.sentry_mode ? 1 : 0, false);
 
         // Software Update Availability Status
         logger.debug("software_update.status %s", vehicleState.software_update.status);
