@@ -155,7 +155,7 @@ module.exports = function(Polyglot) {
     async onSentryMode(message) {
       const id = this.vehicleId();
       const decodeValue = message.value === 1 ? 'on' : 'off';
-      logger.debug('SENTRY MODE raw %s decoded %s (%s)', message.value, decodeValue, this.address);
+      logger.debug('SENTRY MODE raw %s type %s decoded %s (%s)', message.value, message.constructor.name, decodeValue, this.address);
       await this.tesla.cmdSentryMode(id, decodeValue);
       await this.query();
     }
