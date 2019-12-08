@@ -61,6 +61,8 @@ module.exports = function(Polyglot) {
       this.drivers = {
         GV1: { value: '', uom: 2 }, // Charge port door open
         GV2: { value: '', uom: 2 }, // Charge port latch engaged
+        GV3: { value: '', uom: 25 }, // Frunk status
+        GV4: { value: '', uom: 25 }, // Trunk Status
         GV8: { value: '', uom: 2 }, // Locked?
         GV9: { value: '', uom: 51 }, // Sunroof open%
         GV11:  { value: '', uom: 2 }, // Sentry mode on
