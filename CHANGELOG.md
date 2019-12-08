@@ -7,6 +7,7 @@ v2.0.0 (2019-12-06)
 * Combined the celsius and fahrenheit settings for driver/passenger temp into a single control
 * Store and use driver and passenger climate values in status fields rather than in instance variables
 * Added frunk and trunk status
+* Changed sentry mode to a command with options.
 
 v1.0.5 (2019-11-17)
 * Fixed GV17 for software update status values

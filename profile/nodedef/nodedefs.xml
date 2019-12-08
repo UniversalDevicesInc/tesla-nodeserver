@@ -96,7 +96,7 @@
       <st id="GV4" editor="I_OPEN_STATUS"/> <!-- Trunk Status -->
       <st id="GV8" editor="BOOLEAN"/> <!-- Locked -->
       <st id="GV9" editor="I_PERCENT"/> <!-- Sunroof opened -->
-      <st id="GV11" editor="BOOLEAN"/> <!-- Sentry Mode On -->
+      <st id="GV11" editor="I_SENTRY_MODE" hide="T"/> <!-- Sentry Mode -->
       <st id="GV17" editor="I_SOFTWARE_UPDATE_STATUS"/> <!-- Software update availability status -->
       <st id="GV18" editor="BOOLEAN" hide="T"/> <!-- Online? -->
       <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
@@ -118,8 +118,9 @@
         <cmd id="FRUNK_OPEN"/>
         <cmd id="PORT_OPEN"/>
         <cmd id="PORT_CLOSE"/>
-        <cmd id="SENTRY_MODE_ON"/>
-        <cmd id="SENTRY_MODE_OFF"/>
+        <cmd id="SENTRY_MODE">
+          <p id="" editor="I_SENTRY_MODE" init="GV11"/>
+        </cmd>
         <cmd id="START_SOFTWARE_UPDATE"/>
       </accepts>
     </cmds>

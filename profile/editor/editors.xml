@@ -63,4 +63,7 @@
   <editor id="I_OPEN_STATUS">
     <range uom="25" subset="0-1" nls="EN_I_OPEN_STATUS" />
   </editor>
+  <editor id="I_SENTRY_MODE">
+    <range uom="25" subset="0-1" nls="EN_I_SENTRY_MODE" />
+  </editor>
 </editors>

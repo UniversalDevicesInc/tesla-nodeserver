@@ -49,8 +49,7 @@ module.exports = function(Polyglot) {
         FRUNK_OPEN: this.onFrunkOpen, // open the front trunk (frunk)
         PORT_OPEN: this.onPortOpen,
         PORT_CLOSE: this.onPortClose,
-        SENTRY_MODE_ON: this.onSentryModeOn, // turn on Sentry Mode
-        SENTRY_MODE_OFF: this.onSentryModeOff, // turn off Sentry Mode
+        SENTRY_MODE: this.onSentryMode, // Change sentry mode
         START_SOFTWARE_UPDATE: this.onStartSoftwareUpdate // will start the car's software update if one is available.
       };
 
@@ -66,7 +65,7 @@ module.exports = function(Polyglot) {
         GV4: { value: '', uom: 25 }, // Trunk Status
         GV8: { value: '', uom: 2 }, // Locked?
         GV9: { value: '', uom: 51 }, // Sunroof open%
-        GV11:  { value: '', uom: 2 }, // Sentry mode on
+        GV11:  { value: '', uom: 25 }, // Sentry mode on
         GV17: { value: '', uom: 25 }, // Software Update Availability Status
         GV18: { value: '', uom: 2 }, // Online?
         GV19: { value: '', uom: 56 }, // Last updated unix timestamp
@@ -153,17 +152,10 @@ module.exports = function(Polyglot) {
       await this.query(true);
     }
 
-    async onSentryModeOn() {
+    async onSentryMode(message) {
       const id = this.vehicleId();
-      logger.info('SENTRY MODE ON (%s)', this.address);
-      await this.tesla.cmdSentryMode(id, 'on');
-      await this.query();
-    }
-
-    async onSentryModeOff() {
-      const id = this.vehicleId();
-      logger.info('SENTRY MODE OFF (%s)', this.address);
-      await this.tesla.cmdSentryMode(id, 'off');
+      logger.info('SENTRY MODE %s (%s)', message.value, this.address);
+      await this.tesla.cmdSentryMode(id, message.value === 1 ? 'on' : 'off');
       await this.query();
     }
 
