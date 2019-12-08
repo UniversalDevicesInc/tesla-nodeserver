@@ -47,8 +47,7 @@ module.exports = function(Polyglot) {
         WINDOWS_CLOSE: this.onWindowsClose, // close all the windows
         TRUNK_OPEN: this.onTrunkOpen, // open the rear trunk
         FRUNK_OPEN: this.onFrunkOpen, // open the front trunk (frunk)
-        PORT_OPEN: this.onPortOpen,
-        PORT_CLOSE: this.onPortClose,
+        CHARGE_PORT_DOOR: this.onChargePortDoor,
         SENTRY_MODE: this.onSentryMode, // Change sentry mode
         START_SOFTWARE_UPDATE: this.onStartSoftwareUpdate // will start the car's software update if one is available.
       };
@@ -59,7 +58,7 @@ module.exports = function(Polyglot) {
       // Should match the 'sts' section of the nodedef.
       // Must all be strings
       this.drivers = {
-        GV1: { value: '', uom: 2 }, // Charge port door open
+        GV1: { value: '', uom: 25 }, // Charge port door status
         GV2: { value: '', uom: 2 }, // Charge port latch engaged
         GV3: { value: '', uom: 25 }, // Frunk status
         GV4: { value: '', uom: 25 }, // Trunk Status
@@ -112,17 +111,17 @@ module.exports = function(Polyglot) {
       await this.tesla.cmdSunRoof(id, 'close');
     }
 
-    async onPortOpen() {
+    async onChargePortDoor(message) {
       const id = this.vehicleId();
-      logger.info('PORT_OPEN (%s)', this.address);
-      await this.tesla.cmdChargePortOpen(id);
+      logger.info('CHARGE_PORT_DOOR %s (%s)', message.value, this.address);
+      if (message.value === 1) {
+        await this.tesla.cmdChargePortOpen(id);
+      } else {
+        await this.tesla.cmdChargePortClose(id);
+      }
+      await this.queryNow();
     }
 
-    async onPortClose() {
-      const id = this.vehicleId();
-      logger.info('PORT_CLOSE (%s)', this.address);
-      await this.tesla.cmdChargePortClose(id);
-    }
 
     async onWindowsVent() {
       const id = this.vehicleId();
@@ -236,7 +235,8 @@ module.exports = function(Polyglot) {
         const vehicleState = vehicleData.response.vehicle_state;
         const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
 
-        this.setDriver('GV1', chargeState.charge_port_door_open, false);
+        this.setDriver('GV1', chargeState.charge_port_door_open ? 1 : 0, false);
+
         this.setDriver('GV2',
           chargeState.charge_port_latch.toLowerCase() === 'engaged',
           false);

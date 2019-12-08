@@ -90,7 +90,7 @@
   <!-- Vehicle Security info -->
   <nodedef id="VEHSEC" nls="S">
     <sts>
-      <st id="GV1" editor="BOOLEAN"/> <!-- Charge port door open -->
+      <st id="GV1" editor="I_CHARGE_PORT_DOOR" hide="T" /> <!-- Charge port door status -->
       <st id="GV2" editor="BOOLEAN"/> <!-- Charge port latch engaged -->
       <st id="GV3" editor="I_OPEN_STATUS"/> <!-- Frunk Status -->
       <st id="GV4" editor="I_OPEN_STATUS"/> <!-- Trunk Status -->
@@ -116,8 +116,9 @@
         <cmd id="WINDOWS_CLOSE"/>
         <cmd id="TRUNK_OPEN"/>
         <cmd id="FRUNK_OPEN"/>
-        <cmd id="PORT_OPEN"/>
-        <cmd id="PORT_CLOSE"/>
+        <cmd id="CHARGE_PORT_DOOR">
+          <p id="" editor="I_CHARGE_PORT_DOOR" init="GV1"/>
+        </cmd>
         <cmd id="SENTRY_MODE">
           <p id="" editor="I_SENTRY_MODE" init="GV11"/>
         </cmd>
