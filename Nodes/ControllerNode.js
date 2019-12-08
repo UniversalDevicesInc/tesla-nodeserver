@@ -158,6 +158,7 @@ module.exports = function(Polyglot) {
                   id); // We save the ID in GV20 for eventual API calls
 
               const resultClimate = await this.polyInterface.addNode(newVehicleClimate);
+              await newVehicleClimate.initializeUOM();
               await newVehicleClimate.query(true); // get current values
 
               logger.info('VehicleClimate added: %s', resultClimate);
