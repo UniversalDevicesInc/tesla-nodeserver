@@ -38,7 +38,7 @@ module.exports = function(Polyglot) {
       // Commands that this node can handle.
       // Should match the 'accepts' section of the nodedef.
       this.commands = {
-        QUERY: this.queryNow, // force a query now to update the status.
+        QUERY_NOW: this.queryNow, // force a query now to update the status.
         LOCK: this.onLock,
         UNLOCK: this.onUnlock,
         SUNROOF_OPEN: this.onSunroofOpen,
