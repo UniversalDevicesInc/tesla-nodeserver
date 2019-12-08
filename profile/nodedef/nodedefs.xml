@@ -29,13 +29,7 @@
       <st id="CV" editor="I_VOLT"/> <!-- Charger voltage -->
       <st id="CPW" editor="I_WATT"/> <!-- Charger power -->
       <st id="GV10" editor="I_ODO"/> <!-- Odometer -->
-      <st id="GV12" editor="I_CLIMATE_TEMP_RANGE" hide="T"/> <!-- Driver side temp -->
-      <st id="GV13" editor="I_CLIMATE_TEMP_RANGE" hide="T"/> <!-- Passenger side temp -->
-      <st id="GV14" editor="I_TEMP_DEG"/> <!-- Exterior temp -->
       <st id="GV18" editor="BOOLEAN"/> <!-- Online? -->
-      <st id="CLITEMP" editor="I_TEMP_DEG"/> <!-- Interior temperature -->
-      <st id="CLIEMD" editor="BOOLEAN"/> <!-- Climate Conditioning On -->
-      <st id="GV15" editor="BOOLEAN"/> <!-- Max Defrost -->
       <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
       <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
       <st id="ERR" editor="BOOLEAN" hide="T" />
@@ -58,31 +52,6 @@
         <cmd id="QUERY_NOW"/>
         <cmd id="WAKE"/>
         <cmd id="LETSLEEP"/>
-        <cmd id="CLIMATE_ON"/>
-        <cmd id="CLIMATE_OFF"/>
-        <cmd id="MAX_DEFROST_ON"/>
-        <cmd id="MAX_DEFROST_OFF"/>
-        <cmd id="HEATED_SEAT_LEVEL_DRIVER">
-          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
-        </cmd>
-        <cmd id="HEATED_SEAT_LEVEL_PASSENGER">
-          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
-        </cmd>
-        <cmd id="HEATED_SEAT_LEVEL_REAR_LEFT">
-          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
-        </cmd>
-        <cmd id="HEATED_SEAT_LEVEL_REAR_CENTER">
-          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
-        </cmd>
-        <cmd id="HEATED_SEAT_LEVEL_REAR_RIGHT">
-          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
-        </cmd>
-        <cmd id="CLIMATE_TEMP_SETTING_DRIVER">
-          <p id="" editor="I_CLIMATE_TEMP_RANGE" init="GV12" optional="F"/>
-        </cmd>
-        <cmd id="CLIMATE_TEMP_SETTING_PASSENGER">
-          <p id="" editor="I_CLIMATE_TEMP_RANGE" init="GV13" optional="F"/>
-        </cmd>
       </accepts>
     </cmds>
   </nodedef>
@@ -123,6 +92,54 @@
           <p id="" editor="I_SENTRY_MODE" init="GV11"/>
         </cmd>
         <cmd id="START_SOFTWARE_UPDATE"/>
+      </accepts>
+    </cmds>
+  </nodedef>
+
+
+  <!-- Vehicle Climate info -->
+  <nodedef id="VEHICLECLIMATE" nls="C">
+    <sts>
+      <st id="GV12" editor="I_CLIMATE_TEMP_RANGE" hide="T"/> <!-- Driver side temp -->
+      <st id="GV13" editor="I_CLIMATE_TEMP_RANGE" hide="T"/> <!-- Passenger side temp -->
+      <st id="GV14" editor="I_TEMP_DEG"/> <!-- Exterior temp -->
+      <st id="GV18" editor="BOOLEAN"/> <!-- Online? -->
+      <st id="CLITEMP" editor="I_TEMP_DEG"/> <!-- Interior temperature -->
+      <st id="CLIEMD" editor="BOOLEAN"/> <!-- Climate Conditioning On -->
+      <st id="GV15" editor="BOOLEAN"/> <!-- Max Defrost -->
+      <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
+      <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
+      <st id="ERR" editor="BOOLEAN" hide="T" />
+    </sts>
+    <cmds>
+      <sends/>
+      <accepts>
+        <cmd id="QUERY_NOW"/>
+        <cmd id="CLIMATE_ON"/>
+        <cmd id="CLIMATE_OFF"/>
+        <cmd id="MAX_DEFROST_ON"/>
+        <cmd id="MAX_DEFROST_OFF"/>
+        <cmd id="HEATED_SEAT_LEVEL_DRIVER">
+          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
+        </cmd>
+        <cmd id="HEATED_SEAT_LEVEL_PASSENGER">
+          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
+        </cmd>
+        <cmd id="HEATED_SEAT_LEVEL_REAR_LEFT">
+          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
+        </cmd>
+        <cmd id="HEATED_SEAT_LEVEL_REAR_CENTER">
+          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
+        </cmd>
+        <cmd id="HEATED_SEAT_LEVEL_REAR_RIGHT">
+          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
+        </cmd>
+        <cmd id="CLIMATE_TEMP_SETTING_DRIVER">
+          <p id="" editor="I_CLIMATE_TEMP_RANGE" init="GV12" optional="F"/>
+        </cmd>
+        <cmd id="CLIMATE_TEMP_SETTING_PASSENGER">
+          <p id="" editor="I_CLIMATE_TEMP_RANGE" init="GV13" optional="F"/>
+        </cmd>
       </accepts>
     </cmds>
   </nodedef>

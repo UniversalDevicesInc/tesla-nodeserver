@@ -46,17 +46,6 @@ module.exports = function(Polyglot) {
         FLASH: this.onFlash,
         CHARGE_SET_TO: this.onChargeSetTo,
         QUERY_NOW: this.queryNow, // Force a query now to update the status
-        CLIMATE_OFF: this.onClimateOff, // stop pre-heat or pre-cool of the car
-        CLIMATE_ON: this.onClimateOn, // pre-heat or pre-cool the car
-        HEATED_SEAT_LEVEL_DRIVER: this.onHeatedSeatDriver, // set the level on the heated seat for the driver
-        HEATED_SEAT_LEVEL_PASSENGER: this.onHeatedSeatPassenger, // set the level on the heated seat for the passenger
-        HEATED_SEAT_LEVEL_REAR_LEFT: this.onHeatedSeatRearLeft, // set the level on the heated seat for the rear left seat
-        HEATED_SEAT_LEVEL_REAR_CENTER: this.onHeatedSeatRearCenter, // set the level on the heated seat for the rear center seat
-        HEATED_SEAT_LEVEL_REAR_RIGHT: this.onHeatedSeatRearRight, // set the level on the heated seat for the rear right seat
-        MAX_DEFROST_ON: this.onMaxDefrostOn, // turns the climate control to max defrost
-        MAX_DEFROST_OFF: this.onMaxDefrostOff, // turns the climate control to the previous setting
-        CLIMATE_TEMP_SETTING_DRIVER: this.onSetClimateTempDriver, // sets the climate control temp for the drivers side
-        CLIMATE_TEMP_SETTING_PASSENGER: this.onSetClimateTempPassenger, // sets the climate control temp for the passengers side
       };
 
       
@@ -75,21 +64,13 @@ module.exports = function(Polyglot) {
         CV: { value: '', uom: 72 }, // Charger voltage
         CPW: { value: '', uom: 73 }, // Charger power
 //        GV10: { value: '', uom: 116 }, // Odometer (default mile, but multi-editor supports kilometer too)
-//        GV12:  { value: '', uom: 4 }, // Drivers side temp
-//        GV13:  { value: '', uom: 4 }, // Passenger side temp
-//      GV14:  { value: '', uom: 4 }, // Exterior temp
-        GV15:  { value: '', uom: 2 }, // Max Defrost
-        GV17: { value: '', uom: 25 }, // Software Update Availability Status
         GV18: { value: '', uom: 2 }, // Online?
         GV19: { value: '', uom: 56 }, // Last updated unix timestamp
         GV20: { value: id, uom: 56 }, // ID used for the Tesla API
-//        CLITEMP: { value: '', uom: 4 }, // Interior temperature
-        CLIEMD: { value: '', uom: 2 }, // Climate conditioning on
         ERR: { value: '', uom: 2 } // In error?
       };
 
       this.distance_uom = 'mi'; // defaults to miles. Pulls data from vehicle GUI to change to KM where appropriate.
-      this.temperature_uom_index = 4; // defaults to Celsius. Pulls data from vehicle GUI to change to C where appropriate.
       
       this.let_sleep = true; // this will be used to disable short polling
     }
@@ -104,11 +85,6 @@ module.exports = function(Polyglot) {
         vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
       }
       this.vehicleUOM(vehicleGuiSettings.response);
-      logger.info('initializeUOM (%s)', this.decodeTempUOM(this.temperature_uom_index));
-      this.drivers.GV12 = { value: '', uom: this.temperature_uom_index };
-      this.drivers.GV13 = { value: '', uom: this.temperature_uom_index };
-      this.drivers.GV14 = { value: '', uom: this.temperature_uom_index };
-      this.drivers.CLITEMP = { value: '', uom: this.temperature_uom_index };
       
       if (this.distance_uom === 'mi') {
         this.drivers.GV1 = { value: '', uom: 116 };
@@ -188,115 +164,6 @@ module.exports = function(Polyglot) {
         await this.query();
       }
 
-	async onClimateOn() {
-        const id = this.vehicleId();
-        logger.info('CLIMATE_ON (%s)', this.address);
-        await this.tesla.cmdHvacStart(id);
-        await this.query();
-      }
-
-	async onClimateOff() {
-        const id = this.vehicleId();
-        logger.info('CLIMATE_OFF (%s)', this.address);
-        await this.tesla.cmdHvacStop(id);
-        await this.query();
-      }
-
-    async onHeatedSeatDriver(message) {
-      const id = this.vehicleId();
-
-      logger.info('SET DRIVERS HEATED SEAT (%s): %s', this.address,
-          message.value ? message.value : 'No value');
-
-      await this.tesla.cmdHeatedSeats(id, '0', message.value);
-      await this.query();
-    }
-
-    async onHeatedSeatPassenger(message) {
-      const id = this.vehicleId();
-
-      logger.info('SET PASSENGER HEATED SEAT (%s): %s', this.address,
-          message.value ? message.value : 'No value');
-
-      await this.tesla.cmdHeatedSeats(id, '1', message.value);
-      await this.query();
-    }
-
-    async onHeatedSeatRearLeft(message) {
-      const id = this.vehicleId();
-
-      logger.info('SET REAR LEFT HEATED SEAT (%s): %s', this.address,
-          message.value ? message.value : 'No value');
-
-      await this.tesla.cmdHeatedSeats(id, '2', message.value);
-      await this.query();
-    }
-
-    async onHeatedSeatRearCenter(message) {
-      const id = this.vehicleId();
-
-      logger.info('SET REAR CENTER HEATED SEAT (%s): %s', this.address,
-          message.value ? message.value : 'No value');
-
-      await this.tesla.cmdHeatedSeats(id, '4', message.value);
-      await this.query();
-    }
-
-    async onHeatedSeatRearRight(message) {
-      const id = this.vehicleId();
-
-      logger.info('SET REAR RIGHT HEATED SEAT (%s): %s', this.address,
-          message.value ? message.value : 'No value');
-
-      await this.tesla.cmdHeatedSeats(id, '5', message.value);
-      await this.query();
-    }
-
-    async onMaxDefrostOn() {
-      const id = this.vehicleId();
-      logger.info('MAX DEFROST MODE ON (%s)', this.address);
-      await this.tesla.cmdMaxDefrost(id, 'on');
-      await this.query();
-    }
-
-    async onMaxDefrostOff() {
-      const id = this.vehicleId();
-      logger.info('MAX DEFROST OFF (%s)', this.address);
-      await this.tesla.cmdMaxDefrost(id, 'off');
-      await this.query();
-    }
-
-    async onSetClimateTempDriver(message) {
-      const id = this.vehicleId();
-      const celsiusDeg = this.toStdTemp(message.value, message.uom);
-      logger.info('SETTING DRIVERS SIDE CLIMATE TEMP (%s): D_Raw %s, D_Value %s, passenger %s', this.address,
-          message.value, celsiusDeg, this.stdPassengerTemp());
-      logger.debug('message uom: %s', message.uom);
-      await this.tesla.cmdSetClimateTemp(id, celsiusDeg, this.stdPassengerTemp());
-      await this.query();
-    }
-
-    // The passenger temperature is stored in GV13
-    stdPassengerTemp() {
-      const gv13 = this.getDriver('GV13'); // id used for storing the passenger temp
-      return this.toStdTemp(gv13 ? gv13.value : null, gv13.uom);
-    }
-
-    async onSetClimateTempPassenger(message) {
-      const id = this.vehicleId();
-      const celsiusDeg = this.toStdTemp(message.value, message.uom);
-      logger.info('SETTING PASSENGERS SIDE CLIMATE TEMP (%s): D_Raw %s, D_Value %s, driver %s', this.address,
-          message.value, celsiusDeg, this.stdDriverTemp());
-      logger.debug('message uom: %s', message.uom);
-      await this.tesla.cmdSetClimateTemp(id, this.stdDriverTemp(), celsiusDeg);
-      await this.query();
-    }
-
-    // The driver temperature is stored in GV12
-    stdDriverTemp() {
-      const gv12 = this.getDriver('GV12'); // id used for storing the driver temp
-      return this.toStdTemp(gv12 ? gv12.value : null, gv12.uom);
-    }
 
     async queryNow() {
       await this.query(true);
@@ -333,44 +200,6 @@ module.exports = function(Polyglot) {
 	      logger.error('GUI Distance Units missing from gui_settings');
 	    }
 	      
-	    if (guisettings.gui_temperature_units) {
-	      this.temperature_uom_index = this.decodeTempUOM(guisettings.gui_temperature_units);
-	      logger.info('Temperature Units from vehicle: %s', guisettings.gui_temperature_units);
-	    } else {
-	      logger.error('GUI Temperature Units missing from gui_settings');
-	    }
-    }
-
-    celsiusToFahrenheit(celsiusDeg) {
-      return (celsiusDeg * 1.8) + 32;
-    }
-
-    fahrenheitToCelsius(fDeg) {
-      return (fDeg - 32) * 5/9;
-    }
-
-    fromStdTemp(celsiusDeg) {
-      if (this.temperature_uom_index === 17) {
-        return Math.round(this.celsiusToFahrenheit(celsiusDeg)).toString();
-      } else {
-        return Math.round(celsiusDeg).toString();
-      }
-    }
-
-    toStdTemp(localDeg, uom) {
-      if (uom === 17) {
-        return this.fahrenheitToCelsius(localDeg).toString();
-      } else {
-        return localDeg;
-      }
-    }
-
-    decodeTempUOM(uom) {
-      if (uom === 'F') {
-        return 17;
-      } else {
-        return 4;
-      }
     }
 
     async queryVehicle(longPoll) {
@@ -393,7 +222,6 @@ module.exports = function(Polyglot) {
       if (vehicleData && vehicleData.response &&
         vehicleData.response.charge_state &&
         vehicleData.response.vehicle_state &&
-        vehicleData.response.climate_state &&
         vehicleData.response.gui_settings) {
 
         // logger.info('This vehicle Data %o', vehicleData);
@@ -401,7 +229,6 @@ module.exports = function(Polyglot) {
         const response = vehicleData.response;
         const chargeState = vehicleData.response.charge_state;
         const vehiculeState = vehicleData.response.vehicle_state;
-        const climateState = vehicleData.response.climate_state;
         const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
 
         this.vehicleUOM(vehicleData.response.gui_settings);
@@ -437,29 +264,6 @@ module.exports = function(Polyglot) {
           this.setDriver('GV10', Math.round(parseFloat(vehiculeState.odometer)).toString(), true, false, 116);
         }
 
-        // Drivers side temp
-        if (climateState.driver_temp_setting) {
-          this.setDriver('GV12', this.fromStdTemp(climateState.driver_temp_setting), true, false, this.temperature_uom_index);
-        }
-
-        // Passengers side temp
-        if (climateState.passenger_temp_setting) {
-          this.setDriver('GV13', this.fromStdTemp(climateState.passenger_temp_setting), true, false, this.temperature_uom_index);
-        }
-
-        // Exterior temp
-        if (climateState.outside_temp) {
-          this.setDriver('GV14', this.fromStdTemp(climateState.outside_temp), true, false, this.temperature_uom_index);
-        }
-
-        logger.debug("defrost_mode %s, is_front_defroster_on %s, is_auto_conditioning_on %s", climateState.defrost_mode, climateState.is_front_defroster_on, climateState.is_auto_conditioning_on);
-        // Max Defrost
-        if (climateState.defrost_mode == 2 && climateState.is_front_defroster_on && climateState.is_auto_conditioning_on) {
-          this.setDriver('GV15', true, true);
-        } else {
-          this.setDriver('GV15', false, true);
-        }
-
         if (this.let_sleep && !longPoll) {
           this.setDriver('GV18', false, false); // this way we know if we have to wake up the car or not
         } else {
@@ -471,11 +275,6 @@ module.exports = function(Polyglot) {
         // GV20 is not updated. This is the id we use to find this vehicle.
         // It must be already correct.
         
-        // Current temperature inside the vehicle.
-        this.setDriver('CLITEMP', this.fromStdTemp(climateState.inside_temp), true, false, this.temperature_uom_index);
-        // Status of climate conditioning.
-        this.setDriver('CLIEMD', climateState.is_climate_on, false);
-
         this.setDriver('ERR', '0', false);
         this.reportDrivers(); // Reports only changed values
       } else {

@@ -14,10 +14,6 @@ ST-V-GV5-NAME = Charging state
 ST-V-GV6-NAME = Fast charger present
 ST-V-GV7-NAME = Charge limit
 ST-V-GV10-NAME = Odometer
-ST-V-GV12-NAME = Drivers side temp
-ST-V-GV13-NAME = Passengers side temp
-ST-V-GV14-NAME = Outside temp
-ST-V-GV15-NAME = Max Defrost
 ST-V-GV18-NAME = Vehicle Online
 ST-V-GV19-NAME = Timestamp
 ST-V-GV20-NAME = Car ID
@@ -25,8 +21,6 @@ ST-V-CC-NAME = Charger actual current
 ST-V-CV-NAME = Charger voltage
 ST-V-CPW-NAME = Charger power
 ST-V-ERR-NAME = Error
-ST-V-CLITEMP-NAME = Interior temperature
-ST-V-CLIEMD-NAME = Climate conditioning on
 
 
 CMD-V-DON-NAME = Charge On
@@ -37,17 +31,6 @@ CMD-V-HORN-NAME = Horn
 CMD-V-FLASH-NAME = Flash lights
 CMD-V-CHARGE_SET_TO-NAME = Set charge limit
 CMD-V-QUERY_NOW-NAME = Query
-CMD-V-CLIMATE_ON-NAME = Conditioning On
-CMD-V-CLIMATE_OFF-NAME = Conditioning Off
-CMD-V-HEATED_SEAT_LEVEL_DRIVER-NAME = Driver's heated seat level
-CMD-V-HEATED_SEAT_LEVEL_PASSENGER-NAME = Passenger's heated seat level
-CMD-V-HEATED_SEAT_LEVEL_REAR_LEFT-NAME = Rear left heated seat level
-CMD-V-HEATED_SEAT_LEVEL_REAR_CENTER-NAME = Rear center heated seat level
-CMD-V-HEATED_SEAT_LEVEL_REAR_RIGHT-NAME = Rear right heated seat level
-CMD-V-MAX_DEFROST_ON-NAME = Max defrost on
-CMD-V-MAX_DEFROST_OFF-NAME = Max defrost off
-CMD-V-CLIMATE_TEMP_SETTING_DRIVER-NAME = Driver's climate control temp
-CMD-V-CLIMATE_TEMP_SETTING_PASSENGER-NAME = Passenger's climate control temp
 
 EN_I_SOFTWARE_UPDATE_STATUS-0 = None Pending
 EN_I_SOFTWARE_UPDATE_STATUS-1 = Available 
@@ -90,4 +73,32 @@ CMD-S-FRUNK_OPEN-NAME = Open frunk
 CMD-S-CHARGE_PORT_DOOR-NAME = Charge port door
 CMD-S-SENTRY_MODE-NAME = Sentry mode
 CMD-S-START_SOFTWARE_UPDATE-NAME = Start software update
+
+
+ND-VEHICLECLIMATE-NAME = Vehicle Climate
+ND-VEHICLECLIMATE-ICON = Thermostat
+ST-C-GV12-NAME = Drivers side temp
+ST-C-GV13-NAME = Passengers side temp
+ST-C-GV14-NAME = Outside temp
+ST-C-GV15-NAME = Max Defrost
+ST-C-GV18-NAME = Vehicle Online
+ST-C-GV19-NAME = Timestamp
+ST-C-GV20-NAME = Car ID
+ST-C-ERR-NAME = Error
+ST-C-CLITEMP-NAME = Interior temperature
+ST-C-CLIEMD-NAME = Climate conditioning on
+
+
+CMD-C-QUERY_NOW-NAME = Query
+CMD-C-CLIMATE_ON-NAME = Conditioning On
+CMD-C-CLIMATE_OFF-NAME = Conditioning Off
+CMD-C-HEATED_SEAT_LEVEL_DRIVER-NAME = Driver's heated seat level
+CMD-C-HEATED_SEAT_LEVEL_PASSENGER-NAME = Passenger's heated seat level
+CMD-C-HEATED_SEAT_LEVEL_REAR_LEFT-NAME = Rear left heated seat level
+CMD-C-HEATED_SEAT_LEVEL_REAR_CENTER-NAME = Rear center heated seat level
+CMD-C-HEATED_SEAT_LEVEL_REAR_RIGHT-NAME = Rear right heated seat level
+CMD-C-MAX_DEFROST_ON-NAME = Max defrost on
+CMD-C-MAX_DEFROST_OFF-NAME = Max defrost off
+CMD-C-CLIMATE_TEMP_SETTING_DRIVER-NAME = Driver's climate control temp
+CMD-C-CLIMATE_TEMP_SETTING_PASSENGER-NAME = Passenger's climate control temp
 

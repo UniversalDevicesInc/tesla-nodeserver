@@ -17,6 +17,7 @@ module.exports = function(Polyglot) {
   // nodes from this controller. See onCreateNew
   const Vehicle = require('./Vehicle.js')(Polyglot);
   const VehicleSecurity = require('./VehicleSecurity.js')(Polyglot);
+  const VehicleClimate = require('./VehicleClimate.js')(Polyglot);
 
   class Controller extends Polyglot.Node {
     // polyInterface: handle to the interface
@@ -126,7 +127,7 @@ module.exports = function(Polyglot) {
           
           const vehicleSecurityName = vehicle.display_name + " Security";
           const vehicleSecurityAddress =  "s" + deviceAddress;
-          logger.info('Adding vehicleSecurity node %s: %s',
+          logger.info('Adding VehicleSecurity node %s: %s',
               vehicleSecurityAddress, vehicleSecurityName);
             const newVehicleSecurity = new VehicleSecurity(
                 this.polyInterface,
@@ -144,6 +145,27 @@ module.exports = function(Polyglot) {
               'New node created: ' + vehicleSecurityName,
               5
             );
+            
+            const vehicleClimateName = vehicle.display_name + " Climate";
+            const vehicleClimateAddress =  "c" + deviceAddress;
+            logger.info('Adding VehicleClimate node %s: %s',
+                vehicleClimateAddress, vehicleClimateName);
+              const newVehicleClimate = new VehicleClimate(
+                  this.polyInterface,
+                  this.address, // primary
+                  vehicleClimateAddress,
+                  vehicleClimateName,
+                  id); // We save the ID in GV20 for eventual API calls
+
+              const resultClimate = await this.polyInterface.addNode(newVehicleClimate);
+              await newVehicleClimate.query(true); // get current values
+
+              logger.info('VehicleClimate added: %s', resultClimate);
+              this.polyInterface.addNoticeTemp(
+                'newVehicleClimate-' + vehicleClimateAddress,
+                'New node created: ' + vehicleClimateName,
+                5
+              );
 
           return { added: true };
 
