@@ -29,7 +29,7 @@ CMD-V-WAKE-NAME = Wake
 CMD-V-LETSLEEP-NAME = Let vehicle sleep
 CMD-V-HORN-NAME = Horn
 CMD-V-FLASH-NAME = Flash lights
-CMD-V-CHARGE_SET_TO-NAME = Set charge limit
+CMD-V-CHARGE_SET_TO-NAME = Charge limit
 CMD-V-QUERY_NOW-NAME = Query
 
 EN_I_SOFTWARE_UPDATE_STATUS-0 = None Pending
