@@ -137,14 +137,14 @@ module.exports = function(Polyglot) {
       const id = this.vehicleId();
       logger.info('TRUNK OPEN (%s)', this.address);
       await this.tesla.cmdActuateTrunk(id, 'rear');
-      await this.query();
+      await this.query(true);
     }
 
     async onFrunkOpen() {
       const id = this.vehicleId();
       logger.info('FRUNK OPEN (%s)', this.address);
       await this.tesla.cmdActuateTrunk(id, 'front');
-      await this.query();
+      await this.query(true);
     }
 
     async onSentryModeOn() {
