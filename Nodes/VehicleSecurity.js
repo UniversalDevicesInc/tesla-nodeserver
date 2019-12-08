@@ -253,9 +253,7 @@ module.exports = function(Polyglot) {
         }
 
         // Status of sentry mode.
-        if (vehicleState.sentry_mode) {
-          this.setDriver('GV11', vehicleState.sentry_mode, false);
-        }
+        this.setDriver('GV11', vehicleState.sentry_mode, false);
 
         // Software Update Availability Status
         logger.debug("software_update.status %s", vehicleState.software_update.status);
