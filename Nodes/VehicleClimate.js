@@ -215,9 +215,11 @@ module.exports = function(Polyglot) {
     
     async query(longPoll) {
       const _this = this;
-      if (!this.let_sleep || longPoll) {
+      if (longPoll) {
         try {
           // Run query only one at a time
+          logger.info('VehicleSecurity long poll');
+
           await lock.acquire('query', function() {
             return _this.queryVehicle(longPoll);
           });
@@ -225,7 +227,7 @@ module.exports = function(Polyglot) {
           logger.error('Error while querying vehicle: %s', err.message);
         }
       } else {
-        logger.info('SKIPPING POLL TO LET THE VEHICLE SLEEP - ISSUE WAKE CMD TO VEHICLE TO ENABLE SHORT POLLING');
+        logger.info('VehicleClimate SKIPPING POLL TO LET THE VEHICLE SLEEP');
       }
 
     }
@@ -290,9 +292,17 @@ module.exports = function(Polyglot) {
 
       // check if Tesla is sleeping and sent an error code 408
       if (vehicleData === 408) {
-          this.setDriver('GV18', false, true); // car is offline
-          logger.info('API ERROR CAUGHT: %s', vehicleData);
-          return 0;
+        if (longPoll) {
+          // wake the car and try again
+          await this.tesla.wakeUp(id);
+          await delay(2000); // Wait 2 seconds before trying again.
+          vehicleData = await this.tesla.getVehicleData(id);
+        }
+      }
+      if (vehicleData === 408) {
+        this.setDriver('GV18', false, true); // car is offline
+        logger.info('API ERROR CAUGHT: %s', vehicleData);
+        return 0;
       }
 
       // Gather basic vehicle & charge state
