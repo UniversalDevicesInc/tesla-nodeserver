@@ -21,7 +21,7 @@ module.exports = function(Polyglot) {
 
     // polyInterface: handle to the interface
     // primary: Same as address, if the node is a primary node
-    // address: Your node address, withouth the leading 'n999_'
+    // address: Your node address, without the leading 'n999_'
     // name: Your node name
     // id is the nodedefId
     constructor(polyInterface, primary, address, name, id) {
