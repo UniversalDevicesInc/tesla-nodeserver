@@ -242,6 +242,7 @@ module.exports = function(Polyglot) {
           chargeState.charge_port_latch.toLowerCase() === 'engaged',
           false);
 
+        logger.debug("Frunk: %s, Trunk: %s", vehicleState.ft, vehicleState.rt);
         this.setDriver('GV3', vehicleState.ft === 0 ? 0 : 1, false);
         this.setDriver('GV4', vehicleState.rt === 0 ? 0 : 1, false);
 
