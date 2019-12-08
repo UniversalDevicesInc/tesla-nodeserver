@@ -128,28 +128,28 @@ module.exports = function(Polyglot) {
       const id = this.vehicleId();
       logger.info('WINDOWS VENT (%s)', this.address);
       await this.tesla.cmdWindows(id, 'vent');
-      await this.query();
+      await this.queryNow();
     }
 
     async onWindowsClose() {
       const id = this.vehicleId();
       logger.info('WINDOWS CLOSE (%s)', this.address);
       await this.tesla.cmdWindows(id, 'close');
-      await this.query();
+      await this.queryNow();
     }
 
     async onTrunkOpen() {
       const id = this.vehicleId();
       logger.info('TRUNK OPEN (%s)', this.address);
       await this.tesla.cmdActuateTrunk(id, 'rear');
-      await this.query(true);
+      await this.queryNow();
     }
 
     async onFrunkOpen() {
       const id = this.vehicleId();
       logger.info('FRUNK OPEN (%s)', this.address);
       await this.tesla.cmdActuateTrunk(id, 'front');
-      await this.query(true);
+      await this.queryNow();
     }
 
     async onSentryMode(message) {
@@ -157,14 +157,14 @@ module.exports = function(Polyglot) {
       const decodeValue = message.value === '1' ? 'on' : 'off';
       logger.debug('SENTRY MODE raw %s decoded %s (%s)', message.value, decodeValue, this.address);
       await this.tesla.cmdSentryMode(id, decodeValue);
-      await this.query();
+      await this.queryNow();
     }
 
     async onStartSoftwareUpdate() {
       const id = this.vehicleId();
       logger.info('STARTING SOFTWARE UPDATE (%s)', this.address);
       await this.tesla.cmdStartSoftwareUpdate(id);
-      await this.query();
+      await this.queryNow();
     }
 
     // Update Vehicle security only on long poll.
