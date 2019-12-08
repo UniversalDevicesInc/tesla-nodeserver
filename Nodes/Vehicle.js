@@ -45,7 +45,7 @@ module.exports = function(Polyglot) {
         HORN: this.onHorn,
         FLASH: this.onFlash,
         CHARGE_SET_TO: this.onChargeSetTo,
-        QUERY: this.query, // Query function from the base class
+        QUERY: this.queryNow, // Query function from the base class
         CLIMATE_OFF: this.onClimateOff, // stop pre-heat or pre-cool of the car
         CLIMATE_ON: this.onClimateOn, // pre-heat or pre-cool the car
         HEATED_SEAT_LEVEL_DRIVER: this.onHeatedSeatDriver, // set the level on the heated seat for the driver
@@ -298,6 +298,10 @@ module.exports = function(Polyglot) {
       return this.toStdTemp(gv12 ? gv12.value : null, gv12.uom);
     }
 
+    async queryNow() {
+      await this.query(true);
+    }
+    
     async query(longPoll) {
       const _this = this;
       if (!this.let_sleep || longPoll) {
