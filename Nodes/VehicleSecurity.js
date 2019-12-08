@@ -114,7 +114,7 @@ module.exports = function(Polyglot) {
     async onChargePortDoor(message) {
       const id = this.vehicleId();
       logger.info('CHARGE_PORT_DOOR %s (%s)', message.value, this.address);
-      if (message.value === 1) {
+      if (message.value === '1') {
         await this.tesla.cmdChargePortOpen(id);
       } else {
         await this.tesla.cmdChargePortClose(id);
