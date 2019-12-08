@@ -85,6 +85,7 @@ module.exports = function(Polyglot) {
     }
 
     async queryNow() {
+      logger.debug('queryNow (%s)', this.address);
       await this.query(true);
     }
 
