@@ -107,6 +107,7 @@
     <cmds>
       <sends/>
       <accepts>
+        <cmd id="QUERY"/>
         <cmd id="LOCK"/>
         <cmd id="UNLOCK"/>
         <cmd id="SUNROOF_OPEN"/>

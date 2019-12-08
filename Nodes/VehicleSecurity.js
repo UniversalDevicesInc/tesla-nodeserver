@@ -38,6 +38,7 @@ module.exports = function(Polyglot) {
       // Commands that this node can handle.
       // Should match the 'accepts' section of the nodedef.
       this.commands = {
+        QUERY: this.queryNow, // force a query now to update the status.
         LOCK: this.onLock,
         UNLOCK: this.onUnlock,
         SUNROOF_OPEN: this.onSunroofOpen,
@@ -81,6 +82,10 @@ module.exports = function(Polyglot) {
     vehicleId() {
       const gv20 = this.getDriver('GV20'); // id used for the API
       return gv20 ? gv20.value : null;
+    }
+
+    async queryNow() {
+      await this.query(true);
     }
 
     async onLock() {
