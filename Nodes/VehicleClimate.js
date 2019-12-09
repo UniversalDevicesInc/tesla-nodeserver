@@ -89,7 +89,7 @@ module.exports = function(Polyglot) {
         vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
       }
       this.vehicleUOM(vehicleGuiSettings.response);
-      logger.info('initializeUOM (%s)', this.decodeTempUOM(this.temperature_uom_index));
+      logger.info('initializeUOM (%s)', this.temperature_uom_index);
       this.drivers.GV12 = { value: '', uom: this.temperature_uom_index };
       this.drivers.GV13 = { value: '', uom: this.temperature_uom_index };
       this.drivers.GV14 = { value: '', uom: this.temperature_uom_index };
@@ -185,7 +185,7 @@ module.exports = function(Polyglot) {
 
     async onSetClimateTempDriver(message) {
       const id = this.vehicleId();
-      const celsiusDeg = this.toStdTemp(message.value, message.uom);
+      const celsiusDeg = this.toStdTemp(message.value, Number(message.uom));
       logger.info('SETTING DRIVERS SIDE CLIMATE TEMP (%s): D_Raw %s, D_Value %s, passenger %s', this.address,
           message.value, celsiusDeg, this.stdPassengerTemp());
       logger.debug('message uom: %s', message.uom);
@@ -201,7 +201,7 @@ module.exports = function(Polyglot) {
 
     async onSetClimateTempPassenger(message) {
       const id = this.vehicleId();
-      const celsiusDeg = this.toStdTemp(message.value, message.uom);
+      const celsiusDeg = this.toStdTemp(message.value, Number(message.uom));
       logger.info('SETTING PASSENGERS SIDE CLIMATE TEMP (%s): D_Raw %s, D_Value %s, driver %s', this.address,
           message.value, celsiusDeg, this.stdDriverTemp());
       logger.debug('message uom: %s', message.uom);
