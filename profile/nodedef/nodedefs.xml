@@ -100,6 +100,12 @@
   <!-- Vehicle Climate info -->
   <nodedef id="VEHICLECLIMATE" nls="C">
     <sts>
+      <st id="GV1" editor="I_HEATED_SEAT_LEVEL_RANGE" hide="T"/> <!-- Driver seat heat level -->
+      <st id="GV2" editor="I_HEATED_SEAT_LEVEL_RANGE" hide="T"/> <!-- Passenger seat heat level -->
+      <st id="GV3" editor="I_HEATED_SEAT_LEVEL_RANGE" hide="T"/> <!-- Rear Left seat heat level -->
+      <st id="GV4" editor="I_HEATED_SEAT_LEVEL_RANGE" hide="T"/> <!-- Rear Center seat heat level -->
+      <st id="GV5" editor="I_HEATED_SEAT_LEVEL_RANGE" hide="T"/> <!-- Rear Right seat heat level -->
+
       <st id="GV12" editor="I_CLIMATE_TEMP_RANGE" hide="T"/> <!-- Driver side temp -->
       <st id="GV13" editor="I_CLIMATE_TEMP_RANGE" hide="T"/> <!-- Passenger side temp -->
       <st id="GV14" editor="I_TEMP_DEG"/> <!-- Exterior temp -->
@@ -120,19 +126,19 @@
         <cmd id="MAX_DEFROST_ON"/>
         <cmd id="MAX_DEFROST_OFF"/>
         <cmd id="HEATED_SEAT_LEVEL_DRIVER">
-          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
+          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" init="GV1" optional="F"/>
         </cmd>
         <cmd id="HEATED_SEAT_LEVEL_PASSENGER">
-          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
+          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" init="GV2" optional="F"/>
         </cmd>
         <cmd id="HEATED_SEAT_LEVEL_REAR_LEFT">
-          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
+          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" init="GV3" optional="F"/>
         </cmd>
         <cmd id="HEATED_SEAT_LEVEL_REAR_CENTER">
-          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
+          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" init="GV4" optional="F"/>
         </cmd>
         <cmd id="HEATED_SEAT_LEVEL_REAR_RIGHT">
-          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
+          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" init="GV5" optional="F"/>
         </cmd>
         <cmd id="CLIMATE_TEMP_SETTING_DRIVER">
           <p id="" editor="I_CLIMATE_TEMP_RANGE" init="GV12" optional="F"/>

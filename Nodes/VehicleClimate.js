@@ -58,6 +58,11 @@ module.exports = function(Polyglot) {
       // Should match the 'sts' section of the nodedef.
       // Must all be strings
       this.drivers = {
+        GV1: { value: '', uom: 25}, // Driver seat heat
+        GV2: { value: '', uom: 25}, // Passenger seat heat
+        GV3: { value: '', uom: 25}, // Rear left seat heat
+        GV4: { value: '', uom: 25}, // Rear center seat heat
+        GV5: { value: '', uom: 25}, // Rear right seat heat
 //        GV12:  { value: '', uom: 4 }, // Drivers side temp
 //        GV13:  { value: '', uom: 4 }, // Passenger side temp
 //      GV14:  { value: '', uom: 4 }, // Exterior temp
@@ -323,6 +328,12 @@ module.exports = function(Polyglot) {
         const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
 
         this.vehicleUOM(vehicleData.response.gui_settings);
+
+        this.setDriver('GV1', climateState.seat_heater_left, true);
+        this.setDriver('GV2', climateState.seat_heater_right, true);
+        this.setDriver('GV3', climateState.seat_heater_rear_left, true);
+        this.setDriver('GV4', climateState.seat_heater_rear_center, true);
+        this.setDriver('GV5', climateState.seat_heater_rear_right, true);
 
         // Drivers side temp
         if (climateState.driver_temp_setting) {
