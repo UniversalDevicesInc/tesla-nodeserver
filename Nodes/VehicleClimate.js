@@ -109,14 +109,14 @@ module.exports = function(Polyglot) {
         const id = this.vehicleId();
         logger.info('CLIMATE_ON (%s)', this.address);
         await this.tesla.cmdHvacStart(id);
-        await this.query();
+        await this.queryNow();
       }
 
 	async onClimateOff() {
         const id = this.vehicleId();
         logger.info('CLIMATE_OFF (%s)', this.address);
         await this.tesla.cmdHvacStop(id);
-        await this.query();
+        await this.queryNow();
       }
 
     async onHeatedSeatDriver(message) {
@@ -126,7 +126,7 @@ module.exports = function(Polyglot) {
           message.value ? message.value : 'No value');
 
       await this.tesla.cmdHeatedSeats(id, '0', message.value);
-      await this.query();
+      await this.queryNow();
     }
 
     async onHeatedSeatPassenger(message) {
@@ -136,7 +136,7 @@ module.exports = function(Polyglot) {
           message.value ? message.value : 'No value');
 
       await this.tesla.cmdHeatedSeats(id, '1', message.value);
-      await this.query();
+      await this.queryNow();
     }
 
     async onHeatedSeatRearLeft(message) {
@@ -146,7 +146,7 @@ module.exports = function(Polyglot) {
           message.value ? message.value : 'No value');
 
       await this.tesla.cmdHeatedSeats(id, '2', message.value);
-      await this.query();
+      await this.queryNow();
     }
 
     async onHeatedSeatRearCenter(message) {
@@ -156,7 +156,7 @@ module.exports = function(Polyglot) {
           message.value ? message.value : 'No value');
 
       await this.tesla.cmdHeatedSeats(id, '4', message.value);
-      await this.query();
+      await this.queryNow();
     }
 
     async onHeatedSeatRearRight(message) {
@@ -166,21 +166,21 @@ module.exports = function(Polyglot) {
           message.value ? message.value : 'No value');
 
       await this.tesla.cmdHeatedSeats(id, '5', message.value);
-      await this.query();
+      await this.queryNow();
     }
 
     async onMaxDefrostOn() {
       const id = this.vehicleId();
       logger.info('MAX DEFROST MODE ON (%s)', this.address);
       await this.tesla.cmdMaxDefrost(id, 'on');
-      await this.query();
+      await this.queryNow();
     }
 
     async onMaxDefrostOff() {
       const id = this.vehicleId();
       logger.info('MAX DEFROST OFF (%s)', this.address);
       await this.tesla.cmdMaxDefrost(id, 'off');
-      await this.query();
+      await this.queryNow();
     }
 
     async onSetClimateTempDriver(message) {
@@ -190,7 +190,7 @@ module.exports = function(Polyglot) {
           message.value, celsiusDeg, this.stdPassengerTemp());
       logger.debug('message uom: %s', message.uom);
       await this.tesla.cmdSetClimateTemp(id, celsiusDeg, this.stdPassengerTemp());
-      await this.query();
+      await this.queryNow();
     }
 
     // The passenger temperature is stored in GV13
