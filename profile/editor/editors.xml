@@ -17,13 +17,15 @@
     <!-- 73 is watt -->
     <range uom="73" subset="0-100000"/>
   </editor>
-  <editor id="I_MILES">
-    <!-- 56 is raw value as reported by the device -->
-    <range uom="56" subset="0-1000"/>
+  <editor id="I_BATTERY_RANGE">
+    <!-- uom is gathered from the vehicle -->
+    <range uom="116" subset="0-1000"/>
+    <range uom="83" subset="0-1609"/>
   </editor>
   <editor id="I_ODO">
-    <!-- 56 is raw value as reported by the device -->
-    <range uom="56" min="0" max="1000000" step="100" prec="0"/>
+    <!-- uom is gathered from the vehicle -->
+    <range uom="116" min="0" max="1000000" step="100" prec="0"/>
+    <range uom="83"  min="0" max="1609344" step="100" prec="0"/>
   </editor>
   <editor id="I_RAW">
     <!-- 56 is raw value as reported by the device -->
@@ -36,16 +38,21 @@
   <editor id="I_TEMP_DEG">
     <!-- 4 is celsius (C) -->
     <range uom="4" min="-40" max="60" step="1" prec="0" />
+    <range uom="17" min="-40" max="140" step="1" prec="0" />
   </editor>
   <editor id="I_HEATED_SEAT_LEVEL_RANGE">
     <!-- 0 is off 4 is full heat -->
     <range uom="56" min="0" max="3" step="1" prec="0" />
   </editor>
-  <editor id="I_CLIMATE_TEMP_RANGE">
+  <editor id="I_CLIMATE_TEMP_RANGE_C">
     <!-- 15 to 28 degrees C -->
-    <range uom="56" min="15" max="28" step="1" prec="0" />
+    <range uom="4" min="15" max="28" step="1" prec="0" />
+  </editor>
+  <editor id="I_CLIMATE_TEMP_RANGE_F">
+    <!-- 60 to 82 degrees F -->
+    <range uom="17" min="60" max="82" step="1" prec="0" />
   </editor>
   <editor id="I_SOFTWARE_UPDATE_STATUS">
-    <range uom="25" min="0" max="10" nls="EN_I_SOFTWARE_UPDATE_STATUS" />
+    <range uom="25" subset="0-3" nls="EN_I_SOFTWARE_UPDATE_STATUS" />
   </editor>
 </editors>

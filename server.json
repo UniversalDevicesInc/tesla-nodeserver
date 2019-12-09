@@ -14,8 +14,8 @@
     {
       "title": "Tesla NodeServer",
       "author": "Benoit Mercier",
-      "version": "1.0.2",
-      "date": "May 5th, 2019",
+      "version": "1.0.5",
+      "date": "Nov 17th, 2019",
       "source": "https://github.com/UniversalDevicesInc/tesla-nodeserver",
       "license": "MIT"
     }
