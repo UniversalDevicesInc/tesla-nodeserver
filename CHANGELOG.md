@@ -1,7 +1,7 @@
 # Change Log
 
 v2.0.0 (2019-12-06)
-* Split up the vehicle node for a more compact interface.  A General node and a Security node
+* Split up the vehicle node for a more compact interface.  A General node, a Climate node, and a Security node
 * Set charge limit control now reflects the current setting
 * Moved display of status values that also have setters to only display in the control
 * Combined the celsius and fahrenheit settings for driver/passenger temp into a single control
