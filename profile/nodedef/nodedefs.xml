@@ -21,27 +21,15 @@
     <sts>
       <st id="ST" editor="I_PERCENT"/> <!-- SOC% -->
       <st id="GV1" editor="I_BATTERY_RANGE"/> <!-- Battery Range -->
-      <st id="GV2" editor="BOOLEAN"/> <!-- Charge port door open -->
-      <st id="GV3" editor="BOOLEAN"/> <!-- Charge port latch engaged -->
       <st id="GV4" editor="BOOLEAN"/> <!-- Charge enable request -->
       <st id="GV5" editor="BOOLEAN"/> <!-- Charging state -->
       <st id="GV6" editor="BOOLEAN"/> <!-- Fast charger present -->
-      <st id="GV7" editor="I_PERCENT"/> <!-- charge limit soc -->
+      <st id="GV7" editor="I_PERCENT" hide="T"/> <!-- charge limit soc -->
       <st id="CC" editor="I_AMP"/> <!-- Charger actual current -->
       <st id="CV" editor="I_VOLT"/> <!-- Charger voltage -->
       <st id="CPW" editor="I_WATT"/> <!-- Charger power -->
-      <st id="GV8" editor="BOOLEAN"/> <!-- Locked -->
-      <st id="GV9" editor="I_PERCENT"/> <!-- Sunroof opened -->
       <st id="GV10" editor="I_ODO"/> <!-- Odometer -->
-      <st id="GV11" editor="BOOLEAN"/> <!-- Sentry Mode On -->
-      <st id="GV12" editor="I_TEMP_DEG"/> <!-- Driver side temp -->
-      <st id="GV13" editor="I_TEMP_DEG"/> <!-- Passenger side temp -->
-      <st id="GV14" editor="I_TEMP_DEG"/> <!-- Exterior temp -->
       <st id="GV18" editor="BOOLEAN"/> <!-- Online? -->
-      <st id="GV17" editor="I_SOFTWARE_UPDATE_STATUS"/> <!-- Software update availability status -->
-      <st id="CLITEMP" editor="I_TEMP_DEG"/> <!-- Interior temperature -->
-      <st id="CLIEMD" editor="BOOLEAN"/> <!-- Climate Conditioning On -->
-      <st id="GV15" editor="BOOLEAN"/> <!-- Max Defrost -->
       <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
       <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
       <st id="ERR" editor="BOOLEAN" hide="T" />
@@ -58,6 +46,37 @@
         <cmd id="DOF"/> <!-- Charge Off -->
         <cmd id="HORN"/>
         <cmd id="FLASH"/>
+        <cmd id="CHARGE_SET_TO">
+          <p id="" editor="I_PERCENT" init="GV7" optional="F"/>
+        </cmd>
+        <cmd id="QUERY_NOW"/>
+        <cmd id="WAKE"/>
+        <cmd id="LETSLEEP"/>
+      </accepts>
+    </cmds>
+  </nodedef>
+
+  <!-- Vehicle Security info -->
+  <nodedef id="VEHSEC" nls="S">
+    <sts>
+      <st id="GV1" editor="I_CHARGE_PORT_DOOR" hide="T" /> <!-- Charge port door status -->
+      <st id="GV2" editor="BOOLEAN"/> <!-- Charge port latch engaged -->
+      <st id="GV3" editor="I_OPEN_STATUS"/> <!-- Frunk Status -->
+      <st id="GV4" editor="I_OPEN_STATUS"/> <!-- Trunk Status -->
+      <st id="GV8" editor="BOOLEAN"/> <!-- Locked -->
+      <st id="GV9" editor="I_PERCENT"/> <!-- Sunroof opened -->
+      <st id="GV11" editor="I_SENTRY_MODE" hide="T"/> <!-- Sentry Mode -->
+      <st id="GV17" editor="I_SOFTWARE_UPDATE_STATUS"/> <!-- Software update availability status -->
+      <st id="GV18" editor="BOOLEAN" hide="T"/> <!-- Online? -->
+      <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
+      <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
+      <st id="ERR" editor="BOOLEAN" hide="T" />
+    </sts>
+
+    <cmds>
+      <sends/>
+      <accepts>
+        <cmd id="QUERY_NOW"/>
         <cmd id="LOCK"/>
         <cmd id="UNLOCK"/>
         <cmd id="SUNROOF_OPEN"/>
@@ -66,49 +85,69 @@
         <cmd id="WINDOWS_CLOSE"/>
         <cmd id="TRUNK_OPEN"/>
         <cmd id="FRUNK_OPEN"/>
-        <cmd id="PORT_OPEN"/>
-        <cmd id="PORT_CLOSE"/>
-        <cmd id="CHARGE_SET_TO">
-          <p id="" editor="I_PERCENT" optional="F"/>
+        <cmd id="CHARGE_PORT_DOOR">
+          <p id="" editor="I_CHARGE_PORT_DOOR" init="GV1"/>
         </cmd>
-        <cmd id="QUERY"/>
-        <cmd id="WAKE"/>
-        <cmd id="LETSLEEP"/>
+        <cmd id="SENTRY_MODE">
+          <p id="" editor="I_SENTRY_MODE" init="GV11"/>
+        </cmd>
+        <cmd id="START_SOFTWARE_UPDATE"/>
+      </accepts>
+    </cmds>
+  </nodedef>
+
+
+  <!-- Vehicle Climate info -->
+  <nodedef id="VEHICLECLIMATE" nls="C">
+    <sts>
+      <st id="GV1" editor="I_HEATED_SEAT_LEVEL_RANGE" hide="T"/> <!-- Driver seat heat level -->
+      <st id="GV2" editor="I_HEATED_SEAT_LEVEL_RANGE" hide="T"/> <!-- Passenger seat heat level -->
+      <st id="GV3" editor="I_HEATED_SEAT_LEVEL_RANGE" hide="T"/> <!-- Rear Left seat heat level -->
+      <st id="GV4" editor="I_HEATED_SEAT_LEVEL_RANGE" hide="T"/> <!-- Rear Center seat heat level -->
+      <st id="GV5" editor="I_HEATED_SEAT_LEVEL_RANGE" hide="T"/> <!-- Rear Right seat heat level -->
+
+      <st id="GV12" editor="I_CLIMATE_TEMP_RANGE" hide="T"/> <!-- Driver side temp -->
+      <st id="GV13" editor="I_CLIMATE_TEMP_RANGE" hide="T"/> <!-- Passenger side temp -->
+      <st id="GV14" editor="I_TEMP_DEG"/> <!-- Exterior temp -->
+      <st id="CLITEMP" editor="I_TEMP_DEG"/> <!-- Interior temperature -->
+      <st id="CLIEMD" editor="BOOLEAN"/> <!-- Climate Conditioning On -->
+      <st id="GV15" editor="BOOLEAN"/> <!-- Max Defrost -->
+      <st id="GV18" editor="BOOLEAN" hide="T" /> <!-- Online? -->
+      <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
+      <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
+      <st id="ERR" editor="BOOLEAN" hide="T" />
+    </sts>
+    <cmds>
+      <sends/>
+      <accepts>
+        <cmd id="QUERY_NOW"/>
         <cmd id="CLIMATE_ON"/>
         <cmd id="CLIMATE_OFF"/>
         <cmd id="MAX_DEFROST_ON"/>
         <cmd id="MAX_DEFROST_OFF"/>
         <cmd id="HEATED_SEAT_LEVEL_DRIVER">
-          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
+          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" init="GV1" optional="F"/>
         </cmd>
         <cmd id="HEATED_SEAT_LEVEL_PASSENGER">
-          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
+          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" init="GV2" optional="F"/>
         </cmd>
         <cmd id="HEATED_SEAT_LEVEL_REAR_LEFT">
-          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
+          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" init="GV3" optional="F"/>
         </cmd>
         <cmd id="HEATED_SEAT_LEVEL_REAR_CENTER">
-          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
+          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" init="GV4" optional="F"/>
         </cmd>
         <cmd id="HEATED_SEAT_LEVEL_REAR_RIGHT">
-          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" optional="F"/>
+          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" init="GV5" optional="F"/>
         </cmd>
-        <cmd id="CLIMATE_TEMP_SETTING_DRIVER_C">
-          <p id="" editor="I_CLIMATE_TEMP_RANGE_C" optional="F"/>
+        <cmd id="CLIMATE_TEMP_SETTING_DRIVER">
+          <p id="" editor="I_CLIMATE_TEMP_RANGE" init="GV12" optional="F"/>
         </cmd>
-        <cmd id="CLIMATE_TEMP_SETTING_DRIVER_F">
-          <p id="" editor="I_CLIMATE_TEMP_RANGE_F" optional="F"/>
+        <cmd id="CLIMATE_TEMP_SETTING_PASSENGER">
+          <p id="" editor="I_CLIMATE_TEMP_RANGE" init="GV13" optional="F"/>
         </cmd>
-        <cmd id="CLIMATE_TEMP_SETTING_PASSENGER_C">
-          <p id="" editor="I_CLIMATE_TEMP_RANGE_C" optional="F"/>
-        </cmd>
-        <cmd id="CLIMATE_TEMP_SETTING_PASSENGER_F">
-          <p id="" editor="I_CLIMATE_TEMP_RANGE_F" optional="F"/>
-        </cmd>
-        <cmd id="SENTRY_MODE_ON"/>
-        <cmd id="SENTRY_MODE_OFF"/>
-        <cmd id="START_SOFTWARE_UPDATE"/>
       </accepts>
     </cmds>
   </nodedef>
+
 </nodeDefs>

@@ -16,6 +16,8 @@ const lock = new AsyncLock({ timeout: 500 });
 
 const ControllerNode = require('./Nodes/ControllerNode.js')(Polyglot);
 const Vehicle = require('./Nodes/Vehicle.js')(Polyglot);
+const VehicleSecurity = require('./Nodes/VehicleSecurity.js')(Polyglot);
+const VehicleClimate = require('./Nodes/VehicleClimate.js')(Polyglot);
 
 // Must be the same as in tesla.js
 const emailParam = 'Tesla account email';
@@ -34,7 +36,7 @@ logger.info('Starting Tesla Node Server');
 
 // Create an instance of the Polyglot interface. We need pass all the node
 // classes that we will be using.
-const poly = new Polyglot.Interface([ControllerNode, Vehicle]);
+const poly = new Polyglot.Interface([ControllerNode, Vehicle, VehicleSecurity, VehicleClimate]);
 
 // Tesla API interface module
 // const tesla = require('./lib/tesla.js')(Polyglot, poly);
