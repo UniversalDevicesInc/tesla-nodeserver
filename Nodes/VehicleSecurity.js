@@ -29,6 +29,12 @@ module.exports = function(Polyglot) {
 
       this.tesla = require('../lib/tesla.js')(Polyglot, polyInterface);
 
+      this.cache = require('../lib/Cache.js')(Polyglot);
+      this.cache.getCache().on("set", ( key, value ) => {
+        this.pushedData(key, value);
+      });
+
+
       // PGC supports setting the node hint when creating a node
       // REF: https://github.com/UniversalDevicesInc/hints
       // Must be a string in this format
@@ -80,6 +86,17 @@ module.exports = function(Polyglot) {
     vehicleId() {
       const gv20 = this.getDriver('GV20'); // id used for the API
       return gv20 ? gv20.value : null;
+    }
+
+    pushedData (key, vehicleMessage) {
+      const id = this.vehicleId();
+      logger.debug('VehicleSecurity pushedData() received id %s, key %s', id, key);
+      if (vehicleMessage && vehicleMessage.response) {
+        if (vehicleMessage.response.id === id
+            && vehicleMessage.response.isy_nodedef != nodeDefId) {
+          processDrivers(vehicleMessage);
+        }
+      }
     }
 
     async queryNow() {
@@ -219,6 +236,13 @@ module.exports = function(Polyglot) {
         return 0;
       }
 
+      processDrivers(vehicleData);
+
+        // logger.info('This vehicle Data %o', vehicleData);
+    }
+
+    processDrivers(vehicleData) {
+      logger.debug('VehicleSecurity processDrivers')
       // Gather basic vehicle & charge state
       // (same as getVehicleData with less clutter)
       // let vehicleData = await this.tesla.getVehicle(id);
