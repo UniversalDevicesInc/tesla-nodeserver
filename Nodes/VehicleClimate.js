@@ -108,8 +108,14 @@ module.exports = function(Polyglot) {
       return gv20 ? gv20.value : null;
     }
 
-    pushedData (key, value) {
+    pushedData (key, vehicleMessage) {
       logger.debug('VehicleClimate received key %s', key);
+      if (vehicleMessage && vehicleMessage.response) {
+        if (vehicleMessage.response.id === this.vehicleId()
+            && vehicleMessage.response.isy_nodedef != nodeDefId) {
+          processDrivers(vehicleMessage);
+        }
+      }
     }
 
 	async onClimateOn() {
@@ -301,7 +307,7 @@ module.exports = function(Polyglot) {
 
     async queryVehicle(longPoll) {
       const id = this.vehicleId();
-      const vehicleData = await this.tesla.getVehicleData(id);
+      let vehicleData = await this.tesla.getVehicleData(id);
 
       // check if Tesla is sleeping and sent an error code 408
       if (vehicleData === 408) {
@@ -318,45 +324,44 @@ module.exports = function(Polyglot) {
         return 0;
       }
 
-      // Gather basic vehicle & charge state
-      // (same as getVehicleData with less clutter)
-      // let vehicleData = await this.tesla.getVehicle(id);
-      // const chargeState = await this.tesla.getVehicleChargeState(id);
-      // vehicleData.response.charge_state = chargeState.response;
-
-      if (vehicleData && vehicleData.response &&
-        vehicleData.response.climate_state &&
-        vehicleData.response.gui_settings) {
+      processDrivers(vehicleData);
 
         // logger.info('This vehicle Data %o', vehicleData);
+    }
 
+    processDrivers(vehicleData) {
+      logger.debug('VehicleClimate processDrivers');
+      // Gather basic vehicle climate data
+      if (vehicleData && vehicleData.response &&
+          vehicleData.response.climate_state &&
+            vehicleData.response.gui_settings) {
         const response = vehicleData.response;
         const climateState = vehicleData.response.climate_state;
         const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
-
+  
         this.vehicleUOM(vehicleData.response.gui_settings);
-
+  
         this.setDriver('GV1', climateState.seat_heater_left, true);
         this.setDriver('GV2', climateState.seat_heater_right, true);
         this.setDriver('GV3', climateState.seat_heater_rear_left, true);
         this.setDriver('GV4', climateState.seat_heater_rear_center, true);
         this.setDriver('GV5', climateState.seat_heater_rear_right, true);
-
+  
         // Drivers side temp
         if (climateState.driver_temp_setting) {
           this.setDriver('GV12', this.fromStdTemp(climateState.driver_temp_setting), true, false, this.temperature_uom_index);
         }
-
+  
         // Passengers side temp
         if (climateState.passenger_temp_setting) {
           this.setDriver('GV13', this.fromStdTemp(climateState.passenger_temp_setting), true, false, this.temperature_uom_index);
         }
-
+  
         // Exterior temp
         if (climateState.outside_temp) {
           this.setDriver('GV14', this.fromStdTemp(climateState.outside_temp), true, false, this.temperature_uom_index);
         }
-
+  
         logger.debug("defrost_mode %s, is_front_defroster_on %s, is_auto_conditioning_on %s", climateState.defrost_mode, climateState.is_front_defroster_on, climateState.is_auto_conditioning_on);
         // Max Defrost
         if (climateState.defrost_mode == 2 && climateState.is_front_defroster_on && climateState.is_auto_conditioning_on) {
@@ -364,14 +369,14 @@ module.exports = function(Polyglot) {
         } else {
           this.setDriver('GV15', false, true);
         }
-
+  
         if (this.let_sleep && !longPoll) {
           this.setDriver('GV18', false, false); // this way we know if we have to wake up the car or not
         } else {
           this.setDriver('GV18',
               response.state.toLowerCase() === 'online', false);
         }
-
+  
         this.setDriver('GV19', timestamp, false);
         // GV20 is not updated. This is the id we use to find this vehicle.
         // It must be already correct.
@@ -380,17 +385,18 @@ module.exports = function(Polyglot) {
         this.setDriver('CLITEMP', this.fromStdTemp(climateState.inside_temp), true, false, this.temperature_uom_index);
         // Status of climate conditioning.
         this.setDriver('CLIEMD', climateState.is_climate_on, false);
-
+  
         this.setDriver('ERR', '0', false);
         this.reportDrivers(); // Reports only changed values
       } else {
-
+  
         logger.error('API result for getVehicleData is incorrect: %o',
           vehicleData);
         this.setDriver('ERR', '1'); // Will be reported if changed
       }
     }
   }
+
 
   // Required so that the interface can find this Node class using the nodeDefId
   VehicleClimate.nodeDefId = nodeDefId;
