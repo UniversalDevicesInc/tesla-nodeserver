@@ -30,7 +30,7 @@ module.exports = function(Polyglot) {
       this.tesla = require('../lib/tesla.js')(Polyglot, polyInterface);
 
       this.cache = require('../lib/Cache.js')(Polyglot);
-      this.cache.getCache().on("set", ( key, value ) => {
+      this.cache.getCache().on("set", async ( key, value ) => {
         this.pushedData(key, value);
       });
 
@@ -88,7 +88,7 @@ module.exports = function(Polyglot) {
       return gv20 ? gv20.value : null;
     }
 
-    pushedData (key, vehicleMessage) {
+    async pushedData (key, vehicleMessage) {
       const id = this.vehicleId();
       logger.debug('VehicleSecurity pushedData() received id %s, key %s', id, key);
       if (vehicleMessage && vehicleMessage.response) {
