@@ -28,6 +28,10 @@ module.exports = function(Polyglot) {
       super(nodeDefId, polyInterface, primary, address, name);
 
       this.tesla = require('../lib/tesla.js')(Polyglot, polyInterface);
+      
+      this.cache = require('../lib/Cache.js')(Polyglot);
+
+      this.cache.getCache().on("set", this.pushedData);
 
       // PGC supports setting the node hint when creating a node
       // REF: https://github.com/UniversalDevicesInc/hints
@@ -104,6 +108,9 @@ module.exports = function(Polyglot) {
       return gv20 ? gv20.value : null;
     }
 
+    pushedData (key, value) {
+      logger.debug('VehicleClimate received key %s', key);
+    }
 
 	async onClimateOn() {
         const id = this.vehicleId();
