@@ -99,7 +99,7 @@ module.exports = function(Polyglot) {
       logger.info('initializeUOM done');
     }
 
-    responseCache.on("set", function (key, value) {
+    this.responseCache.on("set", function (key, value) {
       logger.debug(`ResponseCache key ${key} was set`);
     });
     
