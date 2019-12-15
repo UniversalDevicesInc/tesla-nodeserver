@@ -98,11 +98,10 @@ module.exports = function(Polyglot) {
       logger.info('initializeUOM done');
     }
 
-    this.responseCache.on("set", function (key, value) {
+    this.cache.getCache().on("set", function (key, value) {
       logger.debug(`ResponseCache key ${key} was set`);
     });
-    
-    
+
     // The id is stored in GV20
     vehicleId() {
       const gv20 = this.getDriver('GV20'); // id used for the API
