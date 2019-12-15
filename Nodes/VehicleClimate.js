@@ -31,7 +31,7 @@ module.exports = function(Polyglot) {
       
       this.cache = require('../lib/Cache.js')(Polyglot);
 
-      this.cache.getCache().on("set", ( key, value ) => {
+      this.cache.getCache().on("set", async ( key, value ) => {
         await this.pushedData(key, value);
       });
 
