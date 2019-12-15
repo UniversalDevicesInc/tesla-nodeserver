@@ -31,6 +31,11 @@ module.exports = function(Polyglot) {
       
       this.cache = require('../lib/Cache.js')(Polyglot);
 
+
+      this.cache.getCache().on("set", function (key, value) {
+        logger.debug(`ResponseCache key ${key} was set`);
+      });
+
       // PGC supports setting the node hint when creating a node
       // REF: https://github.com/UniversalDevicesInc/hints
       // Must be a string in this format
@@ -97,10 +102,6 @@ module.exports = function(Polyglot) {
       }
       logger.info('initializeUOM done');
     }
-
-    this.cache.getCache().on("set", function (key, value) {
-      logger.debug(`ResponseCache key ${key} was set`);
-    });
 
     // The id is stored in GV20
     vehicleId() {
