@@ -122,7 +122,7 @@ module.exports = function(Polyglot) {
     }
 
     async onUnlock() {
-      if (areCommandsEnabled) {
+      if (this.areCommandsEnabled()) {
         const id = this.vehicleId();
         logger.info('UNLOCK (%s)', this.address);
         await this.tesla.cmdDoorUnlock(id);
