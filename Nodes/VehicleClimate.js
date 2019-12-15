@@ -32,7 +32,7 @@ module.exports = function(Polyglot) {
       this.cache = require('../lib/Cache.js')(Polyglot);
 
       this.cache.getCache().on("set", ( key, value ) => {
-        this.pushedData(key, value);
+        await this.pushedData(key, value);
       });
 
       // PGC supports setting the node hint when creating a node
@@ -110,7 +110,7 @@ module.exports = function(Polyglot) {
       return gv20 ? gv20.value : null;
     }
 
-    pushedData (key, vehicleMessage) {
+    async pushedData (key, vehicleMessage) {
       const id = this.vehicleId();
       logger.debug('VehicleClimate pushedData() received id %s, key %s', id, key);
       if (vehicleMessage && vehicleMessage.response) {
