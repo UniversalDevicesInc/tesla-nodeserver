@@ -231,7 +231,7 @@ module.exports = function(Polyglot) {
         vehicleData.response.vehicle_state &&
         vehicleData.response.gui_settings) {
 
-        vehicleMessage.response.isy_nodedef = nodeDefId;
+        vehicleData.response.isy_nodedef = nodeDefId;
         this.cache.getCache().set(id, vehicleData);
 
         // logger.info('This vehicle Data %o', vehicleData);

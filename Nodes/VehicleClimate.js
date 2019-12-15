@@ -237,13 +237,13 @@ module.exports = function(Polyglot) {
       if (longPoll) {
         try {
           // Run query only one at a time
-          logger.info('VehicleSecurity long poll');
+          logger.info('VehicleClimate long poll');
 
           await lock.acquire('query', function() {
             return _this.queryVehicle(longPoll);
           });
         } catch (err) {
-          logger.error('Error while querying vehicle: %s', err.message);
+          logger.error('VehicleClimate Error while querying vehicle: %s', err.message);
         }
       } else {
         logger.info('VehicleClimate SKIPPING POLL TO LET THE VEHICLE SLEEP');
