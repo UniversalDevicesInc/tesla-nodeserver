@@ -24,8 +24,10 @@ module.exports = function(Polyglot) {
     // address: Your node address, without the leading 'n999_'
     // name: Your node name
     // id is the nodedefId
-    constructor(polyInterface, primary, address, name, id) {
+    constructor(polyInterface, primary, address, name, id, rCache) {
       super(nodeDefId, polyInterface, primary, address, name);
+
+      this.responseCache = rCache;
 
       this.tesla = require('../lib/tesla.js')(Polyglot, polyInterface);
 
@@ -84,6 +86,7 @@ module.exports = function(Polyglot) {
         await delay(5000); // Wait 5 seconds before trying again.
         vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
       }
+      responseCache.set(id, vehicleGuiSettings.response);
       this.vehicleUOM(vehicleGuiSettings.response);
       
       if (this.distance_uom === 'mi') {
@@ -96,6 +99,11 @@ module.exports = function(Polyglot) {
       logger.info('initializeUOM done');
     }
 
+    responseCache.on("set", function (key, value) {
+      logger.debug(`ResponseCache key ${key} was set`);
+    });
+    
+    
     // The id is stored in GV20
     vehicleId() {
       const gv20 = this.getDriver('GV20'); // id used for the API

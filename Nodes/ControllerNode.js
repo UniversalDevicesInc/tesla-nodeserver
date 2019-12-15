@@ -1,5 +1,8 @@
 'use strict';
 
+const NodeCache = require( "node-cache" );
+const responseCache = new NodeCache();
+
 // The controller node is a regular ISY node. It must be the first node created
 // by the node server. It has an ST status showing the nodeserver status, and
 // optionally node statuses. It usually has a few commands on the node to
@@ -112,7 +115,8 @@ module.exports = function(Polyglot) {
               this.address, // primary
               deviceAddress,
               vehicle.display_name,
-              id); // We save the ID in GV20 for eventual API calls
+              id, // We save the ID in GV20 for eventual API calls
+              responseCache);
 
           await newVehicle.initializeUOM();
 
