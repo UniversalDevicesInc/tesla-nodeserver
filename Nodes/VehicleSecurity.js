@@ -3,6 +3,9 @@
 const AsyncLock = require('async-lock');
 const lock = new AsyncLock({ timeout: 2000 });
 
+//Must be the same in nodeserver.js
+const disableSecurityCommandsParam = 'Disable Security Commands';
+
 // nodeDefId must match the nodedef in the profile
 const nodeDefId = 'VEHSEC';
 
@@ -105,6 +108,12 @@ module.exports = function(Polyglot) {
       logger.debug('queryNow (%s)', this.address);
       await this.query(true);
     }
+    
+    areCommandsEnabled() {
+      const config = this.polyInterface.getConfig();
+      const params = config.customParams;
+      return params[enableSecurityCommandsParam] === 'true' ? true : false;
+    }
 
     async onLock() {
       const id = this.vehicleId();
@@ -113,9 +122,13 @@ module.exports = function(Polyglot) {
     }
 
     async onUnlock() {
-      const id = this.vehicleId();
-      logger.info('UNLOCK (%s)', this.address);
-      await this.tesla.cmdDoorUnlock(id);
+      if (areCommandsEnabled) {
+        const id = this.vehicleId();
+        logger.info('UNLOCK (%s)', this.address);
+        await this.tesla.cmdDoorUnlock(id);
+      } else {
+        logger.info('UNLOCK disabled');
+      }
     }
 
     async onSunroofOpen() {
