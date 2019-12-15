@@ -273,7 +273,8 @@ module.exports = function(Polyglot) {
 
         this.setDriver('GV8', vehicleState.locked, false);
 
-       	this.setDriver('GV9', vehicleState.sun_roof_percent_open, false);
+//        this.setDriver('GV9', vehicleState.sun_roof_percent_open, false);
+        this.setDriver('GV9', 12, false);
 
         // Status of sentry mode (displayed with an index).
         this.setDriver('GV11', vehicleState.sentry_mode ? 1 : 0, false);
