@@ -7,4 +7,4 @@ you should see your vehicle node appear in the admin console. You
 may have to restart the admin console. 
 
 You can also fine tune how often the node data is refreshed by 
-configuring the Short Poll. The Long Poll is not used.
+configuring the Short Poll. The Long Poll is used by the Security and Climate nodes to refresh their status.
