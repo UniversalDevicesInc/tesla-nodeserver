@@ -288,7 +288,7 @@ module.exports = function(Polyglot) {
         this.setDriver('GV8', vehicleState.locked, false);
 
         logger.debug('vehicleState.sun_roof_percent_open %s', vehicleState.sun_roof_percent_open);
-        if (vehicleState.sun_roof_percent_open != '') {
+        if (typeof vehicleState.sun_roof_percent_open != 'undefined') {
           this.setDriver('GV9', vehicleState.sun_roof_percent_open, false);
         }
 
