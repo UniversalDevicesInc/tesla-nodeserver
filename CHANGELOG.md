@@ -1,5 +1,15 @@
 # Change Log
 
+v2.0.0 (2019-12-06)
+* Split up the vehicle node for a more compact interface.  A General node, a Climate node, and a Security node
+* Set charge limit control now reflects the current setting
+* Moved display of status values that also have setters to only display in the control
+* Combined the celsius and fahrenheit settings for driver/passenger temp into a single control
+* Store and use driver and passenger climate values in status fields rather than in instance variables
+* Added frunk and trunk status
+* Changed sentry mode to an option list
+* Changed seat heat to an option list that shows the setting in the vehicle
+
 v1.0.5 (2019-11-17)
 * Fixed GV17 for software update status values
 * Updated displayed server version to 1.0.5
