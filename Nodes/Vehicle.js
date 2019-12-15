@@ -212,6 +212,7 @@ module.exports = function(Polyglot) {
     async queryVehicle(longPoll) {
       logger.debug('Vehicle.queryVehicle()');
       const id = this.vehicleId();
+      logger.debug('Vehicle.queryVehicle() 2');
       const vehicleData = await this.tesla.getVehicleData(id);
 
       // check if Tesla is sleeping and sent an error code 408
