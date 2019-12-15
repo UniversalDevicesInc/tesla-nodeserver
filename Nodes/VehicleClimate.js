@@ -118,7 +118,7 @@ module.exports = function(Polyglot) {
             , vehicleMessage.response.isy_nodedef, nodeDefId);
         if (key === id
             && vehicleMessage.response.isy_nodedef != nodeDefId) {
-          processDrivers(vehicleMessage);
+          this.processDrivers(vehicleMessage);
         }
       }
     }
@@ -329,7 +329,7 @@ module.exports = function(Polyglot) {
         return 0;
       }
 
-      processDrivers(vehicleData);
+      this.processDrivers(vehicleData);
 
         // logger.info('This vehicle Data %o', vehicleData);
     }

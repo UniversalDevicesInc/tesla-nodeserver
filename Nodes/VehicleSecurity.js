@@ -92,9 +92,10 @@ module.exports = function(Polyglot) {
       const id = this.vehicleId();
       logger.debug('VehicleSecurity pushedData() received id %s, key %s', id, key);
       if (vehicleMessage && vehicleMessage.response) {
-        if (vehicleMessage.response.id === id
+        logger.debug('VehicleSecurity pushedData() vehicleMessage.response.isy_nodedef %s, nodeDefId %s'
+        if (key === id
             && vehicleMessage.response.isy_nodedef != nodeDefId) {
-          processDrivers(vehicleMessage);
+          this.processDrivers(vehicleMessage);
         }
       }
     }
@@ -236,7 +237,7 @@ module.exports = function(Polyglot) {
         return 0;
       }
 
-      processDrivers(vehicleData);
+      this.processDrivers(vehicleData);
 
         // logger.info('This vehicle Data %o', vehicleData);
     }
