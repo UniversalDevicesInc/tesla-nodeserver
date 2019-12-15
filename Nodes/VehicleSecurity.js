@@ -93,6 +93,7 @@ module.exports = function(Polyglot) {
       logger.debug('VehicleSecurity pushedData() received id %s, key %s', id, key);
       if (vehicleMessage && vehicleMessage.response) {
         logger.debug('VehicleSecurity pushedData() vehicleMessage.response.isy_nodedef %s, nodeDefId %s'
+            , vehicleMessage.response.isy_nodedef, nodeDefId);
         if (key === id
             && vehicleMessage.response.isy_nodedef != nodeDefId) {
           this.processDrivers(vehicleMessage);
