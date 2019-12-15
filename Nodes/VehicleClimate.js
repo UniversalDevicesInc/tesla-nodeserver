@@ -114,7 +114,9 @@ module.exports = function(Polyglot) {
       const id = this.vehicleId();
       logger.debug('VehicleClimate pushedData() received id %s, key %s', id, key);
       if (vehicleMessage && vehicleMessage.response) {
-        if (vehicleMessage.response.id === id
+        logger.debug('VehicleClimate pushedData() vehicleMessage.response.isy_nodedef %s, nodeDefId %s'
+            , vehicleMessage.response.isy_nodedef, nodeDefId);
+        if (key === id
             && vehicleMessage.response.isy_nodedef != nodeDefId) {
           processDrivers(vehicleMessage);
         }
