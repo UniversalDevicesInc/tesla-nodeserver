@@ -4,7 +4,7 @@ const AsyncLock = require('async-lock');
 const lock = new AsyncLock({ timeout: 2000 });
 
 //Must be the same in nodeserver.js
-const disableSecurityCommandsParam = 'Disable Security Commands';
+const enableSecurityCommandsParam = 'Enable Security Commands';
 
 // nodeDefId must match the nodedef in the profile
 const nodeDefId = 'VEHSEC';
