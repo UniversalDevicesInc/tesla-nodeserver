@@ -33,7 +33,7 @@ module.exports = function(Polyglot) {
 
 
       this.cache.getCache().on("set", function (key, value) {
-        logger.debug(`ResponseCache key ${key} was set`);
+        logger.debug('ResponseCache key %s was set', key);
       });
 
       // PGC supports setting the node hint when creating a node
