@@ -33,7 +33,7 @@ module.exports = function(Polyglot) {
 
 //      this.cache.getCache().on("set", this.pushedData);
       this.cache.getCache().on("set", ( key, value ) => {
-        this.pushedData(id, key, value);
+        this.pushedData(key, value);
       });
 
       // PGC supports setting the node hint when creating a node
@@ -111,7 +111,8 @@ module.exports = function(Polyglot) {
       return gv20 ? gv20.value : null;
     }
 
-    pushedData (id, key, vehicleMessage) {
+    pushedData (key, vehicleMessage) {
+      const id = this.vehicleId();
       logger.debug('VehicleClimate pushedData() received id %s, key %s', id, key);
       if (vehicleMessage && vehicleMessage.response) {
         if (vehicleMessage.response.id === id
