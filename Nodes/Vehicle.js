@@ -24,12 +24,12 @@ module.exports = function(Polyglot) {
     // address: Your node address, without the leading 'n999_'
     // name: Your node name
     // id is the nodedefId
-    constructor(polyInterface, primary, address, name, id, rCache) {
+    constructor(polyInterface, primary, address, name, id) {
       super(nodeDefId, polyInterface, primary, address, name);
 
-      this.responseCache = rCache;
-
       this.tesla = require('../lib/tesla.js')(Polyglot, polyInterface);
+      
+      this.cache = require('../lib/Cache.js')(Polyglot);
 
       // PGC supports setting the node hint when creating a node
       // REF: https://github.com/UniversalDevicesInc/hints
@@ -86,7 +86,6 @@ module.exports = function(Polyglot) {
         await delay(5000); // Wait 5 seconds before trying again.
         vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
       }
-      responseCache.set(id, vehicleGuiSettings.response);
       this.vehicleUOM(vehicleGuiSettings.response);
       
       if (this.distance_uom === 'mi') {
@@ -231,6 +230,8 @@ module.exports = function(Polyglot) {
         vehicleData.response.charge_state &&
         vehicleData.response.vehicle_state &&
         vehicleData.response.gui_settings) {
+
+        this.cache.getCache().set(id, vehicleData.response);
 
         // logger.info('This vehicle Data %o', vehicleData);
 
