@@ -1,5 +1,10 @@
 # Change Log
 
+v2.1.0 (2020-01-18)
+* When the General node is in wake mode, all three nodes will be refreshed including the Climate and Security nodes
+* A new configuration parameter "Enable Security Commands" has been added
+
+
 v2.0.0 (2019-12-06)
 * Split up the vehicle node for a more compact interface.  A General node, a Climate node, and a Security node
 * Set charge limit control now reflects the current setting

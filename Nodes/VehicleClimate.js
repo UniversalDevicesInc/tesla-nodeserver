@@ -28,9 +28,8 @@ module.exports = function(Polyglot) {
       super(nodeDefId, polyInterface, primary, address, name);
 
       this.tesla = require('../lib/tesla.js')(Polyglot, polyInterface);
-      
-      this.cache = require('../lib/Cache.js')(Polyglot);
 
+      this.cache = require('../lib/Cache.js')(Polyglot);
       this.cache.getCache().on("set", async ( key, value ) => {
         await this.pushedData(key, value);
       });
@@ -118,6 +117,7 @@ module.exports = function(Polyglot) {
             , vehicleMessage.response.isy_nodedef, nodeDefId);
         if (key === id
             && vehicleMessage.response.isy_nodedef != nodeDefId) {
+          // process the message for this vehicle sent from a different node.
           this.processDrivers(vehicleMessage, true);
         }
       }
