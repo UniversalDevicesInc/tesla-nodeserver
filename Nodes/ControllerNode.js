@@ -47,7 +47,7 @@ module.exports = function(Polyglot) {
         ST: { value: '1', uom: 2 }, // uom 2 = Boolean. '1' is True.
       };
       
-      setDebugLevel();
+      this.setDebugLevel();
 
       this.isController = true;
     }
