@@ -1,7 +1,7 @@
 'use strict';
 // This is the general node for the vehicle.
 // This node can be set in the "wake" mode which updates on the short poll.
-// The other nodes are updated by the Cache service on the short poll when queryVehicle() is called here.
+// The other nodes are updated by calling the controller node on the short poll when queryVehicle() is called here.
 
 const AsyncLock = require('async-lock');
 const lock = new AsyncLock({ timeout: 500 });
@@ -31,11 +31,6 @@ module.exports = function(Polyglot) {
       super(nodeDefId, polyInterface, primary, address, name);
 
       this.tesla = require('../lib/tesla.js')(Polyglot, polyInterface);
-
-      this.cache = require('../lib/Cache.js')(Polyglot);
-      this.cache.getCache().on("set", function (key, value) {
-        logger.debug('ResponseCache key %s was set', key);
-      });
 
       // PGC supports setting the node hint when creating a node
       // REF: https://github.com/UniversalDevicesInc/hints
@@ -240,10 +235,9 @@ module.exports = function(Polyglot) {
         vehicleData.response.vehicle_state &&
         vehicleData.response.gui_settings) {
 
+        // Forward the vehicleData to the other nodes so they also update.
         vehicleData.response.isy_nodedef = nodeDefId;
         this.updateOtherNodes(vehicleData);
-        // Forward the vehicleData to the other nodes so they also update.
-//        this.cache.getCache().set(id, vehicleData);
 
         // logger.info('This vehicle Data %o', vehicleData);
 

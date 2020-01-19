@@ -32,12 +32,6 @@ module.exports = function(Polyglot) {
 
       this.tesla = require('../lib/tesla.js')(Polyglot, polyInterface);
 
-      this.cache = require('../lib/Cache.js')(Polyglot);
-      this.cache.getCache().on("set", async ( key, value ) => {
-        this.pushedData(key, value);
-      });
-
-
       // PGC supports setting the node hint when creating a node
       // REF: https://github.com/UniversalDevicesInc/hints
       // Must be a string in this format
