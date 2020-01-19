@@ -213,7 +213,7 @@ module.exports = function(Polyglot) {
     updateOtherNodes(vehicleData) {
       logger.debug('Vehicle.updateOtherNodes(%s)', this.address);
       const controllerNode = this.polyInterface.getNode(this.primary);
-      controllerNode.updateOtherNodes(this.address, vehicleData);
+      controllerNode.updateOtherNodes(this.address, this.vehicleId(), vehicleData);
     }
 
     async queryVehicle(longPoll) {

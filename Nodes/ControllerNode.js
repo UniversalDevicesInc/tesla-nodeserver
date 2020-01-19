@@ -93,14 +93,14 @@ module.exports = function(Polyglot) {
       this.polyInterface.removeNotice('credsError');
     }
 
-    updateOtherNodes(vehicleNodeAddress, vehicleMessage) {
+    updateOtherNodes(vehicleNodeAddress, vehicleId, vehicleMessage) {
       logger.debug('ControllerNodes.updateOtherNodes(%s)', vehicleNodeAddress);
       const securityNode = this.polyInterface.getNode("s" + vehicleNodeAddress);
       logger.debug('ControllerNodes.updateOtherNodes(%s)getnode', vehicleNodeAddress);
-      securityNode.pushedData(vehicleNodeAddress, vehicleMessage);
+      securityNode.pushedData(vehicleId, vehicleMessage);
       logger.debug('ControllerNodes.updateOtherNodes(%s)pushdata', vehicleNodeAddress);
       const climateNode = this.polyInterface.getNode("c" + vehicleNodeAddress);
-      climateNode.pushedData(vehicleNodeAddress, vehicleMessage);
+      climateNode.pushedData(vehicleId, vehicleMessage);
     }
 
     // pass the Tesla API vehicle object
