@@ -229,7 +229,9 @@ module.exports = function(Polyglot) {
           transport.level = loggingLevel;
         }
       } else {
-        logger.warn('Ignoring bad logging level: %s', loggingLevel);
+        for (const transport of logger.transports) {
+          logger.warn('Ignoring bad logging level.  Using: %s', transport.level);
+        }
       }
     }
 
