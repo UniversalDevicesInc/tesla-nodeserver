@@ -16,8 +16,6 @@ module.exports = function(Polyglot) {
   // In this example, we also need to have our custom node because we create
   // nodes from this controller. See onCreateNew
   const Vehicle = require('./Vehicle.js')(Polyglot);
-  const VehicleSecurity = require('./VehicleSecurity.js')(Polyglot);
-  const VehicleClimate = require('./VehicleClimate.js')(Polyglot);
 
   class Controller extends Polyglot.Node {
     // polyInterface: handle to the interface
@@ -93,7 +91,6 @@ module.exports = function(Polyglot) {
       this.polyInterface.removeNotice('credsError');
     }
 
-    // pass the Tesla API vehicle object
     async autoAddVehicle(vehicle) {
       // id is the vehicle ID for the purpose of calling APIs.
       // I have seen cases where the good number is id_s, not id (?)
@@ -107,16 +104,15 @@ module.exports = function(Polyglot) {
         try {
           logger.info('Adding vehicle node %s: %s',
             deviceAddress, vehicle.display_name);
-          const newVehicle = new Vehicle(
+
+          const result = await this.polyInterface.addNode(
+            new Vehicle(
               this.polyInterface,
               this.address, // primary
               deviceAddress,
               vehicle.display_name,
-              id); // We save the ID in GV20 for eventual API calls
-
-          await newVehicle.initializeUOM();
-
-          const result = await this.polyInterface.addNode(newVehicle);
+              id) // We save the ID in GV20 for eventual API calls
+          );
 
           logger.info('Vehicle added: %s', result);
           this.polyInterface.addNoticeTemp(
@@ -124,49 +120,6 @@ module.exports = function(Polyglot) {
             'New node created: ' + vehicle.display_name,
             5
           );
-          
-          const vehicleSecurityName = vehicle.display_name + " Security";
-          const vehicleSecurityAddress =  "s" + deviceAddress;
-          logger.info('Adding VehicleSecurity node %s: %s',
-              vehicleSecurityAddress, vehicleSecurityName);
-            const newVehicleSecurity = new VehicleSecurity(
-                this.polyInterface,
-                this.address, // primary
-                vehicleSecurityAddress,
-                vehicleSecurityName,
-                id); // We save the ID in GV20 for eventual API calls
-
-            const resultSecurity = await this.polyInterface.addNode(newVehicleSecurity);
-            await newVehicleSecurity.query(true); // get current values
-
-            logger.info('VehicleSecurity added: %s', resultSecurity);
-            this.polyInterface.addNoticeTemp(
-              'newVehicleSecurity-' + vehicleSecurityAddress,
-              'New node created: ' + vehicleSecurityName,
-              5
-            );
-            
-            const vehicleClimateName = vehicle.display_name + " Climate";
-            const vehicleClimateAddress =  "c" + deviceAddress;
-            logger.info('Adding VehicleClimate node %s: %s',
-                vehicleClimateAddress, vehicleClimateName);
-              const newVehicleClimate = new VehicleClimate(
-                  this.polyInterface,
-                  this.address, // primary
-                  vehicleClimateAddress,
-                  vehicleClimateName,
-                  id); // We save the ID in GV20 for eventual API calls
-
-              const resultClimate = await this.polyInterface.addNode(newVehicleClimate);
-              await newVehicleClimate.initializeUOM();
-              await newVehicleClimate.query(true); // get current values
-
-              logger.info('VehicleClimate added: %s', resultClimate);
-              this.polyInterface.addNoticeTemp(
-                'newVehicleClimate-' + vehicleClimateAddress,
-                'New node created: ' + vehicleClimateName,
-                5
-              );
 
           return { added: true };
 
