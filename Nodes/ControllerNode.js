@@ -10,6 +10,7 @@
 const nodeDefId = 'CONTROLLER';
 
 const customLoggingLevel = 'Custom Logging Level';
+const validLoggingLevels = ['error', 'warn', 'info', 'verbose', 'debug'];
 
 module.exports = function(Polyglot) {
   // Utility function provided to facilitate logging.
@@ -55,11 +56,15 @@ module.exports = function(Polyglot) {
     setDebugLevel() {
       const config = this.polyInterface.getConfig();
       const params = config.customParams;
-      const loggingLevel = params[customLoggingLevel];
-
-      for (const transport of logger.transports) {
-        logger.debug('VehicleSecurity() transports: %s', transport.level);
-        transport.level = loggingLevel;
+      let loggingLevel = '';
+      if (customLoggingLevel in params) {
+        loggingLevel = params[customLoggingLevel];
+      }
+      logger.debug('Setting logging level: %s', loggingLevel);
+      if (loggingLevel in validLoggingLevels) {
+        for (const transport of logger.transports) {
+          transport.level = loggingLevel;
+        }
       }
     }
 
