@@ -32,7 +32,9 @@ module.exports = function(Polyglot) {
 
       this.tesla = require('../lib/tesla.js')(Polyglot, polyInterface);
       
-      logger.debug('VehicleSecurity() transports: %s', logger.transports);
+      for (const transport of logger.transports) {
+        logger.debug('VehicleSecurity() transports: %s', transport);
+      }
 
       // PGC supports setting the node hint when creating a node
       // REF: https://github.com/UniversalDevicesInc/hints
