@@ -48,24 +48,7 @@ module.exports = function(Polyglot) {
         ST: { value: '1', uom: 2 }, // uom 2 = Boolean. '1' is True.
       };
       
-      this.setDebugLevel(polyInterface);
-
       this.isController = true;
-    }
-    
-    setDebugLevel(polyInterface) {
-      const config = polyInterface.getConfig();
-      const params = config.customParams;
-      let loggingLevel = '';
-      if (customLoggingLevel in params) {
-        loggingLevel = params[customLoggingLevel];
-      }
-      logger.debug('Setting logging level: %s', loggingLevel);
-      if (loggingLevel in validLoggingLevels) {
-        for (const transport of logger.transports) {
-          transport.level = loggingLevel;
-        }
-      }
     }
 
     // Sends the profile files to ISY

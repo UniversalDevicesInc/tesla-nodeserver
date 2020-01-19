@@ -211,7 +211,23 @@ module.exports = function(Polyglot) {
       controllerNode.updateOtherNodes(this.address, this.vehicleId(), vehicleData);
     }
 
+    setDebugLevel(polyInterface) {
+      const config = polyInterface.getConfig();
+      const params = config.customParams;
+      let loggingLevel = '';
+      if (customLoggingLevel in params) {
+        loggingLevel = params[customLoggingLevel];
+      }
+      logger.debug('Setting logging level: %s', loggingLevel);
+      if (loggingLevel in validLoggingLevels) {
+        for (const transport of logger.transports) {
+          transport.level = loggingLevel;
+        }
+      }
+    }
+
     async queryVehicle(longPoll) {
+      this.setDebugLevel(this.polyInterface);
       logger.debug('Vehicle.queryVehicle()');
       const id = this.vehicleId();
       const vehicleData = await this.tesla.getVehicleData(id);
