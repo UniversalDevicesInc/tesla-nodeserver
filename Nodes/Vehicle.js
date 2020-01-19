@@ -228,6 +228,8 @@ module.exports = function(Polyglot) {
           logger.debug('Setting logging level: %s', loggingLevel);
           transport.level = loggingLevel;
         }
+      } else {
+        logger.warn('Ignoring bad logging level: %s', loggingLevel);
       }
     }
 
