@@ -34,6 +34,7 @@ module.exports = function(Polyglot) {
       
       for (const transport of logger.transports) {
         logger.debug('VehicleSecurity() transports: %s', transport.level);
+        transport.level = 'warn';
       }
 
       // PGC supports setting the node hint when creating a node
