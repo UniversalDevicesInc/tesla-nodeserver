@@ -1,5 +1,30 @@
 # Change Log
 
+v2.1.0 (2020-01-18)
+* When the General node is in wake mode, all three nodes will be refreshed including the Climate and Security nodes
+* A new configuration parameter "Enable Security Commands" has been added
+
+
+v2.0.0 (2019-12-06)
+* Split up the vehicle node for a more compact interface.  A General node, a Climate node, and a Security node
+* Set charge limit control now reflects the current setting
+* Moved display of status values that also have setters to only display in the control
+* Combined the celsius and fahrenheit settings for driver/passenger temp into a single control
+* Store and use driver and passenger climate values in status fields rather than in instance variables
+* Added frunk and trunk status
+* Changed sentry mode to an option list
+* Changed seat heat to an option list that shows the setting in the vehicle
+
+v1.0.5 (2019-11-17)
+* Fixed GV17 for software update status values
+* Updated displayed server version to 1.0.5
+* Fixed precision for Odometer reading
+* Support for temperature and distance UOM matching the settings in the vehicle
+** GV12, GV13, GV14 now support both celsius and fahrenheit
+** GV1 and GV10 support both kilometers and miles
+* Added GV15 for Max Defrost status (it is COLD in the Northland)
+* Separate commands for setting driver/passenger temperature in both C and F
+
 v1.0.4 (2019-09-19)
 
 * Added GV11 for Sentry Mode

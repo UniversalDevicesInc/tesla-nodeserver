@@ -29,10 +29,16 @@ Go to Nodeservers|Nodeserver Store, and add the Tesla Nodeserver.
 1. Login to Polyglot and go to your Tesla nodeserver.
 2. Enter your Tesla account user ID and password
 3. You should see a "Tesla Controller" node appear in the ISY admin console, and your vehicle(s) underneath. You may need to restart the admin console.
-4. As of version 1.0.4 polling behaviour has changed. The short poll value is defaulted to 15 seconds and is intended to give near real time updates without letting the vehicle go to sleep. By default short polling will not be active so you may not see data populate in the ISY admin area at first launch. Issuing the "Wake" command will enable the short poll to call the Tesla API. Issuing the "Let vehicle sleep" command will again disable short polling. Note that if you do not issue the "Let vehicle sleep" command then the Tesla will not go to sleep as the polling rate is fairly high and accessing the Tesla API will keep the vehicle awake. 
+4. As of version 1.0.4 polling behaviour has changed. The short poll value is defaulted to 15 seconds and is intended to give near real time updates without letting the vehicle go to sleep. By default short polling will not be active so you may not see data populate in the ISY admin area at first launch. Issuing the "Wake" command will enable the short poll to call the Tesla API. Issuing the "Let vehicle sleep" command will again disable short polling. Note that if you do not issue the "Let vehicle sleep" command then the Tesla will not go to sleep as the polling rate is fairly high and accessing the Tesla API will keep the vehicle awake.
+5. As of 2.0.0 the long poll is used by the Security and Climate nodes to refresh the status.  The Query command may be used to refresh each of these nodes individually.
+6. As of version 2.1.0 when the General node is in wake mode it will refresh on the short poll along with the Security and Climate nodes.
+7. Also new in 2.1.0 is the ability to enable/disable the security commands.  By default "Enable Security Commands" is set to false.
 
 Long polling is now defaulted to 2700 seconds (45 minutes) to allow the Tesla time to fall asleep but still periodically gather data from it if it happens to be awake.
 
 The use case intended for more real time short term polling with the ability to enable/disable it programmatically is so you could issue a command to the vehicle (e.g. start the climate control system) and then get a notification when the vehicle is now up to temperature. 
 
 You can adjust in Polyglot the short and long poll values which represents how frequently data is refreshed, in seconds.
+
+The rationale behind the "Enable Security Commands" is you may not want or need to remotely open your vehicle's doors, frunk, trunk, or windows.  Values are "true/false".
+
