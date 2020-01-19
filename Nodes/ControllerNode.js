@@ -48,13 +48,13 @@ module.exports = function(Polyglot) {
         ST: { value: '1', uom: 2 }, // uom 2 = Boolean. '1' is True.
       };
       
-      this.setDebugLevel();
+      this.setDebugLevel(polyInterface);
 
       this.isController = true;
     }
     
-    setDebugLevel() {
-      const config = this.polyInterface.getConfig();
+    setDebugLevel(polyInterface) {
+      const config = polyInterface.getConfig();
       const params = config.customParams;
       let loggingLevel = '';
       if (customLoggingLevel in params) {
