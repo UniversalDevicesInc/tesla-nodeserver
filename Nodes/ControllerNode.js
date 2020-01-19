@@ -10,7 +10,6 @@
 const nodeDefId = 'CONTROLLER';
 
 const customLoggingLevel = 'Custom Logging Level';
-const validLoggingLevels = ['error', 'warn', 'info', 'verbose', 'debug'];
 
 module.exports = function(Polyglot) {
   // Utility function provided to facilitate logging.

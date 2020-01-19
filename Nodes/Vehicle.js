@@ -9,6 +9,8 @@ const lock = new AsyncLock({ timeout: 500 });
 // nodeDefId must match the nodedef in the profile
 const nodeDefId = 'VEHICLE';
 
+const validLoggingLevels = ['error', 'warn', 'info', 'verbose', 'debug'];
+
 function delay(delay) {
   return new Promise(function(waitforit) {
     setTimeout(waitforit, delay);
