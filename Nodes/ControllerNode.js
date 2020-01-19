@@ -9,6 +9,8 @@
 // nodeDefId must match the nodedef id in your nodedef
 const nodeDefId = 'CONTROLLER';
 
+const customLoggingLevel = 'Custom Logging Level';
+
 module.exports = function(Polyglot) {
   // Utility function provided to facilitate logging.
   const logger = Polyglot.logger;
@@ -44,8 +46,21 @@ module.exports = function(Polyglot) {
       this.drivers = {
         ST: { value: '1', uom: 2 }, // uom 2 = Boolean. '1' is True.
       };
+      
+      setDebugLevel();
 
       this.isController = true;
+    }
+    
+    setDebugLevel() {
+      const config = this.polyInterface.getConfig();
+      const params = config.customParams;
+      const loggingLevel = params[customLoggingLevel];
+
+      for (const transport of logger.transports) {
+        logger.debug('VehicleSecurity() transports: %s', transport.level);
+        transport.level = loggingLevel;
+      }
     }
 
     // Sends the profile files to ISY
