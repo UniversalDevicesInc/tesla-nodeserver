@@ -210,6 +210,12 @@ module.exports = function(Polyglot) {
 	      
     }
 
+    updateOtherNodes(vehicleData) {
+      logger.debug('Vehicle.updateOtherNodes(%s)', this.primary);
+      const controllerNode = this.polyInterface.getNode(this.primary);
+      controllerNode.updateOtherNodes(this.vehicleId(), vehicleData);
+    }
+
     async queryVehicle(longPoll) {
       logger.debug('Vehicle.queryVehicle()');
       const id = this.vehicleId();
@@ -235,8 +241,9 @@ module.exports = function(Polyglot) {
         vehicleData.response.gui_settings) {
 
         vehicleData.response.isy_nodedef = nodeDefId;
+        this.updateOtherNodes(vehicleData);
         // Forward the vehicleData to the other nodes so they also update.
-        this.cache.getCache().set(id, vehicleData);
+//        this.cache.getCache().set(id, vehicleData);
 
         // logger.info('This vehicle Data %o', vehicleData);
 
