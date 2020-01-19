@@ -221,9 +221,11 @@ module.exports = function(Polyglot) {
       if (customLoggingLevel in params) {
         loggingLevel = params[customLoggingLevel];
       }
-      logger.debug('Setting logging level: %s', loggingLevel);
+      logger.debug('Configured logging level: %s', loggingLevel);
       if (loggingLevel in validLoggingLevels) {
+        logger.debug('Found logging level');
         for (const transport of logger.transports) {
+          logger.debug('Setting logging level: %s', loggingLevel);
           transport.level = loggingLevel;
         }
       }
