@@ -176,6 +176,7 @@ module.exports = function(Polyglot) {
     }
     
     async query(longPoll) {
+      this.setDebugLevel(this.polyInterface);
       const _this = this;
       if (!this.let_sleep || longPoll) {
         try {
@@ -236,7 +237,6 @@ module.exports = function(Polyglot) {
     }
 
     async queryVehicle(longPoll) {
-      this.setDebugLevel(this.polyInterface);
       logger.debug('Vehicle.queryVehicle()');
       const id = this.vehicleId();
       const vehicleData = await this.tesla.getVehicleData(id);
