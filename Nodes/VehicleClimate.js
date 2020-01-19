@@ -219,7 +219,7 @@ module.exports = function(Polyglot) {
           message.value, celsiusDeg, this.stdDriverTemp());
       logger.debug('message uom: %s', message.uom);
       await this.tesla.cmdSetClimateTemp(id, this.stdDriverTemp(), celsiusDeg);
-      await this.query();
+      await this.queryNow();
     }
 
     // The driver temperature is stored in GV12
@@ -246,7 +246,7 @@ module.exports = function(Polyglot) {
           logger.error('VehicleClimate Error while querying vehicle: %s', err.message);
         }
       } else {
-        logger.info('VehicleClimate SKIPPING POLL TO LET THE VEHICLE SLEEP');
+        logger.info('VehicleClimate SKIPPING POLL');
       }
 
     }

@@ -229,7 +229,7 @@ module.exports = function(Polyglot) {
           logger.error('Error while querying vehicle: %s', err.message);
         }
       } else {
-        logger.info('VehicleSecurity SKIPPING POLL TO LET THE VEHICLE SLEEP');
+        logger.info('VehicleSecurity SKIPPING POLL');
       }
 
     }
