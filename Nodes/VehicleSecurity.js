@@ -108,8 +108,6 @@ module.exports = function(Polyglot) {
     areCommandsEnabled() {
       const config = this.polyInterface.getConfig();
       const params = config.customParams;
-      logger.debug('VehicleSecurity.areCommandsEnabled (%s)', params[enableSecurityCommandsParam]);
-
       return params[enableSecurityCommandsParam] === 'true' ? true : false;
     }
 
@@ -275,8 +273,6 @@ module.exports = function(Polyglot) {
       const id = this.vehicleId();
       let vehicleData = await this.tesla.getVehicleData(id);
 
-      this.setDriver('GV5', this.areCommandsEnabled() ? 1 : 0, false); // commands enabled/disabled status
-
       // check if Tesla is sleeping and sent an error code 408
       if (vehicleData === 408) {
         if (longPoll) {
@@ -304,6 +300,7 @@ module.exports = function(Polyglot) {
       // let vehicleData = await this.tesla.getVehicle(id);
       // const chargeState = await this.tesla.getVehicleChargeState(id);
       // vehicleData.response.charge_state = chargeState.response;
+      this.setDriver('GV5', this.areCommandsEnabled() ? 1 : 0, false); // commands enabled/disabled status
 
       if (vehicleData && vehicleData.response &&
         vehicleData.response.charge_state &&
