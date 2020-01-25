@@ -32,7 +32,8 @@ Go to Nodeservers|Nodeserver Store, and add the Tesla Nodeserver.
 4. As of version 1.0.4 polling behaviour has changed. The short poll value is defaulted to 15 seconds and is intended to give near real time updates without letting the vehicle go to sleep. By default short polling will not be active so you may not see data populate in the ISY admin area at first launch. Issuing the "Wake" command will enable the short poll to call the Tesla API. Issuing the "Let vehicle sleep" command will again disable short polling. Note that if you do not issue the "Let vehicle sleep" command then the Tesla will not go to sleep as the polling rate is fairly high and accessing the Tesla API will keep the vehicle awake.
 5. As of 2.0.0 the long poll is used by the Security and Climate nodes to refresh the status.  The Query command may be used to refresh each of these nodes individually.
 6. As of version 2.1.0 when the General node is in wake mode it will refresh on the short poll and so will the Security and Climate nodes.
-7. Also new in 2.1.0 is the ability to enable/disable the security commands.  By default "Enable Security Commands" is set to false.
+7. As of version 2.1.0 the ability to enable/disable the security commands.  By default "Enable Security Commands" is set to false.
+8. As of version 2.1.0 a configuration value to change the logging level to help in debugging.
 
 Long polling is now defaulted to 2700 seconds (45 minutes) to allow the Tesla time to fall asleep but still periodically gather data from it if it happens to be awake.
 
