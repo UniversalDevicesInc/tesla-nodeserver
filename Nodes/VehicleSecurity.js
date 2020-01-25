@@ -111,9 +111,13 @@ module.exports = function(Polyglot) {
     }
 
     async onLock() {
-      const id = this.vehicleId();
-      logger.info('LOCK (%s)', this.address);
-      await this.tesla.cmdDoorLock(id);
+      if (this.areCommandsEnabled()) {
+        const id = this.vehicleId();
+        logger.info('LOCK (%s)', this.address);
+        await this.tesla.cmdDoorLock(id);
+      } else {
+        logger.info('LOCK disabled');
+      }
     }
 
     async onUnlock() {
@@ -138,9 +142,13 @@ module.exports = function(Polyglot) {
     }
 
     async onSunroofClose() {
-      const id = this.vehicleId();
-      logger.info('SUNROOF_CLOSE (%s)', this.address);
-      await this.tesla.cmdSunRoof(id, 'close');
+      if (this.areCommandsEnabled()) {
+        const id = this.vehicleId();
+        logger.info('SUNROOF_CLOSE (%s)', this.address);
+        await this.tesla.cmdSunRoof(id, 'close');
+      } else {
+        logger.info('SUNROOF_CLOSE disabled');
+      }
     }
 
     async onChargePortDoor(message) {
@@ -171,10 +179,14 @@ module.exports = function(Polyglot) {
     }
 
     async onWindowsClose() {
-      const id = this.vehicleId();
-      logger.info('WINDOWS CLOSE (%s)', this.address);
-      await this.tesla.cmdWindows(id, 'close');
-      await this.queryNow();
+      if (this.areCommandsEnabled()) {
+        const id = this.vehicleId();
+        logger.info('WINDOWS CLOSE (%s)', this.address);
+        await this.tesla.cmdWindows(id, 'close');
+        await this.queryNow();
+      } else {
+        logger.info('WINDOWS CLOSE disabled');
+      }
     }
 
     async onTrunkOpen() {
@@ -200,18 +212,26 @@ module.exports = function(Polyglot) {
     }
 
     async onSentryMode(message) {
-      const id = this.vehicleId();
-      const decodeValue = message.value === '1' ? 'on' : 'off';
-      logger.debug('SENTRY MODE raw %s decoded %s (%s)', message.value, decodeValue, this.address);
-      await this.tesla.cmdSentryMode(id, decodeValue);
-      await this.queryNow();
+      if (this.areCommandsEnabled()) {
+        const id = this.vehicleId();
+        const decodeValue = message.value === '1' ? 'on' : 'off';
+        logger.debug('SENTRY MODE raw %s decoded %s (%s)', message.value, decodeValue, this.address);
+        await this.tesla.cmdSentryMode(id, decodeValue);
+        await this.queryNow();
+      } else {
+        logger.info('SENTRY MODE disabled');
+      }
     }
 
     async onStartSoftwareUpdate() {
-      const id = this.vehicleId();
-      logger.info('STARTING SOFTWARE UPDATE (%s)', this.address);
-      await this.tesla.cmdStartSoftwareUpdate(id);
-      await this.queryNow();
+      if (this.areCommandsEnabled()) {
+        const id = this.vehicleId();
+        logger.info('STARTING SOFTWARE UPDATE (%s)', this.address);
+        await this.tesla.cmdStartSoftwareUpdate(id);
+        await this.queryNow();
+      } else {
+        logger.info('STARTING SOFTWARE UPDATE disabled');
+      }
     }
 
     // Update Vehicle security only on long poll.
