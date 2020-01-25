@@ -273,7 +273,7 @@ module.exports = function(Polyglot) {
       const id = this.vehicleId();
       let vehicleData = await this.tesla.getVehicleData(id);
 
-      this.setDriver('GV5', this.areCommandsEnabled(), true); // car is offline
+      this.setDriver('GV5', this.areCommandsEnabled() ? 1 : 0, true); // commands enabled/disabled status
 
       // check if Tesla is sleeping and sent an error code 408
       if (vehicleData === 408) {
