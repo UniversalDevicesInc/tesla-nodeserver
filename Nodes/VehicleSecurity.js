@@ -108,7 +108,7 @@ module.exports = function(Polyglot) {
     areCommandsEnabled() {
       const config = this.polyInterface.getConfig();
       const params = config.customParams;
-      logger.debug('areCommandsEnabled (%s)', params[enableSecurityCommandsParam]);
+      logger.debug('VehicleSecurity.areCommandsEnabled (%s)', params[enableSecurityCommandsParam]);
 
       return params[enableSecurityCommandsParam] === 'true' ? true : false;
     }
