@@ -65,6 +65,7 @@ module.exports = function(Polyglot) {
         GV2: { value: '', uom: 2 }, // Charge port latch engaged
         GV3: { value: '', uom: 25 }, // Frunk status
         GV4: { value: '', uom: 25 }, // Trunk Status
+        GV5: { value: '', uom: 25 }, // Security Command Status
         GV8: { value: '', uom: 2 }, // Locked?
         GV9: { value: '', uom: 51 }, // Sunroof open%
         GV11:  { value: '', uom: 25 }, // Sentry mode on
@@ -271,6 +272,8 @@ module.exports = function(Polyglot) {
       logger.debug('VehicleSecurity queryVehicle(%s)', longPoll);
       const id = this.vehicleId();
       let vehicleData = await this.tesla.getVehicleData(id);
+
+      this.setDriver('GV5', this.areCommandsEnabled(), true); // car is offline
 
       // check if Tesla is sleeping and sent an error code 408
       if (vehicleData === 408) {

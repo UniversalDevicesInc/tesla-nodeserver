@@ -63,6 +63,7 @@
       <st id="GV2" editor="BOOLEAN"/> <!-- Charge port latch engaged -->
       <st id="GV3" editor="I_OPEN_STATUS"/> <!-- Frunk Status -->
       <st id="GV4" editor="I_OPEN_STATUS"/> <!-- Trunk Status -->
+      <st id="GV5" editor="I_SECURITY_ENABLED"/> <!-- Security Command Status -->
       <st id="GV8" editor="BOOLEAN"/> <!-- Locked -->
       <st id="GV9" editor="I_PERCENT"/> <!-- Sunroof opened -->
       <st id="GV11" editor="I_SENTRY_MODE" hide="T"/> <!-- Sentry Mode -->

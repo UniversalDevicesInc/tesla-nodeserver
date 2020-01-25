@@ -69,5 +69,8 @@
   <editor id="I_CHARGE_PORT_DOOR">
     <range uom="25" subset="0-1" nls="EN_I_CHARGE_PORT_DOOR" />
   </editor>
+  <editor id="I_SECURITY_ENABLED">
+    <range uom="25" subset="0-1" nls="EN_I_SECURITY_ENABLED" />
+  </editor>
 
 </editors>
