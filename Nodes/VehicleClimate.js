@@ -104,6 +104,19 @@ module.exports = function(Polyglot) {
       return gv20 ? gv20.value : null;
     }
 
+    async pushedData (key, vehicleMessage) {
+      const id = this.vehicleId();
+      logger.debug('VehicleClimate pushedData() received id %s, key %s', id, key);
+      if (vehicleMessage && vehicleMessage.response) {
+        logger.debug('VehicleClimate pushedData() vehicleMessage.response.isy_nodedef %s, nodeDefId %s'
+            , vehicleMessage.response.isy_nodedef, nodeDefId);
+        if (key === id
+            && vehicleMessage.response.isy_nodedef != nodeDefId) {
+          // process the message for this vehicle sent from a different node.
+          this.processDrivers(vehicleMessage, true);
+        }
+      }
+    }
 
 	async onClimateOn() {
         const id = this.vehicleId();
@@ -206,7 +219,7 @@ module.exports = function(Polyglot) {
           message.value, celsiusDeg, this.stdDriverTemp());
       logger.debug('message uom: %s', message.uom);
       await this.tesla.cmdSetClimateTemp(id, this.stdDriverTemp(), celsiusDeg);
-      await this.query();
+      await this.queryNow();
     }
 
     // The driver temperature is stored in GV12
@@ -224,16 +237,16 @@ module.exports = function(Polyglot) {
       if (longPoll) {
         try {
           // Run query only one at a time
-          logger.info('VehicleSecurity long poll');
+          logger.info('VehicleClimate long poll');
 
           await lock.acquire('query', function() {
             return _this.queryVehicle(longPoll);
           });
         } catch (err) {
-          logger.error('Error while querying vehicle: %s', err.message);
+          logger.error('VehicleClimate Error while querying vehicle: %s', err.message);
         }
       } else {
-        logger.info('VehicleClimate SKIPPING POLL TO LET THE VEHICLE SLEEP');
+        logger.info('VehicleClimate SKIPPING POLL');
       }
 
     }
@@ -294,7 +307,7 @@ module.exports = function(Polyglot) {
 
     async queryVehicle(longPoll) {
       const id = this.vehicleId();
-      const vehicleData = await this.tesla.getVehicleData(id);
+      let vehicleData = await this.tesla.getVehicleData(id);
 
       // check if Tesla is sleeping and sent an error code 408
       if (vehicleData === 408) {
@@ -311,24 +324,23 @@ module.exports = function(Polyglot) {
         return 0;
       }
 
-      // Gather basic vehicle & charge state
-      // (same as getVehicleData with less clutter)
-      // let vehicleData = await this.tesla.getVehicle(id);
-      // const chargeState = await this.tesla.getVehicleChargeState(id);
-      // vehicleData.response.charge_state = chargeState.response;
-
-      if (vehicleData && vehicleData.response &&
-        vehicleData.response.climate_state &&
-        vehicleData.response.gui_settings) {
+      this.processDrivers(vehicleData, longPoll);
 
         // logger.info('This vehicle Data %o', vehicleData);
+    }
 
+    processDrivers(vehicleData, longPoll) {
+      logger.debug('VehicleClimate processDrivers');
+      // Gather basic vehicle climate data
+      if (vehicleData && vehicleData.response &&
+          vehicleData.response.climate_state &&
+            vehicleData.response.gui_settings) {
         const response = vehicleData.response;
         const climateState = vehicleData.response.climate_state;
         const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
-
+  
         this.vehicleUOM(vehicleData.response.gui_settings);
-
+  
         this.setDriver('GV1', climateState.seat_heater_left, true);
         this.setDriver('GV2', climateState.seat_heater_right, true);
         this.setDriver('GV3', climateState.seat_heater_rear_left, true);
@@ -377,7 +389,6 @@ module.exports = function(Polyglot) {
         this.setDriver('ERR', '0', false);
         this.reportDrivers(); // Reports only changed values
       } else {
-
         logger.error('API result for getVehicleData is incorrect: %o',
           vehicleData);
         this.setDriver('ERR', '1'); // Will be reported if changed
