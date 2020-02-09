@@ -79,6 +79,8 @@ module.exports = function(Polyglot) {
       this.distance_uom = 'mi'; // defaults to miles. Pulls data from vehicle GUI to change to KM where appropriate.
       
       this.let_sleep = true; // this will be used to disable short polling
+
+      this.last_wake_time = 0;  //  epoch time of last wake.
     }
 
     async initializeUOM() {
@@ -132,6 +134,7 @@ module.exports = function(Polyglot) {
       const id = this.vehicleId();
       logger.info('WAKE (%s)', this.address);
       this.let_sleep = false;
+      this.last_wake_time = this.nowEpoch();
       await this.tesla.wakeUp(id);
     }
 
@@ -177,6 +180,7 @@ module.exports = function(Polyglot) {
     
     async query(longPoll) {
       this.setDebugLevel(this.polyInterface);
+      this.getLongPollValue();
       const _this = this;
       if (!this.let_sleep || longPoll) {
         try {
@@ -236,6 +240,14 @@ module.exports = function(Polyglot) {
       }
     }
 
+    getLongPollValue() {
+      logger.debug("Long Poll value is: %s", this.polyInterface.getConfig().longPoll);
+    }
+    
+    nowEpoch() {
+      return Math.round((new Date().valueOf() / 1000));
+    }
+
     async queryVehicle(longPoll) {
       logger.debug('Vehicle.queryVehicle()');
       const id = this.vehicleId();
@@ -268,7 +280,7 @@ module.exports = function(Polyglot) {
         const response = vehicleData.response;
         const chargeState = vehicleData.response.charge_state;
         const vehiculeState = vehicleData.response.vehicle_state;
-        const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
+        const timestamp = this.nowEpoch().toString();
 
         this.vehicleUOM(vehicleData.response.gui_settings);
 

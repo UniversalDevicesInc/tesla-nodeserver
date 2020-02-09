@@ -1,5 +1,8 @@
 # Change Log
 
+V2.1.1 (2020-02-09)
+* Limit the amount of time the system may be in the Wake mode to the long poll time.
+
 v2.1.0 (2020-01-18)
 * When the General node is in wake mode, all three nodes will be refreshed including the Climate and Security nodes
 * Added configuration parameter "Enable Security Commands"
