@@ -244,7 +244,7 @@ module.exports = function(Polyglot) {
       const longPoll = this.polyInterface.getConfig().longPoll;
       const now = this.nowEpochToTheSecond();
       if (now > (this.last_wake_time + longPoll)) {
-        logger.debug("Sleep timed out: %s, nowEpochToTheSecond() %s", this.last_wake_time, now);
+        logger.debug("updateSleepStatus(%s): %s, nowEpochToTheSecond() %s", this.let_sleep, this.last_wake_time, now);
         this.onLetSleep();
       }
     }
