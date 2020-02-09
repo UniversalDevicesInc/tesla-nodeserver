@@ -180,7 +180,7 @@ module.exports = function(Polyglot) {
     
     async query(longPoll) {
       this.setDebugLevel(this.polyInterface);
-      this.getLongPollValue();
+      this.updateSleepStatus();
       const _this = this;
       if (!this.let_sleep || longPoll) {
         try {
@@ -240,11 +240,15 @@ module.exports = function(Polyglot) {
       }
     }
 
-    getLongPollValue() {
-      logger.debug("Long Poll value is: %s", this.polyInterface.getConfig().longPoll);
+    updateSleepStatus() {
+      const longPoll = this.polyInterface.getConfig().longPoll;
+      if (nowEpochToTheSecond() > (last_wake_time + longPoll)) {
+        logger.debug("Sleep timed out: %, nowEpochToTheSecond() %s", last_wake_time, nowEpochToTheSecond());
+        this.onLetSleep();
+      }
     }
     
-    nowEpoch() {
+    nowEpochToTheSecond() {
       return Math.round((new Date().valueOf() / 1000));
     }
 
