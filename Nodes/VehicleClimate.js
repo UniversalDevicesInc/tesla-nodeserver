@@ -104,7 +104,6 @@ module.exports = function(Polyglot) {
       return gv20 ? gv20.value : null;
     }
 
-<<<<<<< HEAD
     async pushedData (key, vehicleMessage) {
       const id = this.vehicleId();
       logger.debug('VehicleClimate pushedData() received id %s, key %s', id, key);
@@ -118,8 +117,6 @@ module.exports = function(Polyglot) {
         }
       }
     }
-=======
->>>>>>> udi-master
 
 	async onClimateOn() {
         const id = this.vehicleId();

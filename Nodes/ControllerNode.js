@@ -93,7 +93,6 @@ module.exports = function(Polyglot) {
       this.polyInterface.removeNotice('credsError');
     }
 
-<<<<<<< HEAD
     updateOtherNodes(vehicleNodeAddress, vehicleId, vehicleMessage) {
       logger.debug('ControllerNodes.updateOtherNodes(%s)', vehicleNodeAddress);
       const securityNode = this.polyInterface.getNode("s" + vehicleNodeAddress);
@@ -104,8 +103,6 @@ module.exports = function(Polyglot) {
       climateNode.pushedData(vehicleId, vehicleMessage);
     }
 
-=======
->>>>>>> udi-master
     // pass the Tesla API vehicle object
     async autoAddVehicle(vehicle) {
       // id is the vehicle ID for the purpose of calling APIs.
