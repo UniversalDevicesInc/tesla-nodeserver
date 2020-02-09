@@ -134,7 +134,7 @@ module.exports = function(Polyglot) {
       const id = this.vehicleId();
       logger.info('WAKE (%s)', this.address);
       this.let_sleep = false;
-      this.last_wake_time = this.nowEpoch();
+      this.last_wake_time = this.nowEpochToTheSecond();
       await this.tesla.wakeUp(id);
     }
 
@@ -242,8 +242,9 @@ module.exports = function(Polyglot) {
 
     updateSleepStatus() {
       const longPoll = this.polyInterface.getConfig().longPoll;
-      if (nowEpochToTheSecond() > (last_wake_time + longPoll)) {
-        logger.debug("Sleep timed out: %, nowEpochToTheSecond() %s", last_wake_time, nowEpochToTheSecond());
+      const now = this.nowEpochToTheSecond();
+      if (now > (this.last_wake_time + longPoll)) {
+        logger.debug("Sleep timed out: %, nowEpochToTheSecond() %s", this.last_wake_time, now);
         this.onLetSleep();
       }
     }
@@ -284,7 +285,7 @@ module.exports = function(Polyglot) {
         const response = vehicleData.response;
         const chargeState = vehicleData.response.charge_state;
         const vehiculeState = vehicleData.response.vehicle_state;
-        const timestamp = this.nowEpoch().toString();
+        const timestamp = this.nowEpochToTheSecond().toString();
 
         this.vehicleUOM(vehicleData.response.gui_settings);
 
