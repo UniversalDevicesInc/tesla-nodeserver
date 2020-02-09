@@ -44,7 +44,7 @@ module.exports = function(Polyglot) {
       this.drivers = {
         ST: { value: '1', uom: 2 }, // uom 2 = Boolean. '1' is True.
       };
-
+      
       this.isController = true;
     }
 
@@ -91,6 +91,16 @@ module.exports = function(Polyglot) {
 
     clearCredentialsError() {
       this.polyInterface.removeNotice('credsError');
+    }
+
+    updateOtherNodes(vehicleNodeAddress, vehicleId, vehicleMessage) {
+      logger.debug('ControllerNodes.updateOtherNodes(%s)', vehicleNodeAddress);
+      const securityNode = this.polyInterface.getNode("s" + vehicleNodeAddress);
+      logger.debug('ControllerNodes.updateOtherNodes(%s)getnode', vehicleNodeAddress);
+      securityNode.pushedData(vehicleId, vehicleMessage);
+      logger.debug('ControllerNodes.updateOtherNodes(%s)pushdata', vehicleNodeAddress);
+      const climateNode = this.polyInterface.getNode("c" + vehicleNodeAddress);
+      climateNode.pushedData(vehicleId, vehicleMessage);
     }
 
     // pass the Tesla API vehicle object

@@ -1,10 +1,16 @@
 'use strict';
+// This is the general node for the vehicle.
+// This node can be set in the "wake" mode which updates on the short poll.
+// The other nodes are updated by calling the controller node on the short poll when queryVehicle() is called here.
 
 const AsyncLock = require('async-lock');
 const lock = new AsyncLock({ timeout: 500 });
 
 // nodeDefId must match the nodedef in the profile
 const nodeDefId = 'VEHICLE';
+
+const customLoggingLevel = 'Custom Logging Level';
+const validLoggingLevels = ['error', 'warn', 'info', 'verbose', 'debug'];
 
 function delay(delay) {
   return new Promise(function(waitforit) {
@@ -170,6 +176,7 @@ module.exports = function(Polyglot) {
     }
     
     async query(longPoll) {
+      this.setDebugLevel(this.polyInterface);
       const _this = this;
       if (!this.let_sleep || longPoll) {
         try {
@@ -202,7 +209,35 @@ module.exports = function(Polyglot) {
 	      
     }
 
+    updateOtherNodes(vehicleData) {
+      logger.debug('Vehicle.updateOtherNodes(%s)', this.address);
+      const controllerNode = this.polyInterface.getNode(this.primary);
+      controllerNode.updateOtherNodes(this.address, this.vehicleId(), vehicleData);
+    }
+
+    setDebugLevel(polyInterface) {
+      const config = polyInterface.getConfig();
+      const params = config.customParams;
+      let loggingLevel = '';
+      if (customLoggingLevel in params) {
+        loggingLevel = params[customLoggingLevel];
+      }
+      logger.debug('Configured logging level: %s', loggingLevel);
+      if (validLoggingLevels.includes(loggingLevel)) {
+        logger.debug('Found logging level');
+        for (const transport of logger.transports) {
+          logger.debug('Setting logging level: %s', loggingLevel);
+          transport.level = loggingLevel;
+        }
+      } else {
+        for (const transport of logger.transports) {
+          logger.warn('Ignoring bad logging level.  Using: %s', transport.level);
+        }
+      }
+    }
+
     async queryVehicle(longPoll) {
+      logger.debug('Vehicle.queryVehicle()');
       const id = this.vehicleId();
       const vehicleData = await this.tesla.getVehicleData(id);
 
@@ -223,6 +258,10 @@ module.exports = function(Polyglot) {
         vehicleData.response.charge_state &&
         vehicleData.response.vehicle_state &&
         vehicleData.response.gui_settings) {
+
+        // Forward the vehicleData to the other nodes so they also update.
+        vehicleData.response.isy_nodedef = nodeDefId;
+        this.updateOtherNodes(vehicleData);
 
         // logger.info('This vehicle Data %o', vehicleData);
 

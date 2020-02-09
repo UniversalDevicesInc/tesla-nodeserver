@@ -22,11 +22,18 @@ const VehicleClimate = require('./Nodes/VehicleClimate.js')(Polyglot);
 // Must be the same as in tesla.js
 const emailParam = 'Tesla account email';
 const pwParam = 'Tesla account password';
+// Must be the same in VehicleSecurity.js
+const enableSecurityCommandsParam = 'Enable Security Commands';
+// Must be the same in Vehicle.js
+const customLoggingLevel = 'Custom Logging Level';
+
 
 // UI customParams (param:defaultValue)
 const defaultParams = {
   [emailParam]: 'Tesla email',
   [pwParam]: 'password',
+  [enableSecurityCommandsParam]: 'false',
+  [customLoggingLevel]: 'info',
 };
 
 const controllerAddress = 'controller';
