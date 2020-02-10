@@ -329,6 +329,12 @@ module.exports = function(Polyglot) {
         // logger.info('This vehicle Data %o', vehicleData);
     }
 
+    setDriverValues(name, value, force) {
+      if (typeof value != 'undefined') {
+        this.setDriver(name, value, false);
+      }
+    }
+
     processDrivers(vehicleData, longPoll) {
       logger.debug('VehicleClimate processDrivers');
       // Gather basic vehicle climate data
@@ -341,11 +347,11 @@ module.exports = function(Polyglot) {
   
         this.vehicleUOM(vehicleData.response.gui_settings);
   
-        this.setDriver('GV1', climateState.seat_heater_left, true);
-        this.setDriver('GV2', climateState.seat_heater_right, true);
-        this.setDriver('GV3', climateState.seat_heater_rear_left, true);
-        this.setDriver('GV4', climateState.seat_heater_rear_center, true);
-        this.setDriver('GV5', climateState.seat_heater_rear_right, true);
+        this.setDriverValues('GV1', climateState.seat_heater_left, true);
+        this.setDriverValues('GV2', climateState.seat_heater_right, true);
+        this.setDriverValues('GV3', climateState.seat_heater_rear_left, true);
+        this.setDriverValues('GV4', climateState.seat_heater_rear_center, true);
+        this.setDriverValues('GV5', climateState.seat_heater_rear_right, true);
 
         // Drivers side temp
         if (climateState.driver_temp_setting) {
