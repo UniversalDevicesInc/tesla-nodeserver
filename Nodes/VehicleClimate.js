@@ -329,9 +329,9 @@ module.exports = function(Polyglot) {
         // logger.info('This vehicle Data %o', vehicleData);
     }
 
-    setDriverValues(name, value, force) {
+    setDriverValues(name, value, report) {
       if (typeof value != 'undefined') {
-        this.setDriver(name, value, false);
+        this.setDriver(name, value, report);
       }
     }
 
