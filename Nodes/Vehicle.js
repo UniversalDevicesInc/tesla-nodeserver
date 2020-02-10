@@ -306,7 +306,7 @@ module.exports = function(Polyglot) {
 
         this.setDriver('GV4', chargeState.charge_enable_request, false);
         this.setDriver('GV5',
-          chargeState.charging_state.toLowerCase() === 'charging', false);
+          chargeState.charging_state === 'Charging', false);
         this.setDriver('GV6', chargeState.fast_charger_present, false);
         this.setDriver('GV7', chargeState.charge_limit_soc, false);
         this.setDriver('CC', chargeState.charger_actual_current, false);
@@ -324,7 +324,7 @@ module.exports = function(Polyglot) {
           this.setDriver('GV18', false, false); // this way we know if we have to wake up the car or not
         } else {
           this.setDriver('GV18',
-              response.state.toLowerCase() === 'online', false);
+              response.state === 'online', false);
         }
 
         this.setDriver('GV19', timestamp, false);
