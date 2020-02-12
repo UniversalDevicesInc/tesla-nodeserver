@@ -227,16 +227,16 @@ module.exports = function(Polyglot) {
     setDebugLevel(polyInterface) {
       const config = polyInterface.getConfig();
       const params = config.customParams;
-      let loggingLevel = '';
+      let newLoggingLevel = '';
       if (customLoggingLevel in params) {
-        loggingLevel = params[customLoggingLevel];
+        newLoggingLevel = params[customLoggingLevel];
       }
-      logger.debug('Configured logging level: %s', loggingLevel);
-      if (validLoggingLevels.includes(loggingLevel)) {
+      logger.debug('Configured logging level: %s', newLoggingLevel);
+      if (validLoggingLevels.includes(newLoggingLevel)) {
         logger.debug('Found logging level');
         for (const transport of logger.transports) {
-          logger.debug('Setting logging level: %s', loggingLevel);
-          transport.level = loggingLevel;
+          logger.debug('Setting logging level: %s', newLoggingLevel);
+          transport.level = newLoggingLevel;
         }
       } else {
         for (const transport of logger.transports) {
