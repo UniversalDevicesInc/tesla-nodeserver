@@ -181,7 +181,7 @@ module.exports = function(Polyglot) {
     
     async query(longPoll) {
       this.setDebugLevel(this.polyInterface);
-      this.updateSleepStatus();
+//      this.updateSleepStatus();
       const _this = this;
       if (!this.let_sleep || longPoll) {
         try {
