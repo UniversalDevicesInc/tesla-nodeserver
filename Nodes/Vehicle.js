@@ -139,10 +139,14 @@ module.exports = function(Polyglot) {
     }
 
     async onLetSleep() {
+      this.letSleep();
+      await this.queryNow();
+    }
+
+    letSleep() {
       logger.info('LET SLEEP (%s)', this.address);
       this.let_sleep = true;
       this.setDriver('GV18', false, true); // this way we know if we have to wake up the car or not
-      await this.queryNow();
     }
 
     async onHorn() {
@@ -181,7 +185,7 @@ module.exports = function(Polyglot) {
     
     async query(longPoll) {
       this.setDebugLevel(this.polyInterface);
-      await this.updateSleepStatus();
+      this.updateSleepStatus();
       const _this = this;
       if (!this.let_sleep || longPoll) {
         try {
@@ -241,12 +245,12 @@ module.exports = function(Polyglot) {
       }
     }
 
-    async updateSleepStatus() {
+    updateSleepStatus() {
       const longPoll = this.polyInterface.getConfig().longPoll;
       const now = this.nowEpochToTheSecond();
       if (now > (this.last_wake_time + longPoll)) {
         logger.debug("updateSleepStatus(%s): %s, nowEpochToTheSecond() %s", this.let_sleep, this.last_wake_time, now);
-//        await this.onLetSleep();
+        this.letSleep();
       }
     }
     
