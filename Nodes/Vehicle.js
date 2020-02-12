@@ -181,7 +181,7 @@ module.exports = function(Polyglot) {
     
     async query(longPoll) {
       this.setDebugLevel(this.polyInterface);
-      this.updateSleepStatus();
+      await this.updateSleepStatus();
       const _this = this;
       if (!this.let_sleep || longPoll) {
         try {
@@ -241,7 +241,7 @@ module.exports = function(Polyglot) {
       }
     }
 
-    updateSleepStatus() {
+    async updateSleepStatus() {
       const longPoll = this.polyInterface.getConfig().longPoll;
       const now = this.nowEpochToTheSecond();
       if (now > (this.last_wake_time + longPoll)) {
