@@ -139,11 +139,11 @@ module.exports = function(Polyglot) {
     }
 
     async onLetSleep() {
-      this.letSleep();
+      this.setLetSleep();
       await this.queryNow();
     }
 
-    letSleep() {
+    setLetSleep() {
       logger.info('LET SLEEP (%s)', this.address);
       this.let_sleep = true;
       this.setDriver('GV18', false, true); // this way we know if we have to wake up the car or not
@@ -250,7 +250,7 @@ module.exports = function(Polyglot) {
       const now = this.nowEpochToTheSecond();
       if (now > (this.last_wake_time + longPoll)) {
         logger.debug("updateSleepStatus(%s): %s, nowEpochToTheSecond() %s", this.let_sleep, this.last_wake_time, now);
-        this.letSleep();
+        this.setLetSleep();
       }
     }
     
