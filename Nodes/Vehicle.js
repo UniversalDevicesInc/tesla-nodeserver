@@ -246,7 +246,7 @@ module.exports = function(Polyglot) {
       const now = this.nowEpochToTheSecond();
       if (now > (this.last_wake_time + longPoll)) {
         logger.debug("updateSleepStatus(%s): %s, nowEpochToTheSecond() %s", this.let_sleep, this.last_wake_time, now);
-        await this.onLetSleep();
+//        await this.onLetSleep();
       }
     }
     
