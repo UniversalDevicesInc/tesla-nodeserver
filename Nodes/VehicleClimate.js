@@ -354,7 +354,6 @@ module.exports = function(Polyglot) {
         this.setDriverValues('GV3', climateState.seat_heater_rear_left, true);
         this.setDriverValues('GV4', climateState.seat_heater_rear_center, true);
         this.setDriverValues('GV5', climateState.seat_heater_rear_right, true);
-        this.setDriverValues('GV5', climateState.bogus, true);
 
         // Drivers side temp
         if (climateState.driver_temp_setting) {
