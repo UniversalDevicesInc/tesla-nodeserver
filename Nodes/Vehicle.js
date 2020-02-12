@@ -120,14 +120,14 @@ module.exports = function(Polyglot) {
         await this.tesla.cmdChargeLimitSetTo(id, message.value);
       }
       await this.tesla.cmdChargeStart(id);
-      await this.query();
+      await this.queryNow();
     }
 
     async onDOF() {
       const id = this.vehicleId();
       logger.info('DOF-Charge Stop (%s)', this.address);
       await this.tesla.cmdChargeStop(id);
-      await this.query();
+      await this.queryNow();
     }
 
     async onWake() {
@@ -142,6 +142,7 @@ module.exports = function(Polyglot) {
       logger.info('LET SLEEP (%s)', this.address);
       this.let_sleep = true;
       this.setDriver('GV18', false, true); // this way we know if we have to wake up the car or not
+      await this.queryNow();
     }
 
     async onHorn() {
@@ -160,7 +161,7 @@ module.exports = function(Polyglot) {
       const id = this.vehicleId();
       logger.info('CHARGE_SET_STD (%s)', this.address);
       await this.tesla.cmdChargeLimitStd(id);
-      await this.query();
+      await this.queryNow();
     }
 
     async onChargeSetTo(message) {
@@ -170,7 +171,7 @@ module.exports = function(Polyglot) {
           message.value ? message.value : 'No value');
 
         await this.tesla.cmdChargeLimitSetTo(id, message.value);
-        await this.query();
+        await this.queryNow();
       }
 
 
