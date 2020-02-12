@@ -332,8 +332,6 @@ module.exports = function(Polyglot) {
     setDriverValues(name, value, report) {
       if (typeof value != 'undefined') {
         this.setDriver(name, value, report);
-      } else {
-        this.setDriver(name, '', false);
       }
     }
 
