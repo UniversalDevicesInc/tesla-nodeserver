@@ -114,7 +114,7 @@ module.exports = function(Polyglot) {
       const params = config.customParams;
       const securitySettings = params[enableSecurityCommandsParam];
       const values = securitySettings.split(',');
-      logger.debug('areCommandsEnabled %', values);
+      logger.debug('checkSecuritySetting %', values);
       return values.includes(setting) ? true : false;
     }
 
