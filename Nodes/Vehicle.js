@@ -183,7 +183,7 @@ module.exports = function(Polyglot) {
       await this.query(true);
     }
     
-    async query(longPoll) {
+    async query1(longPoll) {
       this.setDebugLevel(this.polyInterface);
       this.updateSleepStatus();
       const _this = this;
@@ -199,7 +199,24 @@ module.exports = function(Polyglot) {
       } else {
         logger.info('SKIPPING POLL TO LET THE VEHICLE SLEEP - ISSUE WAKE CMD TO VEHICLE TO ENABLE SHORT POLLING');
       }
+    }
 
+    async query(longPoll) {
+      try {
+        const _this = this;
+        // Run query only one at a time
+        await lock.acquire('query', function() {
+          _this.setDebugLevel(_this.polyInterface);
+          _this.updateSleepStatus();
+          if (!this.let_sleep || longPoll) {
+            return _this.queryVehicle(longPoll);
+          } else {
+            logger.info('SKIPPING POLL TO LET THE VEHICLE SLEEP - ISSUE WAKE CMD TO VEHICLE TO ENABLE SHORT POLLING');
+          }
+        });
+      } catch (err) {
+        logger.error('Error while querying vehicle: %s', err.message);
+      }
     }
 
     vehicleUOM(guisettings) {
