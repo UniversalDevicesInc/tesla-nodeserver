@@ -208,7 +208,7 @@ module.exports = function(Polyglot) {
         await lock.acquire('query', function() {
           _this.setDebugLevel(_this.polyInterface);
           _this.updateSleepStatus();
-          if (!this.let_sleep || longPoll) {
+          if (!_this.let_sleep || longPoll) {
             return _this.queryVehicle(longPoll);
           } else {
             logger.info('SKIPPING POLL TO LET THE VEHICLE SLEEP - ISSUE WAKE CMD TO VEHICLE TO ENABLE SHORT POLLING');
