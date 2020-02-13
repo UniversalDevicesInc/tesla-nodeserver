@@ -106,7 +106,7 @@ module.exports = function(Polyglot) {
     }
     
     areCommandsEnabled() {
-      return checkSecuritySetting('true');
+      return this.checkSecuritySetting('true');
     }
     
     checkSecuritySetting(setting) {
