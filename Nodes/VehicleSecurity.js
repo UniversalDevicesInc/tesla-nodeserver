@@ -106,9 +106,16 @@ module.exports = function(Polyglot) {
     }
     
     areCommandsEnabled() {
+      return checkSecuritySetting('true');
+    }
+    
+    checkSecuritySetting(setting) {
       const config = this.polyInterface.getConfig();
       const params = config.customParams;
-      return params[enableSecurityCommandsParam] === 'true' ? true : false;
+      const securitySettings = params[enableSecurityCommandsParam];
+      const values = securitySettings.split(',');
+      logger.debug('areCommandsEnabled %', values);
+      return values.includes(setting) ? true : false;
     }
 
     async onLock() {
@@ -225,7 +232,7 @@ module.exports = function(Polyglot) {
     }
 
     async onStartSoftwareUpdate() {
-      if (this.areCommandsEnabled()) {
+      if (this.areCommandsEnabled() || this.checkSecuritySetting('software_update')) {
         const id = this.vehicleId();
         logger.info('STARTING SOFTWARE UPDATE (%s)', this.address);
         await this.tesla.cmdStartSoftwareUpdate(id);
