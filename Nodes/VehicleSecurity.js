@@ -119,7 +119,7 @@ module.exports = function(Polyglot) {
     }
 
     async onLock() {
-      if (this.areCommandsEnabled()) {
+      if (this.areCommandsEnabled() || this.checkSecuritySetting('lock')) {
         const id = this.vehicleId();
         logger.info('LOCK (%s)', this.address);
         await this.tesla.cmdDoorLock(id);
@@ -129,7 +129,7 @@ module.exports = function(Polyglot) {
     }
 
     async onUnlock() {
-      if (this.areCommandsEnabled()) {
+      if (this.areCommandsEnabled() || this.checkSecuritySetting('lock')) {
         const id = this.vehicleId();
         logger.info('UNLOCK (%s)', this.address);
         await this.tesla.cmdDoorUnlock(id);
@@ -140,7 +140,7 @@ module.exports = function(Polyglot) {
     }
 
     async onSunroofOpen() {
-      if (this.areCommandsEnabled()) {
+      if (this.areCommandsEnabled() || this.checkSecuritySetting('sunroof')) {
         const id = this.vehicleId();
         logger.info('SUNROOF_OPEN (%s)', this.address);
         await this.tesla.cmdSunRoof(id, 'vent');
@@ -150,7 +150,7 @@ module.exports = function(Polyglot) {
     }
 
     async onSunroofClose() {
-      if (this.areCommandsEnabled()) {
+      if (this.areCommandsEnabled() || this.checkSecuritySetting('sunroof')) {
         const id = this.vehicleId();
         logger.info('SUNROOF_CLOSE (%s)', this.address);
         await this.tesla.cmdSunRoof(id, 'close');
@@ -163,20 +163,24 @@ module.exports = function(Polyglot) {
       const id = this.vehicleId();
       logger.info('CHARGE_PORT_DOOR %s (%s)', message.value, this.address);
       if (message.value === '1') {
-        if (this.areCommandsEnabled()) {
+        if (this.areCommandsEnabled() || this.checkSecuritySetting('charge_port')) {
           await this.tesla.cmdChargePortOpen(id);
         } else {
           logger.info('CHARGE_PORT_DOOR disabled');
         }
       } else {
-        await this.tesla.cmdChargePortClose(id);
+        if (this.areCommandsEnabled() || this.checkSecuritySetting('charge_port')) {
+          await this.tesla.cmdChargePortClose(id);
+        } else {
+          logger.info('CHARGE_PORT_DOOR disabled');
+        }
       }
       await this.queryNow();
     }
 
 
     async onWindowsVent() {
-      if (this.areCommandsEnabled()) {
+      if (this.areCommandsEnabled() || this.checkSecuritySetting('windows')) {
         const id = this.vehicleId();
         logger.info('WINDOWS_VENT (%s)', this.address);
         await this.tesla.cmdWindows(id, 'vent');
@@ -187,7 +191,7 @@ module.exports = function(Polyglot) {
     }
 
     async onWindowsClose() {
-      if (this.areCommandsEnabled()) {
+      if (this.areCommandsEnabled() || this.checkSecuritySetting('windows')) {
         const id = this.vehicleId();
         logger.info('WINDOWS CLOSE (%s)', this.address);
         await this.tesla.cmdWindows(id, 'close');
@@ -198,7 +202,7 @@ module.exports = function(Polyglot) {
     }
 
     async onTrunkOpen() {
-      if (this.areCommandsEnabled()) {
+      if (this.areCommandsEnabled() || this.checkSecuritySetting('trunk')) {
         const id = this.vehicleId();
         logger.info('TRUNK_OPEN (%s)', this.address);
         await this.tesla.cmdActuateTrunk(id, 'rear');
@@ -209,7 +213,7 @@ module.exports = function(Polyglot) {
     }
 
     async onFrunkOpen() {
-      if (this.areCommandsEnabled()) {
+      if (this.areCommandsEnabled() || this.checkSecuritySetting('frunk')) {
         const id = this.vehicleId();
         logger.info('FRUNK_OPEN (%s)', this.address);
         await this.tesla.cmdActuateTrunk(id, 'front');
@@ -220,7 +224,7 @@ module.exports = function(Polyglot) {
     }
 
     async onSentryMode(message) {
-      if (this.areCommandsEnabled()) {
+      if (this.areCommandsEnabled() || this.checkSecuritySetting('sentry')) {
         const id = this.vehicleId();
         const decodeValue = message.value === '1' ? 'on' : 'off';
         logger.debug('SENTRY MODE raw %s decoded %s (%s)', message.value, decodeValue, this.address);

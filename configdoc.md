@@ -7,8 +7,8 @@ you should see your vehicle node appear in the admin console. You
 may have to restart the admin console. 
 
 You can also fine tune how often the node data is refreshed by 
-configuring the Short Poll. The Long Poll is used by the Security and Climate nodes to refresh their status.
+configuring the Short Poll. The Long Poll is used as a timeout for limiting the amount of "wake" time.
 
-The setting *Enable Security Commands* may be set to either "true" or "false".  If you do not want to be able to unlock the car or open the frunk/trunk/windows, then any value other than "true" will disable the security commands.
+The setting *Enable Security Commands* may be set to either "true" or "false".  The value "true" will enable all commands.  Individual commands may be enabled with a comma separated list of values from "lock", "sunroof", "charge_port", "windows", "trunk", "frunk", "sentry", and "software_update".
 
 The setting *Custom Logging Level* may have the values "error", "warn", "info", "verbose", "debug".
