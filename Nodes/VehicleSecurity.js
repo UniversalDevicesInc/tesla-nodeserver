@@ -323,7 +323,7 @@ module.exports = function(Polyglot) {
         const vehicleState = vehicleData.response.vehicle_state;
         const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
 
-        this.setDriver('GV1', this.checkSecuritySetting('chargeport') ? (chargeState.charge_port_door_open ? 1 : 0) : 2 , false);
+        this.setDriver('GV1', chargeState.charge_port_door_open ? 1 : 0, false);
 
         this.setDriver('GV2',
           chargeState.charge_port_latch === 'Engaged',
