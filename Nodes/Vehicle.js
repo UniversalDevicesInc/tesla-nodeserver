@@ -3,6 +3,9 @@
 // This node can be set in the "wake" mode which updates on the short poll.
 // The other nodes are updated by calling the controller node on the short poll when queryVehicle() is called here.
 
+const AsyncLock = require('async-lock');
+const lock = new AsyncLock({ timeout: 500 });
+
 // nodeDefId must match the nodedef in the profile
 const nodeDefId = 'VEHICLE';
 
@@ -27,10 +30,8 @@ module.exports = function(Polyglot) {
     // address: Your node address, without the leading 'n999_'
     // name: Your node name
     // id is the nodedefId
-    constructor(polyInterface, primary, address, name, id, sharedLock) {
+    constructor(polyInterface, primary, address, name, id) {
       super(nodeDefId, polyInterface, primary, address, name);
-
-      this.lock = sharedLock;
 
       this.tesla = require('../lib/tesla.js')(Polyglot, polyInterface);
 

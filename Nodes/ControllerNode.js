@@ -1,8 +1,5 @@
 'use strict';
 
-const AsyncLock = require('async-lock');
-const lock = new AsyncLock({ timeout: 2000 });
-
 // The controller node is a regular ISY node. It must be the first node created
 // by the node server. It has an ST status showing the nodeserver status, and
 // optionally node statuses. It usually has a few commands on the node to
@@ -125,8 +122,7 @@ module.exports = function(Polyglot) {
               this.address, // primary
               deviceAddress,
               vehicle.display_name,
-              id,
-              lock); // We save the ID in GV20 for eventual API calls
+              id); // We save the ID in GV20 for eventual API calls
 
           await newVehicle.initializeUOM();
 
@@ -148,8 +144,7 @@ module.exports = function(Polyglot) {
                 this.address, // primary
                 vehicleSecurityAddress,
                 vehicleSecurityName,
-                id,
-                lock); // We save the ID in GV20 for eventual API calls
+                id); // We save the ID in GV20 for eventual API calls
 
             const resultSecurity = await this.polyInterface.addNode(newVehicleSecurity);
             await newVehicleSecurity.query(true); // get current values
@@ -170,8 +165,7 @@ module.exports = function(Polyglot) {
                   this.address, // primary
                   vehicleClimateAddress,
                   vehicleClimateName,
-                  id,
-                  lock); // We save the ID in GV20 for eventual API calls
+                  id); // We save the ID in GV20 for eventual API calls
 
               const resultClimate = await this.polyInterface.addNode(newVehicleClimate);
               await newVehicleClimate.initializeUOM();

@@ -1,5 +1,8 @@
 'use strict';
 
+const AsyncLock = require('async-lock');
+const lock = new AsyncLock({ timeout: 2000 });
+
 //Must be the same in nodeserver.js
 const enableSecurityCommandsParam = 'Enable Security Commands';
 
@@ -24,10 +27,8 @@ module.exports = function(Polyglot) {
     // address: Your node address, without the leading 'n999_'
     // name: Your node name
     // id is the nodedefId
-    constructor(polyInterface, primary, address, name, id, sharedLock) {
+    constructor(polyInterface, primary, address, name, id) {
       super(nodeDefId, polyInterface, primary, address, name);
-
-      this.lock = sharedLock;
 
       this.tesla = require('../lib/tesla.js')(Polyglot, polyInterface);
 
