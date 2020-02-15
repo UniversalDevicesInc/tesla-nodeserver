@@ -282,7 +282,7 @@ module.exports = function(Polyglot) {
     }
 
     async queryVehicle(longPoll) {
-      logger.debug('Vehicle.queryVehicle()');
+      logger.debug('Vehicle.queryVehicle(%s)', longPoll);
       const id = this.vehicleId();
       let vehicleData = await this.tesla.getVehicleData(id);
 
