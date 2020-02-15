@@ -182,24 +182,6 @@ module.exports = function(Polyglot) {
     async queryNow() {
       await this.query(true);
     }
-    
-    async query1(longPoll) {
-      this.setDebugLevel(this.polyInterface);
-      this.updateSleepStatus();
-      const _this = this;
-      if (!this.let_sleep || longPoll) {
-        try {
-          // Run query only one at a time
-          await lock.acquire('query', function() {
-            return _this.queryVehicle(longPoll);
-          });
-        } catch (err) {
-          logger.error('Error while querying vehicle: %s', err.message);
-        }
-      } else {
-        logger.info('SKIPPING POLL TO LET THE VEHICLE SLEEP - ISSUE WAKE CMD TO VEHICLE TO ENABLE SHORT POLLING');
-      }
-    }
 
     async query(longPoll) {
       try {
