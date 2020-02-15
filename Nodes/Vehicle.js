@@ -291,7 +291,7 @@ module.exports = function(Polyglot) {
         if (longPoll) {
           // wake the car and try again
           await this.tesla.wakeUp(id);
-          await delay(2000); // Wait 2 seconds before trying again.
+          await delay(3000); // Wait 3 seconds before trying again.
           vehicleData = await this.tesla.getVehicleData(id);
         }
       }

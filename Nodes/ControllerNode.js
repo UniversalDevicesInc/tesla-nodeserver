@@ -147,7 +147,6 @@ module.exports = function(Polyglot) {
                 id); // We save the ID in GV20 for eventual API calls
 
             const resultSecurity = await this.polyInterface.addNode(newVehicleSecurity);
-            await newVehicleSecurity.query(true); // get current values
 
             logger.info('VehicleSecurity added: %s', resultSecurity);
             this.polyInterface.addNoticeTemp(
@@ -169,7 +168,6 @@ module.exports = function(Polyglot) {
 
               const resultClimate = await this.polyInterface.addNode(newVehicleClimate);
               await newVehicleClimate.initializeUOM();
-              await newVehicleClimate.query(true); // get current values
 
               logger.info('VehicleClimate added: %s', resultClimate);
               this.polyInterface.addNoticeTemp(
@@ -177,6 +175,8 @@ module.exports = function(Polyglot) {
                 'New node created: ' + vehicleClimateName,
                 5
               );
+
+              await newVehicle.queryNow(); // get current values - will update all nodes
 
           return { added: true };
 
