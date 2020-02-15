@@ -268,12 +268,16 @@ module.exports = function(Polyglot) {
         logger.info('API ERROR CAUGHT: %s', vehicleData);
         return 0;
       }
-      if (vehicleSummary.state === 'asleep') {
-        this.setDriver('GV17', 0, true); // car is asleep
-      } else if (vehicleSummary.state === 'online') {
-        this.setDriver('GV17', 1, true); // car is online
-      } else {
-        logger.warn("Vehicle.checkVehicleOnline() unexpected state: %s", vehicleSummary.state);
+
+      if (vehicleSummary && vehicleSummary.response && vehicleSummary.response.state) {
+        const vehicleState = vehicleSummary.response.state;
+        if (vehicleState === 'asleep') {
+          this.setDriver('GV17', 0, true); // car is asleep
+        } else if (vehicleState === 'online') {
+          this.setDriver('GV17', 1, true); // car is online
+        } else {
+          logger.warn("Vehicle.checkVehicleOnline() unexpected state: %s", vehicleState);
+        }
       }
     }
 
