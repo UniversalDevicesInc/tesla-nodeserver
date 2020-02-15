@@ -197,7 +197,7 @@ module.exports = function(Polyglot) {
           }
         });
       } catch (err) {
-        logger.error('Error while querying vehicle: %s', err.message);
+        logger.error('Error while querying vehicle: %s', err);
       }
     }
 
