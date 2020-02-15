@@ -24,8 +24,10 @@ module.exports = function(Polyglot) {
     // address: Your node address, without the leading 'n999_'
     // name: Your node name
     // id is the nodedefId
-    constructor(polyInterface, primary, address, name, id) {
+    constructor(polyInterface, primary, address, name, id, sharedLock) {
       super(nodeDefId, polyInterface, primary, address, name);
+
+      this.lock = sharedLock;
 
       this.tesla = require('../lib/tesla.js')(Polyglot, polyInterface);
 
