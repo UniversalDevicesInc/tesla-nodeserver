@@ -262,7 +262,7 @@ module.exports = function(Polyglot) {
     // Assume the app is allowing the vehicle to sleep, but we want to know if it has actually gone offline
     async checkVehicleOnline() {
       const id = this.vehicleId();
-      const vehicleSummary = await.tesla.getVehicle(id);
+      const vehicleSummary = await this.tesla.getVehicle(id);
       if (vehicleSummary === 408) {
         this.setDriver('GV18', false, true); // car is offline
         logger.info('API ERROR CAUGHT: %s', vehicleData);
