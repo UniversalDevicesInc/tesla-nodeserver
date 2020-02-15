@@ -44,6 +44,10 @@
     <!-- 0 is off 4 is full heat -->
     <range uom="25" subset="0-3" nls="EN_I_SEAT_HEATER_LEVEL" />
   </editor>
+  <editor id="I_VEHICLE_STATE">
+    <!-- 0 is asleep, 1 is online -->
+    <range uom="25" subset="0-1" nls="EN_I_VEHICLE_STATE" />
+  </editor>
   <editor id="I_CLIMATE_TEMP_RANGE">
     <!-- 15 to 28 degrees C -->
     <range uom="4" min="15" max="28" step="1" prec="0" />

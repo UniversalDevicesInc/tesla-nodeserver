@@ -70,7 +70,8 @@ module.exports = function(Polyglot) {
         CV: { value: '', uom: 72 }, // Charger voltage
         CPW: { value: '', uom: 73 }, // Charger power
 //        GV10: { value: '', uom: 116 }, // Odometer (default mile, but multi-editor supports kilometer too)
-        GV18: { value: '', uom: 2 }, // Online?
+        GV17: { value: '', uom: 25 }, // vehicle status
+        GV18: { value: '', uom: 2 }, // wake mode
         GV19: { value: '', uom: 56 }, // Last updated unix timestamp
         GV20: { value: id, uom: 56 }, // ID used for the Tesla API
         ERR: { value: '', uom: 2 } // In error?
@@ -194,10 +195,11 @@ module.exports = function(Polyglot) {
             return _this.queryVehicle(longPoll);
           } else {
             logger.info('SKIPPING POLL TO LET THE VEHICLE SLEEP - ISSUE WAKE CMD TO VEHICLE TO ENABLE SHORT POLLING');
+            return _this.checkVehicleOnline();
           }
         });
       } catch (err) {
-        logger.error('Error while querying vehicle: %s, %s', err, err.stack);
+        logger.error('Error while querying vehicle: %s', err.stack);
       }
     }
 
@@ -257,10 +259,28 @@ module.exports = function(Polyglot) {
       return Math.round((new Date().valueOf() / 1000));
     }
 
+    // Assume the app is allowing the vehicle to sleep, but we want to know if it has actually gone offline
+    async checkVehicleOnline() {
+      const id = this.vehicleId();
+      const vehicleSummary = await.tesla.getVehicle(id);
+      if (vehicleSummary === 408) {
+        this.setDriver('GV18', false, true); // car is offline
+        logger.info('API ERROR CAUGHT: %s', vehicleData);
+        return 0;
+      }
+      if (vehicleSummary.state === 'asleep') {
+        this.setDriver('GV17', 0, true); // car is asleep
+      } else if (vehicleSummary.state === 'online') {
+        this.setDriver('GV17', 1, true); // car is online
+      } else {
+        logger.warn("Vehicle.checkVehicleOnline() unexpected state: %s", vehicleSummary.state);
+      }
+    }
+
     async queryVehicle(longPoll) {
       logger.debug('Vehicle.queryVehicle()');
       const id = this.vehicleId();
-      const vehicleData = await this.tesla.getVehicleData(id);
+      let vehicleData = await this.tesla.getVehicleData(id);
 
       // check if Tesla is sleeping and sent an error code 408
       if (vehicleData === 408) {

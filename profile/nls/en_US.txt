@@ -14,7 +14,8 @@ ST-V-GV5-NAME = Charging state
 ST-V-GV6-NAME = Fast charger present
 ST-V-GV7-NAME = Charge limit
 ST-V-GV10-NAME = Odometer
-ST-V-GV18-NAME = Vehicle Online
+ST-V-GV17-NAME = Vehicle State
+ST-V-GV18-NAME = Wake Mode
 ST-V-GV19-NAME = Timestamp
 ST-V-GV20-NAME = Car ID
 ST-V-CC-NAME = Charger actual current
@@ -46,6 +47,9 @@ EN_I_SENTRY_MODE-2 = Unavailable
 
 EN_I_CHARGE_PORT_DOOR-0 = Closed
 EN_I_CHARGE_PORT_DOOR-1 = Open
+
+EN_I_VEHICLE_STATE-0 = Asleep
+EN_I_VEHICLE_STATE-1 = Online
 
 EN_I_SEAT_HEATER_LEVEL-0 = Off
 EN_I_SEAT_HEATER_LEVEL-1 = Low 
@@ -87,6 +91,12 @@ CMD-S-START_SOFTWARE_UPDATE-NAME = Start software update
 
 ND-VEHICLECLIMATE-NAME = Vehicle Climate
 ND-VEHICLECLIMATE-ICON = Thermostat
+ST-C-GV1-NAME = Driver Seat heat level
+ST-C-GV2-NAME = Passenger Seat heat level
+ST-C-GV3-NAME = Rear Left Seat heat level
+ST-C-GV4-NAME = Rear Center Seat heat level
+ST-C-GV5-NAME = Rear Right Seat heat level
+
 ST-C-GV12-NAME = Drivers side temp
 ST-C-GV13-NAME = Passengers side temp
 ST-C-GV14-NAME = Outside temp

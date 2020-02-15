@@ -33,7 +33,7 @@ Go to Nodeservers|Nodeserver Store, and add the Tesla Nodeserver.
 5. As of version 2.1.0 when the General node is in wake mode it will refresh on the short poll and so will the Security and Climate nodes.
 6. As of version 2.1.0 the ability to enable/disable the security commands.  By default "Enable Security Commands" is set to false.
 7. As of version 2.1.0 a configuration value to change the logging level to help in debugging.
-8. As of 2.1.1 the long poll is used to limit the "wake" period.  The Query command may be used to refresh the nodes independent of the wake status.
+8. As of 2.2.0 the long poll is used to limit the "wake" period.  The Query command may be used to refresh the nodes independent of the wake status.
 
 Long polling is now defaulted to 2700 seconds (45 minutes) to allow the Tesla time to fall asleep but still periodically gather data from it if it happens to be awake.  The long poll is also the limit of time that the "wake" command will run the short poll.
 
