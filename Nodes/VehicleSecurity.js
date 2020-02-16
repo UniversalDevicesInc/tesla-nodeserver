@@ -70,13 +70,11 @@ module.exports = function(Polyglot) {
         GV9: { value: '', uom: 51 }, // Sunroof open%
         GV11:  { value: '', uom: 25 }, // Sentry mode on
         GV17: { value: '', uom: 25 }, // Software Update Availability Status
-        GV18: { value: '', uom: 2 }, // Online?
         GV19: { value: '', uom: 56 }, // Last updated unix timestamp
         GV20: { value: id, uom: 56 }, // ID used for the Tesla API
         ERR: { value: '', uom: 2 } // In error?
       };
 
-      this.let_sleep = true; // this will be used to disable short polling
     }
 
 
@@ -102,7 +100,7 @@ module.exports = function(Polyglot) {
 
     async queryNow() {
       logger.debug('queryNow (%s)', this.address);
-      await this.query(true);
+      await this.asyncQuery(true);
     }
     
     areCommandsEnabled() {
@@ -246,16 +244,22 @@ module.exports = function(Polyglot) {
       }
     }
 
+    async query(ignored) {
+      // This is overridden and does nothing because the only time
+      // this will be called is on the long poll, and the long poll
+      // refresh is done from the Vehicle node.
+    }
+
     // Update Vehicle security only on long poll.
-    async query(longPoll) {
+    async asyncQuery(now) {
       const _this = this;
-      if (longPoll) {
+      if (now) {
         try {
           // Run query only one at a time
-          logger.info('VehicleSecurity long poll');
+          logger.info('VehicleSecurity now');
 
           await lock.acquire('query', function() {
-            return _this.queryVehicle(longPoll);
+            return _this.queryVehicle(now);
           });
         } catch (err) {
           logger.error('Error while querying vehicle: %s', err.message);
@@ -318,7 +322,6 @@ module.exports = function(Polyglot) {
         vehicleData.response.vehicle_state &&
         vehicleData.response.gui_settings) {
 
-        const response = vehicleData.response;
         const chargeState = vehicleData.response.charge_state;
         const vehicleState = vehicleData.response.vehicle_state;
         const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
@@ -346,13 +349,6 @@ module.exports = function(Polyglot) {
         // Software Update Availability Status
         logger.debug("software_update.status %s", vehicleState.software_update.status);
         this.setDriver('GV17', this.decodSoftwareUpdateStatus(vehicleState.software_update.status), true);
-
-        if (this.let_sleep && !longPoll) {
-          this.setDriver('GV18', false, false); // this way we know if we have to wake up the car or not
-        } else {
-          this.setDriver('GV18',
-              response.state === 'online', false);
-        }
 
         this.setDriver('GV19', timestamp, false);
         // GV20 is not updated. This is the id we use to find this vehicle.

@@ -69,7 +69,6 @@
       <st id="GV9" editor="I_PERCENT"/> <!-- Sunroof opened -->
       <st id="GV11" editor="I_SENTRY_MODE" hide="T"/> <!-- Sentry Mode -->
       <st id="GV17" editor="I_SOFTWARE_UPDATE_STATUS"/> <!-- Software update availability status -->
-      <st id="GV18" editor="BOOLEAN" hide="T"/> <!-- Online? -->
       <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
       <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
       <st id="ERR" editor="BOOLEAN" hide="T" />
@@ -114,7 +113,6 @@
       <st id="CLITEMP" editor="I_TEMP_DEG"/> <!-- Interior temperature -->
       <st id="CLIEMD" editor="BOOLEAN"/> <!-- Climate Conditioning On -->
       <st id="GV15" editor="BOOLEAN"/> <!-- Max Defrost -->
-      <st id="GV18" editor="BOOLEAN" hide="T" /> <!-- Online? -->
       <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
       <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
       <st id="ERR" editor="BOOLEAN" hide="T" />

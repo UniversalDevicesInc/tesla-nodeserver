@@ -67,7 +67,6 @@ module.exports = function(Polyglot) {
 //        GV13:  { value: '', uom: 4 }, // Passenger side temp
 //      GV14:  { value: '', uom: 4 }, // Exterior temp
         GV15:  { value: '', uom: 2 }, // Max Defrost
-        GV18: { value: '', uom: 2 }, // Online?
         GV19: { value: '', uom: 56 }, // Last updated unix timestamp
         GV20: { value: id, uom: 56 }, // ID used for the Tesla API
         CLIEMD: { value: '', uom: 2 }, // Climate conditioning on
@@ -76,7 +75,6 @@ module.exports = function(Polyglot) {
 
       this.temperature_uom_index = 4; // defaults to Celsius. Pulls data from vehicle GUI to change to C where appropriate.
       
-      this.let_sleep = true; // this will be used to disable short polling
     }
 
     async initializeUOM() {
@@ -229,18 +227,24 @@ module.exports = function(Polyglot) {
     }
 
     async queryNow() {
-      await this.query(true);
+      await this.asyncQuery(true);
     }
     
-    async query(longPoll) {
+    async query(ignored) {
+      // This is overridden and does nothing because the only time
+      // this will be called is on the long poll, and the long poll
+      // refresh is done from the Vehicle node.
+    }
+    
+    async asyncQuery(now) {
       const _this = this;
-      if (longPoll) {
+      if (now) {
         try {
           // Run query only one at a time
-          logger.info('VehicleClimate long poll');
+          logger.info('VehicleClimate now');
 
           await lock.acquire('query', function() {
-            return _this.queryVehicle(longPoll);
+            return _this.queryVehicle(now);
           });
         } catch (err) {
           logger.error('VehicleClimate Error while querying vehicle: %s', err.message);
@@ -314,7 +318,7 @@ module.exports = function(Polyglot) {
         if (longPoll) {
           // wake the car and try again
           await this.tesla.wakeUp(id);
-          await delay(2000); // Wait 2 seconds before trying again.
+          await delay(3000); // Wait 3 seconds before trying again.
           vehicleData = await this.tesla.getVehicleData(id);
         }
       }
@@ -324,7 +328,7 @@ module.exports = function(Polyglot) {
         return 0;
       }
 
-      this.processDrivers(vehicleData, longPoll);
+      this.processDrivers(vehicleData);
 
         // logger.info('This vehicle Data %o', vehicleData);
     }
@@ -337,13 +341,12 @@ module.exports = function(Polyglot) {
       }
     }
 
-    processDrivers(vehicleData, longPoll) {
+    processDrivers(vehicleData) {
       logger.debug('VehicleClimate processDrivers');
       // Gather basic vehicle climate data
       if (vehicleData && vehicleData.response &&
           vehicleData.response.climate_state &&
             vehicleData.response.gui_settings) {
-        const response = vehicleData.response;
         const climateState = vehicleData.response.climate_state;
         const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
   
@@ -376,13 +379,6 @@ module.exports = function(Polyglot) {
           this.setDriver('GV15', true, true);
         } else {
           this.setDriver('GV15', false, true);
-        }
-
-        if (this.let_sleep && !longPoll) {
-          this.setDriver('GV18', false, false); // this way we know if we have to wake up the car or not
-        } else {
-          this.setDriver('GV18',
-              response.state === 'online', false);
         }
 
         this.setDriver('GV19', timestamp, false);
