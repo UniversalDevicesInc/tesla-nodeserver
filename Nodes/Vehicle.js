@@ -275,6 +275,8 @@ module.exports = function(Polyglot) {
           this.setDriver('GV17', 0, true); // car is asleep
         } else if (vehicleState === 'online') {
           this.setDriver('GV17', 1, true); // car is online
+        } else if (vehicleState === 'offline') {
+          this.setDriver('GV17', 2, true); // car is offline
         } else {
           logger.warn("Vehicle.checkVehicleOnline() unexpected state: %s", vehicleState);
         }

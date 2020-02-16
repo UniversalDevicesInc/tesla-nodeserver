@@ -46,7 +46,7 @@
   </editor>
   <editor id="I_VEHICLE_STATE">
     <!-- 0 is asleep, 1 is online -->
-    <range uom="25" subset="0-1" nls="EN_I_VEHICLE_STATE" />
+    <range uom="25" subset="0-2" nls="EN_I_VEHICLE_STATE" />
   </editor>
   <editor id="I_CLIMATE_TEMP_RANGE">
     <!-- 15 to 28 degrees C -->
