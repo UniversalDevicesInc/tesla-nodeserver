@@ -93,7 +93,7 @@ module.exports = function(Polyglot) {
         // process the message for this vehicle sent from a different node.
         if (key === id
             && vehicleMessage.response.isy_nodedef != nodeDefId) {
-          this.processDrivers(vehicleMessage, true);
+          this.processDrivers(vehicleMessage);
         }
       }
     }
@@ -303,12 +303,12 @@ module.exports = function(Polyglot) {
         return 0;
       }
 
-      this.processDrivers(vehicleData, longPoll);
+      this.processDrivers(vehicleData);
 
         // logger.info('This vehicle Data %o', vehicleData);
     }
 
-    processDrivers(vehicleData, longPoll) {
+    processDrivers(vehicleData) {
       logger.debug('VehicleSecurity processDrivers')
       // Gather basic vehicle & charge state
       // (same as getVehicleData with less clutter)

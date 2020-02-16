@@ -111,7 +111,7 @@ module.exports = function(Polyglot) {
         if (key === id
             && vehicleMessage.response.isy_nodedef != nodeDefId) {
           // process the message for this vehicle sent from a different node.
-          this.processDrivers(vehicleMessage, true);
+          this.processDrivers(vehicleMessage);
         }
       }
     }
