@@ -252,8 +252,8 @@ module.exports = function(Polyglot) {
       return Math.round((new Date().valueOf() / 1000));
     }
     
-    resolveCharginState(charging_state) {
-      let chargingStateIndex = 0;
+    resolveChargingState(charging_state) {
+      let chargingStateIndex;
       if (charging_state === 'Stopped') {
         chargingStateIndex = 0;
       } else if (charging_state === 'Disconnected') {
@@ -345,8 +345,7 @@ module.exports = function(Polyglot) {
         }
 
         this.setDriver('GV4', chargeState.charge_enable_request, false);
-        this.setDriver('GV5', this.resolveCharginState(chargeState.charging_state)
-          chargeState.charging_state === 'Charging', false);
+        this.setDriver('GV5', this.resolveChargingState(chargeState.charging_state), false);
         this.setDriver('GV6', chargeState.fast_charger_present, false);
         this.setDriver('GV7', chargeState.charge_limit_soc, false);
         this.setDriver('CC', chargeState.charger_actual_current, false);
