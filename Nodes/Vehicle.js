@@ -4,7 +4,7 @@
 // The other nodes are updated by calling the controller node on the short poll when queryVehicle() is called here.
 
 const AsyncLock = require('async-lock');
-const lock = new AsyncLock({ timeout: 500 });
+const lock = new AsyncLock({ timeout: 10000 });
 
 // nodeDefId must match the nodedef in the profile
 const nodeDefId = 'VEHICLE';
