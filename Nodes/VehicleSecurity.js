@@ -341,7 +341,9 @@ module.exports = function(Polyglot) {
 
         logger.debug('vehicleState.sun_roof_percent_open %s', vehicleState.sun_roof_percent_open);
         if (typeof vehicleState.sun_roof_percent_open != 'undefined') {
-          this.setDriver('GV9', vehicleState.sun_roof_percent_open, false);
+          this.setDriver('GV9', vehicleState.sun_roof_percent_open, false, false, 51);
+        } else {
+          this.setDriver('GV9', 101, false, false, 25);
         }
 
         // Status of sentry mode (displayed with an index).

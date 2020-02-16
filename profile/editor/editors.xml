@@ -40,6 +40,11 @@
     <range uom="4" min="-40" max="60" step="1" prec="0" />
     <range uom="17" min="-40" max="140" step="1" prec="0" />
   </editor>
+  <editor id="I_SUNROOF">
+    <!-- 0 not available -->
+    <range uom="25" subset="101" nls="EN_I_SUNROOF" />
+    <range uom="51" subset="0-100" />
+  </editor>
   <editor id="I_HEATED_SEAT_LEVEL_RANGE">
     <!-- 0 is off 4 is full heat -->
     <range uom="25" subset="0-3" nls="EN_I_SEAT_HEATER_LEVEL" />
