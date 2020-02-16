@@ -315,6 +315,7 @@ module.exports = function(Polyglot) {
       // let vehicleData = await this.tesla.getVehicle(id);
       // const chargeState = await this.tesla.getVehicleChargeState(id);
       // vehicleData.response.charge_state = chargeState.response;
+      logger.debug('VehicleSecurity.areCommandsEnabled() %s', this.areCommandsEnabled());
       this.setDriver('GV5', this.areCommandsEnabled() ? 1 : 0, false); // commands enabled/disabled status
 
       if (vehicleData && vehicleData.response &&
