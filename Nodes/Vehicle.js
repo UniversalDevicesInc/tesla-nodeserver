@@ -102,7 +102,7 @@ module.exports = function(Polyglot) {
         this.drivers.GV1 = { value: '', uom: 83 };
         this.drivers.GV10 = { value: '', uom: 83 };
       }
-      logger.info('initializeUOM done');
+      logger.info('Vehicle.initializeUOM() done');
     }
 
     // The id is stored in GV20
