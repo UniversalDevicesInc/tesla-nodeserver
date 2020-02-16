@@ -147,7 +147,7 @@ module.exports = function(Polyglot) {
     setLetSleep() {
       logger.info('LET SLEEP (%s)', this.address);
       this.let_sleep = true;
-      this.setDriver('GV18', false, true); // this way we know if we have to wake up the car or not
+      this.setDriver('GV18', false, true); // Set Wake Mode to false
     }
 
     async onHorn() {
@@ -246,6 +246,7 @@ module.exports = function(Polyglot) {
       }
     }
 
+    // Check when the wake period expires, and then disable short polling.
     updateSleepStatus() {
       const longPoll = this.polyInterface.getConfig().longPoll;
       const now = this.nowEpochToTheSecond();
@@ -264,7 +265,7 @@ module.exports = function(Polyglot) {
       const id = this.vehicleId();
       const vehicleSummary = await this.tesla.getVehicle(id);
       if (vehicleSummary === 408) {
-        this.setDriver('GV18', false, true); // car is offline
+        this.setDriver('GV17', false, true); // car is offline
         logger.info('API ERROR CAUGHT: %s', vehicleData);
         return 0;
       }
