@@ -260,6 +260,8 @@ module.exports = function(Polyglot) {
         chargingStateIndex = 1;
       } else if (charging_state === 'Charging') {
         chargingStateIndex = 2;
+      } else if (charging_state === 'Complete') {
+        chargingStateIndex = 3;
       } else {
         logger.warn('Unmatched charging state: %s', charging_state);
       }
