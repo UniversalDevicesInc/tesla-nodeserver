@@ -63,7 +63,7 @@ module.exports = function(Polyglot) {
         ST: { value: '', uom: 51 }, // SOC%
 //        GV1: { value: '', uom: 116 }, // Battery range (default mile, but UOM gathered from the vehicle)
         GV4: { value: '', uom: 2 }, // Charge enable request
-        GV5: { value: '', uom: 2 }, // Charging state
+        GV5: { value: '', uom: 25 }, // Charging state
         GV6: { value: '', uom: 2 }, // Fast charger present
         GV7: { value: '', uom: 51 }, // Charge limit SOC%
         CC: { value: '', uom: 1 }, // Charger actual current
@@ -162,13 +162,6 @@ module.exports = function(Polyglot) {
       await this.tesla.cmdFlashLights(id);
     }
 
-    async onChargeSetStd() {
-      const id = this.vehicleId();
-      logger.info('CHARGE_SET_STD (%s)', this.address);
-      await this.tesla.cmdChargeLimitStd(id);
-      await this.queryNow();
-    }
-
     async onChargeSetTo(message) {
         const id = this.vehicleId();
 
@@ -177,8 +170,7 @@ module.exports = function(Polyglot) {
 
         await this.tesla.cmdChargeLimitSetTo(id, message.value);
         await this.queryNow();
-      }
-
+    }
 
     async queryNow() {
       await this.query(true);
@@ -259,6 +251,21 @@ module.exports = function(Polyglot) {
     nowEpochToTheSecond() {
       return Math.round((new Date().valueOf() / 1000));
     }
+    
+    resolveCharginState(charging_state) {
+      let chargingStateIndex = 0;
+      if (charging_state === 'Stopped') {
+        chargingStateIndex = 0;
+      } else if (charging_state === 'Disconnected') {
+        chargingStateIndex = 1;
+      } else if (charging_state === 'Charging') {
+        chargingStateIndex = 2;
+      } else {
+        logger.warn('Unmatched charging state: %s', charging_state);
+      }
+
+      return chargingStateIndex;
+    }
 
     // Assume the app is allowing the vehicle to sleep, but we want to know if it has actually gone offline
     async checkVehicleOnline() {
@@ -328,12 +335,6 @@ module.exports = function(Polyglot) {
 
         this.vehicleUOM(vehicleData.response.gui_settings);
 
-        // We know the 'Stopped' status, but what are the others?
-        if (chargeState.charging_state !== 'Stopped' &&
-          chargeState.charging_state !== 'Disconnected') {
-          logger.info('Charging state: %s', chargeState.charging_state);
-        }
-
         this.setDriver('ST', chargeState.battery_level, false);
 
         // Battery range
@@ -344,7 +345,7 @@ module.exports = function(Polyglot) {
         }
 
         this.setDriver('GV4', chargeState.charge_enable_request, false);
-        this.setDriver('GV5',
+        this.setDriver('GV5', this.resolveCharginState(chargeState.charging_state)
           chargeState.charging_state === 'Charging', false);
         this.setDriver('GV6', chargeState.fast_charger_present, false);
         this.setDriver('GV7', chargeState.charge_limit_soc, false);

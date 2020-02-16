@@ -7,6 +7,7 @@ V2.2.0 (2020-02-09)
 * Renamed Vehicle Online to Wake Mode - true when the app is using the short poll to get updates
 * Added Vehicle State which tells whether the vehicle is actually online or asleep
 * Removed duplicate Vehicle Online from Climate and Security nodes
+* Better reporting of Charging State (Stopped, Disconnected, Charging)
 
 v2.1.0 (2020-01-18)
 * When the General node is in wake mode, all three nodes will be refreshed including the Climate and Security nodes

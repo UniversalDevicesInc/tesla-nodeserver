@@ -22,7 +22,7 @@
       <st id="ST" editor="I_PERCENT"/> <!-- SOC% -->
       <st id="GV1" editor="I_BATTERY_RANGE"/> <!-- Battery Range -->
       <st id="GV4" editor="BOOLEAN"/> <!-- Charge enable request -->
-      <st id="GV5" editor="BOOLEAN"/> <!-- Charging state -->
+      <st id="GV5" editor="I_CHARGING_STATE"/> <!-- Charging state -->
       <st id="GV6" editor="BOOLEAN"/> <!-- Fast charger present -->
       <st id="GV7" editor="I_PERCENT" hide="T"/> <!-- charge limit soc -->
       <st id="CC" editor="I_AMP"/> <!-- Charger actual current -->
