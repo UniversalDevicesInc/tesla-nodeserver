@@ -159,10 +159,7 @@
       <st id="ERR" editor="BOOLEAN" hide="T" />
     </sts>
     <cmds>
-      <sends>
-        <cmd id="DON"/>
-        <cmd id="DOF"/>
-      </sends>
+      <sends/>
       <accepts>
         <cmd id="DON"/> <!-- Auto Conditioning On -->
         <cmd id="DOF"/> <!-- Auto Conditioning Off -->

@@ -138,6 +138,3 @@ ST-AC-GV19-NAME = Timestamp
 ST-AC-GV20-NAME = Car ID
 ST-AC-ERR-NAME = Error
 
-CMD-AC-QUERY-NAME = Query
-CMD-AC-DON-NAME = Auto Conditioning On
-CMD-AC-DOFF-NAME = Auto Conditioning Off
