@@ -187,7 +187,6 @@ module.exports = function(Polyglot) {
                     vehicleConditioningName,
                     id); // We save the ID in GV20 for eventual API calls
 
-                await newVehicleConditioning.initializeUOM();
                 const resultConditioning = await this.polyInterface.addNode(newVehicleConditioning);
 
                 logger.info('VehicleConditioning added: %s', resultConditioning);
