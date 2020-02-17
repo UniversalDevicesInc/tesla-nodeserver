@@ -18,7 +18,7 @@ const ControllerNode = require('./Nodes/ControllerNode.js')(Polyglot);
 const Vehicle = require('./Nodes/Vehicle.js')(Polyglot);
 const VehicleSecurity = require('./Nodes/VehicleSecurity.js')(Polyglot);
 const VehicleClimate = require('./Nodes/VehicleClimate.js')(Polyglot);
-const VehicleConditioning = require('./VehicleConditioning.js')(Polyglot);
+const VehicleConditioning = require('./Nodes/VehicleConditioning.js')(Polyglot);
 
 // Must be the same as in tesla.js
 const emailParam = 'Tesla account email';
