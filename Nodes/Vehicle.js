@@ -361,11 +361,10 @@ module.exports = function(Polyglot) {
           this.setDriver('GV10', Math.round(parseFloat(vehiculeState.odometer)).toString(), true, false, 116);
         }
 
-        if (this.let_sleep && !longPoll) {
+        if (this.let_sleep) {
           this.setDriver('GV18', false, false); // this way we know if we have to wake up the car or not
         } else {
-          this.setDriver('GV18',
-              response.state === 'online', false);
+          this.setDriver('GV18', true, false);
         }
 
         this.setDriver('GV19', timestamp, false);
