@@ -5,6 +5,10 @@
     <!-- 2 is boolean -->
     <range uom="2" subset="0-1"/>
   </editor>
+  <editor id="ONOFF">
+    <!-- 78 is off/on -->
+    <range uom="78" />
+  </editor>
   <editor id="I_AMP">
     <!-- 1 is Ampere -->
     <range uom="1" subset="0-100000"/>
