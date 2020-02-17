@@ -161,6 +161,9 @@ module.exports = function(Polyglot) {
         logger.debug("is_auto_conditioning_on %s", climateState.is_auto_conditioning_on);
         this.setDriver('ST', climateState.is_auto_conditioning_on ? 100 : 0, false);
 
+        const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
+        this.setDriver('GV19', timestamp, false);
+
         this.setDriver('ERR', '0', false);
         this.reportDrivers(); // Reports only changed values
       } else {
