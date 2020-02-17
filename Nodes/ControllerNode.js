@@ -102,6 +102,8 @@ module.exports = function(Polyglot) {
       logger.debug('ControllerNodes.updateOtherNodes(%s)pushdata', vehicleNodeAddress);
       const climateNode = this.polyInterface.getNode("c" + vehicleNodeAddress);
       climateNode.pushedData(vehicleId, vehicleMessage);
+      const condNode = this.polyInterface.getNode("ac" + vehicleNodeAddress);
+      condNode.pushedData(vehicleId, vehicleMessage);
     }
 
     // pass the Tesla API vehicle object
