@@ -150,4 +150,25 @@
     </cmds>
   </nodedef>
 
+  <!-- Vehicle Auto Conditioning info -->
+  <nodedef id="VEHICLECOND" nls="AC">
+    <sts>
+      <st id="ST" editor="BOOLEAN"/>
+      <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
+      <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
+      <st id="ERR" editor="BOOLEAN" hide="T" />
+    </sts>
+    <cmds>
+      <sends>
+        <cmd id="DON"/>
+        <cmd id="DOF"/>
+      </sends>
+      <accepts>
+        <cmd id="DON"/> <!-- Auto Conditioning On -->
+        <cmd id="DOF"/> <!-- Auto Conditioning Off -->
+        <cmd id="QUERY"/>
+      </accepts>
+    </cmds>
+  </nodedef>
+
 </nodeDefs>

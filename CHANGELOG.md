@@ -9,6 +9,7 @@ V2.2.0 (2020-02-09)
 * Removed duplicate Vehicle Online from Climate and Security nodes
 * Better reporting of Charging State (Stopped, Disconnected, Charging)
 * Added Sunroof unavailable status
+* Added Conditioning node for easier command control of the auto conditioning feature
 
 v2.1.0 (2020-01-18)
 * When the General node is in wake mode, all three nodes will be refreshed including the Climate and Security nodes

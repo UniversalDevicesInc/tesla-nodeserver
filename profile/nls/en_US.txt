@@ -130,3 +130,14 @@ CMD-C-MAX_DEFROST_OFF-NAME = Max defrost off
 CMD-C-CLIMATE_TEMP_SETTING_DRIVER-NAME = Driver's climate control temp
 CMD-C-CLIMATE_TEMP_SETTING_PASSENGER-NAME = Passenger's climate control temp
 
+
+ND-VEHICLECOND-NAME = Vehicle Auto Conditioning
+ND-VEHICLECOND-ICON = Thermostat
+ST-AC-ST-NAME = Status
+ST-AC-GV19-NAME = Timestamp
+ST-AC-GV20-NAME = Car ID
+ST-AC-ERR-NAME = Error
+
+CMD-AC-QUERY-NAME = Query
+CMD-AC-DON-NAME = Auto Conditioning On
+CMD-AC-DOFF-NAME = Auto Conditioning Off

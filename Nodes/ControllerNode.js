@@ -18,6 +18,7 @@ module.exports = function(Polyglot) {
   const Vehicle = require('./Vehicle.js')(Polyglot);
   const VehicleSecurity = require('./VehicleSecurity.js')(Polyglot);
   const VehicleClimate = require('./VehicleClimate.js')(Polyglot);
+  const VehicleConditioning = require('./VehicleConditioning.js')(Polyglot);
 
   class Controller extends Polyglot.Node {
     // polyInterface: handle to the interface
@@ -174,6 +175,27 @@ module.exports = function(Polyglot) {
                 'New node created: ' + vehicleClimateName,
                 5
               );
+              
+              const vehicleConditioningName = vehicle.display_name + " Auto Conditioning";
+              const vehicleConditioningAddress =  "ac" + deviceAddress;
+              logger.info('Adding VehicleConditioning node %s: %s',
+                  vehicleConditioningAddress, vehicleConditioningName);
+                const newVehicleConditioning = new VehicleConditioning(
+                    this.polyInterface,
+                    this.address, // primary
+                    vehicleConditioningAddress,
+                    vehicleConditioningName,
+                    id); // We save the ID in GV20 for eventual API calls
+
+                await newVehicleConditioning.initializeUOM();
+                const resultConditioning = await this.polyInterface.addNode(newVehicleConditioning);
+
+                logger.info('VehicleConditioning added: %s', resultConditioning);
+                this.polyInterface.addNoticeTemp(
+                  'newVehicleConditioning-' + vehicleConditioningAddress,
+                  'New node created: ' + vehicleConditioningName,
+                  5
+                );
 
               await newVehicle.queryNow(); // get current values - will update all nodes
 
