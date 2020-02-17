@@ -163,7 +163,7 @@
       <accepts>
         <cmd id="DON"/> <!-- Auto Conditioning On -->
         <cmd id="DOF"/> <!-- Auto Conditioning Off -->
-        <cmd id="QUERY"/>
+        <cmd id="QUERY_NOW"/>
       </accepts>
     </cmds>
   </nodedef>

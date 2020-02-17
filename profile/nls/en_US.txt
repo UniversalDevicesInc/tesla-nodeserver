@@ -138,3 +138,5 @@ ST-AC-GV19-NAME = Timestamp
 ST-AC-GV20-NAME = Car ID
 ST-AC-ERR-NAME = Error
 
+CMD-AC-QUERY_NOW-NAME = Query
+
