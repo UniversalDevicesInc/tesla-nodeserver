@@ -70,7 +70,7 @@ module.exports = function(Polyglot) {
         CV: { value: '', uom: 72 }, // Charger voltage
         CPW: { value: '', uom: 73 }, // Charger power
 //        GV10: { value: '', uom: 116 }, // Odometer (default mile, but multi-editor supports kilometer too)
-        GV17: { value: '', uom: 25 }, // vehicle status
+        AWAKE: { value: '', uom: 25 }, // vehicle status
         GV18: { value: '', uom: 2 }, // wake mode
         GV19: { value: '', uom: 56 }, // Last updated unix timestamp
         GV20: { value: id, uom: 56 }, // ID used for the Tesla API
@@ -274,7 +274,7 @@ module.exports = function(Polyglot) {
       const id = this.vehicleId();
       const vehicleSummary = await this.tesla.getVehicle(id);
       if (vehicleSummary === 408) {
-        this.setDriver('GV17', false, true); // car is offline
+        this.setDriver('AWAKE', false, true); // car is offline
         logger.info('API ERROR CAUGHT: %s', vehicleData);
         return 0;
       }
@@ -282,11 +282,11 @@ module.exports = function(Polyglot) {
       if (vehicleSummary && vehicleSummary.response && vehicleSummary.response.state) {
         const vehicleState = vehicleSummary.response.state;
         if (vehicleState === 'asleep') {
-          this.setDriver('GV17', 0, true); // car is asleep
+          this.setDriver('AWAKE', 0, true); // car is asleep
         } else if (vehicleState === 'online') {
-          this.setDriver('GV17', 1, true); // car is online
+          this.setDriver('AWAKE', 1, true); // car is online
         } else if (vehicleState === 'offline') {
-          this.setDriver('GV17', 2, true); // car is offline
+          this.setDriver('AWAKE', 2, true); // car is offline
         } else {
           logger.warn("Vehicle.checkVehicleOnline() unexpected state: %s", vehicleState);
         }

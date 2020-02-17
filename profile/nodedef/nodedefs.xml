@@ -29,7 +29,7 @@
       <st id="CV" editor="I_VOLT"/> <!-- Charger voltage -->
       <st id="CPW" editor="I_WATT"/> <!-- Charger power -->
       <st id="GV10" editor="I_ODO"/> <!-- Odometer -->
-      <st id="GV17" editor="I_VEHICLE_STATE"/> <!-- Vehicle State -->
+      <st id="AWAKE" editor="I_VEHICLE_STATE"/> <!-- Vehicle State -->
       <st id="GV18" editor="BOOLEAN"/> <!-- Wake mode? -->
       <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
       <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
