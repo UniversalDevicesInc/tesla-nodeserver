@@ -3,7 +3,7 @@
 V2.2.0 (2020-02-09)
 * Limit the amount of time the system may be in the Wake mode to the long poll time
 * Fixed optional rear seat heater handling
-* Added individual security overrides for lock, sunroof, charge_port, windows, trunk, frunk, sentry, and software_update
+* Added individual security overrides for lock, sunroof, charge\_port, windows, trunk, frunk, sentry, and software\_update
 * Renamed Vehicle Online to Wake Mode - true when the app is using the short poll to get updates
 * Added Vehicle State which tells whether the vehicle is actually online or asleep
 * Removed duplicate Vehicle Online from Climate and Security nodes
