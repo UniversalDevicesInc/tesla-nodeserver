@@ -328,9 +328,6 @@ module.exports = function(Polyglot) {
         vehicleData.response.isy_nodedef = nodeDefId;
         this.updateOtherNodes(vehicleData);
 
-        // logger.info('This vehicle Data %o', vehicleData);
-
-        const response = vehicleData.response;
         const chargeState = vehicleData.response.charge_state;
         const vehiculeState = vehicleData.response.vehicle_state;
         const timestamp = this.nowEpochToTheSecond().toString();
