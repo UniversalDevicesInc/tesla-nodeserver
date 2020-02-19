@@ -305,6 +305,10 @@ module.exports = function(Polyglot) {
           await this.tesla.wakeUp(id);
           await delay(3000); // Wait 3 seconds before trying again.
           vehicleData = await this.tesla.getVehicleData(id);
+          if (vehicleData === 408) {
+            await delay(3000); // Wait another 3 seconds before trying again.
+            vehicleData = await this.tesla.getVehicleData(id);
+          }
         }
       }
       if (vehicleData === 408) {
