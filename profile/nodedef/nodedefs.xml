@@ -22,14 +22,15 @@
       <st id="ST" editor="I_PERCENT"/> <!-- SOC% -->
       <st id="GV1" editor="I_BATTERY_RANGE"/> <!-- Battery Range -->
       <st id="GV4" editor="BOOLEAN"/> <!-- Charge enable request -->
-      <st id="GV5" editor="BOOLEAN"/> <!-- Charging state -->
+      <st id="GV5" editor="I_CHARGING_STATE"/> <!-- Charging state -->
       <st id="GV6" editor="BOOLEAN"/> <!-- Fast charger present -->
       <st id="GV7" editor="I_PERCENT" hide="T"/> <!-- charge limit soc -->
       <st id="CC" editor="I_AMP"/> <!-- Charger actual current -->
       <st id="CV" editor="I_VOLT"/> <!-- Charger voltage -->
       <st id="CPW" editor="I_WATT"/> <!-- Charger power -->
       <st id="GV10" editor="I_ODO"/> <!-- Odometer -->
-      <st id="GV18" editor="BOOLEAN"/> <!-- Online? -->
+      <st id="AWAKE" editor="I_VEHICLE_STATE"/> <!-- Vehicle State -->
+      <st id="GV18" editor="BOOLEAN"/> <!-- Wake mode? -->
       <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
       <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
       <st id="ERR" editor="BOOLEAN" hide="T" />
@@ -65,10 +66,9 @@
       <st id="GV4" editor="I_OPEN_STATUS"/> <!-- Trunk Status -->
       <st id="GV5" editor="I_SECURITY_ENABLED"/> <!-- Security Command Status -->
       <st id="GV8" editor="BOOLEAN"/> <!-- Locked -->
-      <st id="GV9" editor="I_PERCENT"/> <!-- Sunroof opened -->
+      <st id="GV9" editor="I_SUNROOF"/> <!-- Sunroof opened -->
       <st id="GV11" editor="I_SENTRY_MODE" hide="T"/> <!-- Sentry Mode -->
       <st id="GV17" editor="I_SOFTWARE_UPDATE_STATUS"/> <!-- Software update availability status -->
-      <st id="GV18" editor="BOOLEAN" hide="T"/> <!-- Online? -->
       <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
       <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
       <st id="ERR" editor="BOOLEAN" hide="T" />
@@ -113,7 +113,6 @@
       <st id="CLITEMP" editor="I_TEMP_DEG"/> <!-- Interior temperature -->
       <st id="CLIEMD" editor="BOOLEAN"/> <!-- Climate Conditioning On -->
       <st id="GV15" editor="BOOLEAN"/> <!-- Max Defrost -->
-      <st id="GV18" editor="BOOLEAN" hide="T" /> <!-- Online? -->
       <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
       <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
       <st id="ERR" editor="BOOLEAN" hide="T" />
@@ -147,6 +146,27 @@
         <cmd id="CLIMATE_TEMP_SETTING_PASSENGER">
           <p id="" editor="I_CLIMATE_TEMP_RANGE" init="GV13" optional="F"/>
         </cmd>
+      </accepts>
+    </cmds>
+  </nodedef>
+
+  <!-- Vehicle Auto Conditioning info -->
+  <nodedef id="VEHICLECOND" nls="AC">
+    <sts>
+      <st id="ST" editor="ONOFF"/>
+      <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
+      <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
+      <st id="ERR" editor="BOOLEAN" hide="T" />
+    </sts>
+    <cmds>
+      <sends>
+        <cmd id="DON"/>
+        <cmd id="DOF"/>
+      </sends>
+      <accepts>
+        <cmd id="DON"/> <!-- Auto Conditioning On -->
+        <cmd id="DOF"/> <!-- Auto Conditioning Off -->
+        <cmd id="QUERY_NOW"/>
       </accepts>
     </cmds>
   </nodedef>

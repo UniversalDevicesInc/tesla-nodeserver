@@ -70,13 +70,11 @@ module.exports = function(Polyglot) {
         GV9: { value: '', uom: 51 }, // Sunroof open%
         GV11:  { value: '', uom: 25 }, // Sentry mode on
         GV17: { value: '', uom: 25 }, // Software Update Availability Status
-        GV18: { value: '', uom: 2 }, // Online?
         GV19: { value: '', uom: 56 }, // Last updated unix timestamp
         GV20: { value: id, uom: 56 }, // ID used for the Tesla API
         ERR: { value: '', uom: 2 } // In error?
       };
 
-      this.let_sleep = true; // this will be used to disable short polling
     }
 
 
@@ -95,24 +93,31 @@ module.exports = function(Polyglot) {
         // process the message for this vehicle sent from a different node.
         if (key === id
             && vehicleMessage.response.isy_nodedef != nodeDefId) {
-          this.processDrivers(vehicleMessage, true);
+          this.processDrivers(vehicleMessage);
         }
       }
     }
 
     async queryNow() {
       logger.debug('queryNow (%s)', this.address);
-      await this.query(true);
+      await this.asyncQuery(true);
     }
     
     areCommandsEnabled() {
+      return this.checkSecuritySetting('true');
+    }
+    
+    checkSecuritySetting(setting) {
       const config = this.polyInterface.getConfig();
       const params = config.customParams;
-      return params[enableSecurityCommandsParam] === 'true' ? true : false;
+      const securitySettings = params[enableSecurityCommandsParam];
+      const values = securitySettings.split(',');
+      logger.debug('checkSecuritySetting %s', values);
+      return values.includes(setting) ? true : false;
     }
 
     async onLock() {
-      if (this.areCommandsEnabled()) {
+      if (this.areCommandsEnabled() || this.checkSecuritySetting('lock')) {
         const id = this.vehicleId();
         logger.info('LOCK (%s)', this.address);
         await this.tesla.cmdDoorLock(id);
@@ -122,7 +127,7 @@ module.exports = function(Polyglot) {
     }
 
     async onUnlock() {
-      if (this.areCommandsEnabled()) {
+      if (this.areCommandsEnabled() || this.checkSecuritySetting('lock')) {
         const id = this.vehicleId();
         logger.info('UNLOCK (%s)', this.address);
         await this.tesla.cmdDoorUnlock(id);
@@ -133,7 +138,7 @@ module.exports = function(Polyglot) {
     }
 
     async onSunroofOpen() {
-      if (this.areCommandsEnabled()) {
+      if (this.areCommandsEnabled() || this.checkSecuritySetting('sunroof')) {
         const id = this.vehicleId();
         logger.info('SUNROOF_OPEN (%s)', this.address);
         await this.tesla.cmdSunRoof(id, 'vent');
@@ -143,7 +148,7 @@ module.exports = function(Polyglot) {
     }
 
     async onSunroofClose() {
-      if (this.areCommandsEnabled()) {
+      if (this.areCommandsEnabled() || this.checkSecuritySetting('sunroof')) {
         const id = this.vehicleId();
         logger.info('SUNROOF_CLOSE (%s)', this.address);
         await this.tesla.cmdSunRoof(id, 'close');
@@ -156,20 +161,24 @@ module.exports = function(Polyglot) {
       const id = this.vehicleId();
       logger.info('CHARGE_PORT_DOOR %s (%s)', message.value, this.address);
       if (message.value === '1') {
-        if (this.areCommandsEnabled()) {
+        if (this.areCommandsEnabled() || this.checkSecuritySetting('charge_port')) {
           await this.tesla.cmdChargePortOpen(id);
         } else {
           logger.info('CHARGE_PORT_DOOR disabled');
         }
       } else {
-        await this.tesla.cmdChargePortClose(id);
+        if (this.areCommandsEnabled() || this.checkSecuritySetting('charge_port')) {
+          await this.tesla.cmdChargePortClose(id);
+        } else {
+          logger.info('CHARGE_PORT_DOOR disabled');
+        }
       }
       await this.queryNow();
     }
 
 
     async onWindowsVent() {
-      if (this.areCommandsEnabled()) {
+      if (this.areCommandsEnabled() || this.checkSecuritySetting('windows')) {
         const id = this.vehicleId();
         logger.info('WINDOWS_VENT (%s)', this.address);
         await this.tesla.cmdWindows(id, 'vent');
@@ -180,7 +189,7 @@ module.exports = function(Polyglot) {
     }
 
     async onWindowsClose() {
-      if (this.areCommandsEnabled()) {
+      if (this.areCommandsEnabled() || this.checkSecuritySetting('windows')) {
         const id = this.vehicleId();
         logger.info('WINDOWS CLOSE (%s)', this.address);
         await this.tesla.cmdWindows(id, 'close');
@@ -191,7 +200,7 @@ module.exports = function(Polyglot) {
     }
 
     async onTrunkOpen() {
-      if (this.areCommandsEnabled()) {
+      if (this.areCommandsEnabled() || this.checkSecuritySetting('trunk')) {
         const id = this.vehicleId();
         logger.info('TRUNK_OPEN (%s)', this.address);
         await this.tesla.cmdActuateTrunk(id, 'rear');
@@ -202,7 +211,7 @@ module.exports = function(Polyglot) {
     }
 
     async onFrunkOpen() {
-      if (this.areCommandsEnabled()) {
+      if (this.areCommandsEnabled() || this.checkSecuritySetting('frunk')) {
         const id = this.vehicleId();
         logger.info('FRUNK_OPEN (%s)', this.address);
         await this.tesla.cmdActuateTrunk(id, 'front');
@@ -213,7 +222,7 @@ module.exports = function(Polyglot) {
     }
 
     async onSentryMode(message) {
-      if (this.areCommandsEnabled()) {
+      if (this.areCommandsEnabled() || this.checkSecuritySetting('sentry')) {
         const id = this.vehicleId();
         const decodeValue = message.value === '1' ? 'on' : 'off';
         logger.debug('SENTRY MODE raw %s decoded %s (%s)', message.value, decodeValue, this.address);
@@ -225,7 +234,7 @@ module.exports = function(Polyglot) {
     }
 
     async onStartSoftwareUpdate() {
-      if (this.areCommandsEnabled()) {
+      if (this.areCommandsEnabled() || this.checkSecuritySetting('software_update')) {
         const id = this.vehicleId();
         logger.info('STARTING SOFTWARE UPDATE (%s)', this.address);
         await this.tesla.cmdStartSoftwareUpdate(id);
@@ -235,16 +244,22 @@ module.exports = function(Polyglot) {
       }
     }
 
+    async query(ignored) {
+      // This is overridden and does nothing because the only time
+      // this will be called is on the long poll, and the long poll
+      // refresh is done from the Vehicle node.
+    }
+
     // Update Vehicle security only on long poll.
-    async query(longPoll) {
+    async asyncQuery(now) {
       const _this = this;
-      if (longPoll) {
+      if (now) {
         try {
           // Run query only one at a time
-          logger.info('VehicleSecurity long poll');
+          logger.info('VehicleSecurity now');
 
           await lock.acquire('query', function() {
-            return _this.queryVehicle(longPoll);
+            return _this.queryVehicle(now);
           });
         } catch (err) {
           logger.error('Error while querying vehicle: %s', err.message);
@@ -288,18 +303,19 @@ module.exports = function(Polyglot) {
         return 0;
       }
 
-      this.processDrivers(vehicleData, longPoll);
+      this.processDrivers(vehicleData);
 
         // logger.info('This vehicle Data %o', vehicleData);
     }
 
-    processDrivers(vehicleData, longPoll) {
+    processDrivers(vehicleData) {
       logger.debug('VehicleSecurity processDrivers')
       // Gather basic vehicle & charge state
       // (same as getVehicleData with less clutter)
       // let vehicleData = await this.tesla.getVehicle(id);
       // const chargeState = await this.tesla.getVehicleChargeState(id);
       // vehicleData.response.charge_state = chargeState.response;
+
       this.setDriver('GV5', this.areCommandsEnabled() ? 1 : 0, false); // commands enabled/disabled status
 
       if (vehicleData && vehicleData.response &&
@@ -307,7 +323,6 @@ module.exports = function(Polyglot) {
         vehicleData.response.vehicle_state &&
         vehicleData.response.gui_settings) {
 
-        const response = vehicleData.response;
         const chargeState = vehicleData.response.charge_state;
         const vehicleState = vehicleData.response.vehicle_state;
         const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
@@ -315,7 +330,7 @@ module.exports = function(Polyglot) {
         this.setDriver('GV1', chargeState.charge_port_door_open ? 1 : 0, false);
 
         this.setDriver('GV2',
-          chargeState.charge_port_latch.toLowerCase() === 'engaged',
+          chargeState.charge_port_latch === 'Engaged',
           false);
 
         logger.debug("Frunk: %s, Trunk: %s", vehicleState.ft, vehicleState.rt);
@@ -326,22 +341,17 @@ module.exports = function(Polyglot) {
 
         logger.debug('vehicleState.sun_roof_percent_open %s', vehicleState.sun_roof_percent_open);
         if (typeof vehicleState.sun_roof_percent_open != 'undefined') {
-          this.setDriver('GV9', vehicleState.sun_roof_percent_open, false);
+          this.setDriver('GV9', vehicleState.sun_roof_percent_open, false, false, 51);
+        } else {
+          this.setDriver('GV9', 101, false, false, 25);
         }
 
         // Status of sentry mode (displayed with an index).
-        this.setDriver('GV11', vehicleState.sentry_mode ? 1 : 0, false);
+        this.setDriver('GV11', vehicleState.sentry_mode_available ? (vehicleState.sentry_mode ? 1 : 0) : 2, false);
 
         // Software Update Availability Status
         logger.debug("software_update.status %s", vehicleState.software_update.status);
         this.setDriver('GV17', this.decodSoftwareUpdateStatus(vehicleState.software_update.status), true);
-
-        if (this.let_sleep && !longPoll) {
-          this.setDriver('GV18', false, false); // this way we know if we have to wake up the car or not
-        } else {
-          this.setDriver('GV18',
-              response.state.toLowerCase() === 'online', false);
-        }
 
         this.setDriver('GV19', timestamp, false);
         // GV20 is not updated. This is the id we use to find this vehicle.
