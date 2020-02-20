@@ -388,7 +388,7 @@ module.exports = function(Polyglot) {
         // Current temperature inside the vehicle.
         this.setDriver('CLITEMP', this.fromStdTemp(climateState.inside_temp), true, false, this.temperature_uom_index);
         // Status of climate conditioning.
-        this.setDriver('CLIEMD', climateState.is_climate_on, false);
+        this.setDriver('CLIEMD', climateState.is_auto_conditioning_on, false);
 
         this.setDriver('ERR', '0', false);
         this.reportDrivers(); // Reports only changed values
