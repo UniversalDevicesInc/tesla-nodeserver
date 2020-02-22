@@ -105,6 +105,8 @@ ST-C-GV2-NAME = Passenger Seat heat level
 ST-C-GV3-NAME = Rear Left Seat heat level
 ST-C-GV4-NAME = Rear Center Seat heat level
 ST-C-GV5-NAME = Rear Right Seat heat level
+ST-C-GV6-NAME = Third Row Left Seat heat level
+ST-C-GV7-NAME = Third Row Right Seat heat level
 
 ST-C-GV12-NAME = Drivers side temp
 ST-C-GV13-NAME = Passengers side temp
@@ -126,6 +128,8 @@ CMD-C-HEATED_SEAT_LEVEL_PASSENGER-NAME = Passenger's heated seat level
 CMD-C-HEATED_SEAT_LEVEL_REAR_LEFT-NAME = Rear left heated seat level
 CMD-C-HEATED_SEAT_LEVEL_REAR_CENTER-NAME = Rear center heated seat level
 CMD-C-HEATED_SEAT_LEVEL_REAR_RIGHT-NAME = Rear right heated seat level
+CMD-C-HEATED_SEAT_LEVEL_THIRD_ROW_LEFT-NAME = Third row left heated seat level
+CMD-C-HEATED_SEAT_LEVEL_THIRD_ROW_RIGHT-NAME = Third row right heated seat level
 CMD-C-MAX_DEFROST_ON-NAME = Max defrost on
 CMD-C-MAX_DEFROST_OFF-NAME = Max defrost off
 CMD-C-CLIMATE_TEMP_SETTING_DRIVER-NAME = Driver's climate control temp

@@ -46,6 +46,8 @@ module.exports = function(Polyglot) {
         HEATED_SEAT_LEVEL_REAR_LEFT: this.onHeatedSeatRearLeft, // set the level on the heated seat for the rear left seat
         HEATED_SEAT_LEVEL_REAR_CENTER: this.onHeatedSeatRearCenter, // set the level on the heated seat for the rear center seat
         HEATED_SEAT_LEVEL_REAR_RIGHT: this.onHeatedSeatRearRight, // set the level on the heated seat for the rear right seat
+        HEATED_SEAT_LEVEL_THIRD_ROW_LEFT: this.onHeatedSeatThirdRowLeft, // set the level on the heated seat for the third row left seat
+        HEATED_SEAT_LEVEL_THIRD_ROW_RIGHT: this.onHeatedSeatThirdRowRight, // set the level on the heated seat for the third row right seat
         MAX_DEFROST_ON: this.onMaxDefrostOn, // turns the climate control to max defrost
         MAX_DEFROST_OFF: this.onMaxDefrostOff, // turns the climate control to the previous setting
         CLIMATE_TEMP_SETTING_DRIVER: this.onSetClimateTempDriver, // sets the climate control temp for the drivers side
@@ -63,6 +65,8 @@ module.exports = function(Polyglot) {
         GV3: { value: '', uom: 25}, // Rear left seat heat
         GV4: { value: '', uom: 25}, // Rear center seat heat
         GV5: { value: '', uom: 25}, // Rear right seat heat
+        GV6: { value: '', uom: 25}, // Third row left seat heat
+        GV7: { value: '', uom: 25}, // Third row right seat heat
 //        GV12:  { value: '', uom: 4 }, // Drivers side temp
 //        GV13:  { value: '', uom: 4 }, // Passenger side temp
 //      GV14:  { value: '', uom: 4 }, // Exterior temp
@@ -177,6 +181,26 @@ module.exports = function(Polyglot) {
           message.value ? message.value : 'No value');
 
       await this.tesla.cmdHeatedSeats(id, '5', message.value);
+      await this.queryNow();
+    }
+
+    async onHeatedSeatThirdRowLeft(message) {
+      const id = this.vehicleId();
+
+      logger.info('SET THIRD_ROW_LEFT HEATED SEAT (%s): %s', this.address,
+          message.value ? message.value : 'No value');
+
+      await this.tesla.cmdHeatedSeats(id, '7', message.value);
+      await this.queryNow();
+    }
+
+    async onHeatedSeatThirdRowRight(message) {
+      const id = this.vehicleId();
+
+      logger.info('SET THIRD_ROW_RIGHT HEATED SEAT (%s): %s', this.address,
+          message.value ? message.value : 'No value');
+
+      await this.tesla.cmdHeatedSeats(id, '8', message.value);
       await this.queryNow();
     }
 
@@ -354,9 +378,11 @@ module.exports = function(Polyglot) {
   
         this.setDriverValues('GV1', climateState.seat_heater_left, true);
         this.setDriverValues('GV2', climateState.seat_heater_right, true);
-        this.setDriverValues('GV3', climateState.lkjlkj, true);
+        this.setDriverValues('GV3', climateState.seat_heater_rear_left, true);
         this.setDriverValues('GV4', climateState.seat_heater_rear_center, true);
         this.setDriverValues('GV5', climateState.seat_heater_rear_right, true);
+        this.setDriverValues('GV6', climateState.seat_heater_third_row_left, true);
+        this.setDriverValues('GV7', climateState.seat_heater_third_row_right, true);
 
         // Drivers side temp
         if (climateState.driver_temp_setting) {

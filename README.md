@@ -41,6 +41,6 @@ The use case intended for more real time short term polling with the ability to 
 
 You can adjust in Polyglot the short and long poll values which represents how frequently data is refreshed, in seconds.
 
-The configuration setting "Enable Security Commands" allows you to limit security sensitive controls like your vehicle's doors, frunk, trunk, or windows.  Values for the configuration are "true/false".  Enter the value "true" to enable all the security commands.  Individual commands may be enabled with a comma separated list of values from "lock", "sunroof", "charge_port", "windows", "trunk", "frunk", "sentry", and "software_update".
+The configuration setting "Enable Security Commands" allows you to limit security sensitive controls like your vehicle's doors, frunk, trunk, or windows.  Values for the configuration are "true/false".  Enter the value "true" to enable all the security commands.  Individual commands may be enabled with a comma separated list of values from "lock", "sunroof", "charge\_port", "windows", "trunk", "frunk", "sentry", and "software\_update".
 
 The configuration setting *Custom Logging Level* may have the values "error", "warn", "info", "verbose", "debug".
