@@ -376,35 +376,35 @@ module.exports = function(Polyglot) {
   
         this.vehicleUOM(vehicleData.response.gui_settings);
   
-        this.setDriverValues('GV1', climateState.seat_heater_left, true);
-        this.setDriverValues('GV2', climateState.seat_heater_right, true);
-        this.setDriverValues('GV3', climateState.seat_heater_rear_left, true);
-        this.setDriverValues('GV4', climateState.seat_heater_rear_center, true);
-        this.setDriverValues('GV5', climateState.seat_heater_rear_right, true);
-        this.setDriverValues('GV6', climateState.seat_heater_third_row_left, true);
-        this.setDriverValues('GV7', climateState.seat_heater_third_row_right, true);
+        this.setDriverValues('GV1', climateState.seat_heater_left, false);
+        this.setDriverValues('GV2', climateState.seat_heater_right, false);
+        this.setDriverValues('GV3', climateState.seat_heater_rear_left, false);
+        this.setDriverValues('GV4', climateState.seat_heater_rear_center, false);
+        this.setDriverValues('GV5', climateState.seat_heater_rear_right, false);
+        this.setDriverValues('GV6', climateState.seat_heater_third_row_left, false);
+        this.setDriverValues('GV7', climateState.seat_heater_third_row_right, false);
 
         // Drivers side temp
         if (climateState.driver_temp_setting) {
-          this.setDriver('GV12', this.fromStdTemp(climateState.driver_temp_setting), true, false, this.temperature_uom_index);
+          this.setDriver('GV12', this.fromStdTemp(climateState.driver_temp_setting), false, false, this.temperature_uom_index);
         }
 
         // Passengers side temp
         if (climateState.passenger_temp_setting) {
-          this.setDriver('GV13', this.fromStdTemp(climateState.passenger_temp_setting), true, false, this.temperature_uom_index);
+          this.setDriver('GV13', this.fromStdTemp(climateState.passenger_temp_setting), false, false, this.temperature_uom_index);
         }
 
         // Exterior temp
         if (climateState.outside_temp) {
-          this.setDriver('GV14', this.fromStdTemp(climateState.outside_temp), true, false, this.temperature_uom_index);
+          this.setDriver('GV14', this.fromStdTemp(climateState.outside_temp), false, false, this.temperature_uom_index);
         }
 
         logger.debug("defrost_mode %s, is_front_defroster_on %s, is_auto_conditioning_on %s", climateState.defrost_mode, climateState.is_front_defroster_on, climateState.is_auto_conditioning_on);
         // Max Defrost
         if (climateState.defrost_mode == 2 && climateState.is_front_defroster_on && climateState.is_auto_conditioning_on) {
-          this.setDriver('GV15', true, true);
+          this.setDriver('GV15', true, false);
         } else {
-          this.setDriver('GV15', false, true);
+          this.setDriver('GV15', false, false);
         }
 
         this.setDriver('GV19', timestamp, false);
@@ -412,7 +412,7 @@ module.exports = function(Polyglot) {
         // It must be already correct.
         
         // Current temperature inside the vehicle.
-        this.setDriver('CLITEMP', this.fromStdTemp(climateState.inside_temp), true, false, this.temperature_uom_index);
+        this.setDriver('CLITEMP', this.fromStdTemp(climateState.inside_temp), false, false, this.temperature_uom_index);
         // Status of climate conditioning.
         this.setDriver('CLIEMD', climateState.is_auto_conditioning_on, false);
 
