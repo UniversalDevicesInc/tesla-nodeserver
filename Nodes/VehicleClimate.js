@@ -337,7 +337,7 @@ module.exports = function(Polyglot) {
       if (typeof value != 'undefined') {
         this.setDriver(name, value, report);
       } else {
-        this.setDriver(name, '', false);
+        this.setDriver(name, 10, false);
       }
     }
 
@@ -354,7 +354,7 @@ module.exports = function(Polyglot) {
   
         this.setDriverValues('GV1', climateState.seat_heater_left, true);
         this.setDriverValues('GV2', climateState.seat_heater_right, true);
-        this.setDriverValues('GV3', climateState.seat_heater_rear_left, true);
+        this.setDriverValues('GV3', climateState.lkjlkj, true);
         this.setDriverValues('GV4', climateState.seat_heater_rear_center, true);
         this.setDriverValues('GV5', climateState.seat_heater_rear_right, true);
 
