@@ -106,6 +106,8 @@
       <st id="GV3" editor="I_HEATED_SEAT_LEVEL_RANGE" hide="T"/> <!-- Rear Left seat heat level -->
       <st id="GV4" editor="I_HEATED_SEAT_LEVEL_RANGE" hide="T"/> <!-- Rear Center seat heat level -->
       <st id="GV5" editor="I_HEATED_SEAT_LEVEL_RANGE" hide="T"/> <!-- Rear Right seat heat level -->
+      <st id="GV6" editor="I_HEATED_SEAT_LEVEL_RANGE" hide="T"/> <!-- Third Row Left seat heat level -->
+      <st id="GV7" editor="I_HEATED_SEAT_LEVEL_RANGE" hide="T"/> <!-- Third Row Right seat heat level -->
 
       <st id="GV12" editor="I_CLIMATE_TEMP_RANGE" hide="T"/> <!-- Driver side temp -->
       <st id="GV13" editor="I_CLIMATE_TEMP_RANGE" hide="T"/> <!-- Passenger side temp -->

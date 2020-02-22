@@ -50,7 +50,7 @@
     <range uom="51" subset="0-100" />
   </editor>
   <editor id="I_HEATED_SEAT_LEVEL_RANGE">
-    <!-- 0 is off 4 is full heat -->
+    <!-- 0 is off 3 is full heat, 10 is unavailable -->
     <range uom="25" subset="0-3,10" nls="EN_I_SEAT_HEATER_LEVEL" />
   </editor>
   <editor id="I_CHARGING_STATE">
