@@ -212,7 +212,7 @@ module.exports = function(Polyglot) {
                 nodeName,
                 id); // We save the ID in GV20 for eventual API calls
 
-          resultAddNode = await this.polyInterface.addNode(newNode);
+          resultAddNode = await this.polyInterface.addNode(newWakeModeNode);
 
           logger.info('VehicleWakeMode added: %s', resultAddNode);
           this.polyInterface.addNoticeTemp(
