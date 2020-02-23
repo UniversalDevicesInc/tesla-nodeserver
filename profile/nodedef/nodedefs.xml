@@ -29,8 +29,6 @@
       <st id="CV" editor="I_VOLT"/> <!-- Charger voltage -->
       <st id="CPW" editor="I_WATT"/> <!-- Charger power -->
       <st id="GV10" editor="I_ODO"/> <!-- Odometer -->
-      <st id="AWAKE" editor="I_VEHICLE_STATE"/> <!-- Vehicle State -->
-      <st id="GV18" editor="BOOLEAN"/> <!-- Wake mode? -->
       <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
       <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
       <st id="ERR" editor="BOOLEAN" hide="T" />
@@ -174,6 +172,25 @@
       <accepts>
         <cmd id="DON"/> <!-- Auto Conditioning On -->
         <cmd id="DOF"/> <!-- Auto Conditioning Off -->
+        <cmd id="QUERY_NOW"/>
+      </accepts>
+    </cmds>
+  </nodedef>
+
+  <!-- Vehicle Wake Mode info -->
+  <nodedef id="VEHICLEWAKEMODE" nls="WM">
+    <sts>
+      <st id="ST" editor="ONOFF"/>
+      <st id="AWAKE" editor="I_VEHICLE_STATE"/> <!-- Vehicle State -->
+      <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
+      <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
+      <st id="ERR" editor="BOOLEAN" hide="T" />
+    </sts>
+    <cmds>
+      <sends/>
+      <accepts>
+        <cmd id="DON"/> <!-- Wake mode On -->
+        <cmd id="DOF"/> <!-- Wake mode Off -->
         <cmd id="QUERY_NOW"/>
       </accepts>
     </cmds>

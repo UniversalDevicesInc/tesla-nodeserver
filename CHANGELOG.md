@@ -1,5 +1,8 @@
 # Change Log
 
+V2.3.0 (2020-02-23)
+* Split out the wake mode into a dedicated node
+
 V2.2.1 (2020-02-22)
 * Fixed configuration documentation for underscores
 * Added cmd HEATED\_SEAT\_LEVEL\_THIRD\_ROW\_LEFT to set the level on the heated seat for the third row left seat

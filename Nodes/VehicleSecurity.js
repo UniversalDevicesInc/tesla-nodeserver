@@ -298,7 +298,6 @@ module.exports = function(Polyglot) {
         }
       }
       if (vehicleData === 408) {
-        this.setDriver('GV18', false, true); // car is offline
         logger.info('API ERROR CAUGHT: %s', vehicleData);
         return 0;
       }

@@ -14,8 +14,6 @@ ST-V-GV5-NAME = Charging state
 ST-V-GV6-NAME = Fast charger present
 ST-V-GV7-NAME = Charge limit
 ST-V-GV10-NAME = Odometer
-ST-V-AWAKE-NAME = Vehicle State
-ST-V-GV18-NAME = Wake Mode
 ST-V-GV19-NAME = Timestamp
 ST-V-GV20-NAME = Car ID
 ST-V-CC-NAME = Charger actual current
@@ -26,8 +24,6 @@ ST-V-ERR-NAME = Error
 
 CMD-V-DON-NAME = Charge On
 CMD-V-DOF-NAME = Charge Off
-CMD-V-WAKE-NAME = Wake
-CMD-V-LETSLEEP-NAME = Let vehicle sleep
 CMD-V-HORN-NAME = Horn
 CMD-V-FLASH-NAME = Flash lights
 CMD-V-CHARGE_SET_TO-NAME = Charge limit
@@ -56,6 +52,7 @@ EN_I_CHARGE_PORT_DOOR-1 = Open
 EN_I_VEHICLE_STATE-0 = Asleep
 EN_I_VEHICLE_STATE-1 = Online
 EN_I_VEHICLE_STATE-2 = Offline
+EN_I_VEHICLE_STATE-3 = Not Responding
 
 EN_I_SEAT_HEATER_LEVEL-0 = Off
 EN_I_SEAT_HEATER_LEVEL-1 = Low 
@@ -79,7 +76,6 @@ ST-S-GV8-NAME = Locked
 ST-S-GV9-NAME = % Sunroof
 ST-S-GV11-NAME = Sentry mode on
 ST-S-GV17-NAME = Software Update Status
-ST-S-GV18-NAME = Vehicle Online
 ST-S-GV19-NAME = Timestamp
 ST-S-GV20-NAME = Car ID
 ST-S-ERR-NAME = Error
@@ -112,7 +108,6 @@ ST-C-GV12-NAME = Drivers side temp
 ST-C-GV13-NAME = Passengers side temp
 ST-C-GV14-NAME = Outside temp
 ST-C-GV15-NAME = Max Defrost
-ST-C-GV18-NAME = Vehicle Online
 ST-C-GV19-NAME = Timestamp
 ST-C-GV20-NAME = Car ID
 ST-C-ERR-NAME = Error
@@ -144,4 +139,16 @@ ST-AC-GV20-NAME = Car ID
 ST-AC-ERR-NAME = Error
 
 CMD-AC-QUERY_NOW-NAME = Query
+
+ND-VEHICLEWAKEMODE-NAME = Vehicle Wake Mode
+ND-VEHICLEWAKEMODE-ICON = Output
+ST-WM-ST-NAME = Status
+ST-WM-AWAKE-NAME = Vehicle State
+ST-WM-GV19-NAME = Timestamp
+ST-WM-GV20-NAME = Car ID
+ST-WM-ERR-NAME = Error
+
+CMD-WM-QUERY_NOW-NAME = Query
+CMD-V-DON-NAME = Wake
+CMD-V-DOF-NAME = Let vehicle sleep
 
