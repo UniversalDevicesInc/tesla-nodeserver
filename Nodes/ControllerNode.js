@@ -97,16 +97,24 @@ module.exports = function(Polyglot) {
 
     updateOtherNodes(vehicleNodeAddress, vehicleId, vehicleMessage) {
       logger.debug('ControllerNodes.updateOtherNodes(%s)', vehicleNodeAddress);
-      let tmpNode = this.polyInterface.getNode(vehicleNodeAddress);
-      tmpNode.pushedData(vehicleId, vehicleMessage);
+      let tmpNode = this.polyInterface.getNode("cm" + vehicleNodeAddress);
+      logger.debug('ControllerNodes.updateOtherNodes(%s)getnode', tmpNode);
+      if (tmpNode) {
+        tmpNode.pushedData(vehicleId, vehicleMessage);
+        logger.debug('ControllerNodes.updateOtherNodes(%s)pushdata', tmpNode);
+      }
       tmpNode = this.polyInterface.getNode("s" + vehicleNodeAddress);
-      logger.debug('ControllerNodes.updateOtherNodes(%s)getnode', vehicleNodeAddress);
-      tmpNode.pushedData(vehicleId, vehicleMessage);
-      logger.debug('ControllerNodes.updateOtherNodes(%s)pushdata', vehicleNodeAddress);
+      if (tmpNode) {
+        tmpNode.pushedData(vehicleId, vehicleMessage);
+      }
       tmpNode = this.polyInterface.getNode("c" + vehicleNodeAddress);
-      tmpNode.pushedData(vehicleId, vehicleMessage);
+      if (tmpNode) {
+        tmpNode.pushedData(vehicleId, vehicleMessage);
+      }
       tmpNode = this.polyInterface.getNode("ac" + vehicleNodeAddress);
-      tmpNode.pushedData(vehicleId, vehicleMessage);
+      if (tmpNode) {
+        tmpNode.pushedData(vehicleId, vehicleMessage);
+      }
     }
 
     // pass the Tesla API vehicle object
@@ -121,12 +129,13 @@ module.exports = function(Polyglot) {
 
       if (!node) {
         try {
+          let nodeAddress =  "cm" + deviceAddress;
           logger.info('Adding vehicle node %s: %s',
             deviceAddress, vehicle.display_name);
           const newVehicle = new Vehicle(
               this.polyInterface,
               this.address, // primary
-              deviceAddress,
+              nodeAddress,
               vehicle.display_name,
               id); // We save the ID in GV20 for eventual API calls
 
@@ -135,7 +144,7 @@ module.exports = function(Polyglot) {
 
           logger.info('Vehicle added: %s', result);
           this.polyInterface.addNoticeTemp(
-            'newVehicle-' + deviceAddress,
+            'newVehicle-' + nodeAddress,
             'New node created: ' + vehicle.display_name,
             5
           );
@@ -182,7 +191,7 @@ module.exports = function(Polyglot) {
           );
 
           let nodeName = vehicle.display_name + " Auto Conditioning";
-          let nodeAddress =  "ac" + deviceAddress;
+          nodeAddress =  "ac" + deviceAddress;
           logger.info('Adding VehicleConditioning node %s: %s',
               nodeAddress, nodeName);
           let newNode = new VehicleConditioning(
@@ -202,7 +211,7 @@ module.exports = function(Polyglot) {
           );
 
           nodeName = vehicle.display_name + " Wake Mode";
-          nodeAddress =  "wm" + deviceAddress;
+          nodeAddress =  deviceAddress;
           logger.info('Adding VehicleWakeMode node %s: %s',
               nodeAddress, nodeName);
           const newWakeModeNode = new VehicleWakeMode(
