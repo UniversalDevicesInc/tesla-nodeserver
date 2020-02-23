@@ -149,6 +149,6 @@ ST-WM-GV20-NAME = Car ID
 ST-WM-ERR-NAME = Error
 
 CMD-WM-QUERY_NOW-NAME = Query
-CMD-V-DON-NAME = Wake
-CMD-V-DOF-NAME = Let vehicle sleep
+CMD-WM-DON-NAME = Wake
+CMD-WM-DOF-NAME = Let vehicle sleep
 

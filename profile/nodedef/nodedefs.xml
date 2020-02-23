@@ -49,8 +49,6 @@
           <p id="" editor="I_PERCENT" init="GV7" optional="F"/>
         </cmd>
         <cmd id="QUERY_NOW"/>
-        <cmd id="WAKE"/>
-        <cmd id="LETSLEEP"/>
       </accepts>
     </cmds>
   </nodedef>
