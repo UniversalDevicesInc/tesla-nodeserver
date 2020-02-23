@@ -97,15 +97,15 @@ module.exports = function(Polyglot) {
 
     updateOtherNodes(vehicleNodeAddress, vehicleId, vehicleMessage) {
       logger.debug('ControllerNodes.updateOtherNodes(%s)', vehicleNodeAddress);
-      let tmpNode = this.polyInterface.getNode("s" + vehicleNodeAddress);
+      let tmpNode = this.polyInterface.getNode(vehicleNodeAddress);
+      tmpNode.pushedData(vehicleId, vehicleMessage);
+      tmpNode = this.polyInterface.getNode("s" + vehicleNodeAddress);
       logger.debug('ControllerNodes.updateOtherNodes(%s)getnode', vehicleNodeAddress);
       tmpNode.pushedData(vehicleId, vehicleMessage);
       logger.debug('ControllerNodes.updateOtherNodes(%s)pushdata', vehicleNodeAddress);
       tmpNode = this.polyInterface.getNode("c" + vehicleNodeAddress);
       tmpNode.pushedData(vehicleId, vehicleMessage);
       tmpNode = this.polyInterface.getNode("ac" + vehicleNodeAddress);
-      tmpNode.pushedData(vehicleId, vehicleMessage);
-      tmpNode = this.polyInterface.getNode("wm" + vehicleNodeAddress);
       tmpNode.pushedData(vehicleId, vehicleMessage);
     }
 
