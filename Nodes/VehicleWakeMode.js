@@ -44,8 +44,7 @@ module.exports = function(Polyglot) {
       // Commands that this node can handle.
       // Should match the 'accepts' section of the nodedef.
       this.commands = {
-        DON: this.onWake, // monitor on the short poll - may keep the car awake.
-        DOF: this.onLetSleep, // stop monitoring and let the car sleep
+        WAKE_MODE: this.onWake, // monitor on the short poll - may keep the car awake.
         QUERY_NOW: this.queryNow, // Force a query now to update the status
       };
 
@@ -73,17 +72,20 @@ module.exports = function(Polyglot) {
       return gv20 ? gv20.value : null;
     }
 
-    async onWake() {
+    async onWake(message) {
       const id = this.vehicleId();
-      logger.info('WAKE (%s)', this.address);
-      this.let_sleep = false;
-      this.last_wake_time = this.nowEpochToTheSecond();
-      await this.tesla.wakeUp(id);
-    }
+      logger.info('WAKE (%s) %s', this.address, message.value);
 
-    async onLetSleep() {
-      this.setLetSleep();
-      this.reportDrivers(); // Reports only changed values
+      const decodeValue = message.value === '1' ? true : false;
+
+      if (decodeValue) {
+        this.let_sleep = false;
+        this.last_wake_time = this.nowEpochToTheSecond();
+        await this.tesla.wakeUp(id);
+      } else {
+        this.setLetSleep();
+        this.reportDrivers(); // Reports only changed values
+      }
     }
     
     nowEpochToTheSecond() {
@@ -242,7 +244,7 @@ module.exports = function(Polyglot) {
         if (this.let_sleep) {
           this.setDriver('ST', 0); // wake mode off
         } else {
-          this.setDriver('ST', 100);  // wake mode on
+          this.setDriver('ST', 1);  // wake mode on
         }
 
         const timestamp = this.nowEpochToTheSecond().toString();

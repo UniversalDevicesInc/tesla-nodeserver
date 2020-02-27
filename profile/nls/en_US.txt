@@ -65,6 +65,9 @@ EN_I_SECURITY_ENABLED-1 = Commands Enabled
 
 EN_I_SUNROOF-101 = Unavailable
 
+EN_I_OFFON-0 = Off
+EN_I_OFFON-1 = On
+
 ND-VEHSEC-NAME = Vehicle Security
 ND-VEHSEC-ICON = DoorLock
 ST-S-GV1-NAME = Charge port door
@@ -149,6 +152,5 @@ ST-WM-GV20-NAME = Car ID
 ST-WM-ERR-NAME = Error
 
 CMD-WM-QUERY_NOW-NAME = Query
-CMD-WM-DON-NAME = Wake
-CMD-WM-DOF-NAME = Let vehicle sleep
+CMD-WM-WAKE_MODE-NAME = Wake Mode
 

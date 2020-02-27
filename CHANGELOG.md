@@ -2,6 +2,7 @@
 
 V2.3.0 (2020-02-23)
 * Split out the wake mode into a dedicated node
+* Optional seat heaters now show "Unavailable" if not available.
 
 V2.2.1 (2020-02-22)
 * Fixed configuration documentation for underscores

@@ -187,8 +187,9 @@
     <cmds>
       <sends/>
       <accepts>
-        <cmd id="DON"/> <!-- Wake mode On -->
-        <cmd id="DOF"/> <!-- Wake mode Off -->
+        <cmd id="WAKE_MODE">
+          <p id="" editor="I_WAKE_MODE" init="ST"/>
+        </cmd>
         <cmd id="QUERY_NOW"/>
       </accepts>
     </cmds>
