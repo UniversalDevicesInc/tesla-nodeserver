@@ -178,7 +178,7 @@
   <!-- Vehicle Wake Mode info -->
   <nodedef id="VEHICLEWAKEMODE" nls="WM">
     <sts>
-      <st id="ST" editor="ONOFF"/>
+      <st id="ST" editor="I_WAKE_MODE"/>
       <st id="AWAKE" editor="I_VEHICLE_STATE"/> <!-- Vehicle State -->
       <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
       <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
