@@ -75,21 +75,21 @@ module.exports = function(Polyglot) {
     }
 
     async onDON(message) {
-      this.setWakeMode(true);
+      await this.setWakeMode(true);
     }
 
     async onDOF(message) {
-      this.setWakeMode(false);
+      await this.setWakeMode(false);
     }
 
     async onWake(message) {
       logger.info('WAKE (%s) %s', this.address, message.value);
 
       const decodeValue = message.value === '1' ? true : false;
-      this.setWakeMode(decodeValue);
+      await this.setWakeMode(decodeValue);
     }
 
-    setWakeMode(decodeValue) {
+    async setWakeMode(decodeValue) {
       if (decodeValue) {
         const id = this.vehicleId();
         this.let_sleep = false;
