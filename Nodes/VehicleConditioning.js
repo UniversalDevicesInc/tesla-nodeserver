@@ -49,7 +49,7 @@ module.exports = function(Polyglot) {
       // Should match the 'sts' section of the nodedef.
       // Must all be strings
       this.drivers = {
-          ST: { value: '', uom: 78 }, // Conditioning status
+          ST: { value: '', uom: 25 }, // Conditioning status
         GV19: { value: '', uom: 56 }, // Last updated unix timestamp
         GV20: { value: id, uom: 56 }, // ID used for the Tesla API
         ERR: { value: '', uom: 2 } // In error?
@@ -159,7 +159,7 @@ module.exports = function(Polyglot) {
       // Gather basic vehicle climate data
       if (climateState) {
         logger.debug("is_auto_conditioning_on %s", climateState.is_auto_conditioning_on);
-        this.setDriver('ST', climateState.is_auto_conditioning_on ? 100 : 0, false);
+        this.setDriver('ST', climateState.is_auto_conditioning_on ? 255 : 0, false);
 
         const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
         this.setDriver('GV19', timestamp, false);
