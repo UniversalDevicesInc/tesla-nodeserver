@@ -94,6 +94,7 @@ module.exports = function(Polyglot) {
         const id = this.vehicleId();
         this.let_sleep = false;
         this.last_wake_time = this.nowEpochToTheSecond();
+        this.setDriver('ST', 255);  // wake mode on
         await this.tesla.wakeUp(id);
       } else {
         this.setLetSleep();
