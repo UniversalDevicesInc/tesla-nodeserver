@@ -45,6 +45,8 @@ module.exports = function(Polyglot) {
       // Should match the 'accepts' section of the nodedef.
       this.commands = {
         WAKE_MODE: this.onWake, // monitor on the short poll - may keep the car awake.
+        DON: this.onDON, // command to turn on
+        DOF: this.onDOF, // command to turn off
         QUERY_NOW: this.queryNow, // Force a query now to update the status
       };
 
@@ -54,7 +56,7 @@ module.exports = function(Polyglot) {
       // Should match the 'sts' section of the nodedef.
       // Must all be strings
       this.drivers = {
-          ST: { value: '', uom: 78 }, // wake mode polling status
+          ST: { value: '', uom: 25 }, // wake mode polling status
        AWAKE: { value: '', uom: 25 }, // vehicle status as reported by vehicle
         GV19: { value: '', uom: 56 }, // Last updated unix timestamp
         GV20: { value: id, uom: 56 }, // ID used for the Tesla API
@@ -72,13 +74,24 @@ module.exports = function(Polyglot) {
       return gv20 ? gv20.value : null;
     }
 
+    async onDON(message) {
+      this.setWakeMode(true);
+    }
+
+    async onDOF(message) {
+      this.setWakeMode(false);
+    }
+
     async onWake(message) {
-      const id = this.vehicleId();
       logger.info('WAKE (%s) %s', this.address, message.value);
 
       const decodeValue = message.value === '1' ? true : false;
+      this.setWakeMode(decodeValue);
+    }
 
+    setWakeMode(decodeValue) {
       if (decodeValue) {
+        const id = this.vehicleId();
         this.let_sleep = false;
         this.last_wake_time = this.nowEpochToTheSecond();
         await this.tesla.wakeUp(id);
