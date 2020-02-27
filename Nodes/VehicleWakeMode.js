@@ -85,7 +85,7 @@ module.exports = function(Polyglot) {
     async onWake(message) {
       logger.info('WAKE (%s) %s', this.address, message.value);
 
-      const decodeValue = message.value === '1' ? true : false;
+      const decodeValue = message.value === '255' ? true : false;
       await this.setWakeMode(decodeValue);
     }
 
@@ -257,7 +257,7 @@ module.exports = function(Polyglot) {
         if (this.let_sleep) {
           this.setDriver('ST', 0); // wake mode off
         } else {
-          this.setDriver('ST', 1);  // wake mode on
+          this.setDriver('ST', 255);  // wake mode on
         }
 
         const timestamp = this.nowEpochToTheSecond().toString();

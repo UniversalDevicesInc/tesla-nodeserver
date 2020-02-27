@@ -66,7 +66,7 @@ EN_I_SECURITY_ENABLED-1 = Commands Enabled
 EN_I_SUNROOF-101 = Unavailable
 
 EN_I_OFFON-0 = Off
-EN_I_OFFON-1 = On
+EN_I_OFFON-255 = On
 
 ND-VEHSEC-NAME = Vehicle Security
 ND-VEHSEC-ICON = DoorLock

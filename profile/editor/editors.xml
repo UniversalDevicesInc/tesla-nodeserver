@@ -7,7 +7,7 @@
   </editor>
   <editor id="I_WAKE_MODE">
     <!-- 0 is off, 1 is on -->
-    <range uom="25" subset="0-1" nls="EN_I_OFFON" />
+    <range uom="25" subset="0,255" nls="EN_I_OFFON" />
   </editor>
   <editor id="I_AMP">
     <!-- 1 is Ampere -->
