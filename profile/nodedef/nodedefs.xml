@@ -108,7 +108,7 @@
       <st id="GV12" editor="I_CLIMATE_TEMP_RANGE" hide="T"/> <!-- Driver side temp -->
       <st id="GV13" editor="I_CLIMATE_TEMP_RANGE" hide="T"/> <!-- Passenger side temp -->
       <st id="GV14" editor="I_TEMP_DEG"/> <!-- Exterior temp -->
-      <st id="CLITEMP" editor="I_TEMP_DEG"/> <!-- Interior temperature -->
+      <st id="ST" editor="I_TEMP_DEG"/> <!-- Interior temperature -->
       <st id="CLIEMD" editor="BOOLEAN"/> <!-- Climate Conditioning On -->
       <st id="GV15" editor="BOOLEAN"/> <!-- Max Defrost -->
       <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->

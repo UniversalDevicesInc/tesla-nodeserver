@@ -114,7 +114,7 @@ ST-C-GV15-NAME = Max Defrost
 ST-C-GV19-NAME = Timestamp
 ST-C-GV20-NAME = Car ID
 ST-C-ERR-NAME = Error
-ST-C-CLITEMP-NAME = Interior temperature
+ST-C-ST-NAME = Interior temperature
 ST-C-CLIEMD-NAME = Climate conditioning on
 
 

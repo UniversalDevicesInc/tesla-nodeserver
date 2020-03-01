@@ -95,7 +95,7 @@ module.exports = function(Polyglot) {
       this.drivers.GV12 = { value: '', uom: this.temperature_uom_index };
       this.drivers.GV13 = { value: '', uom: this.temperature_uom_index };
       this.drivers.GV14 = { value: '', uom: this.temperature_uom_index };
-      this.drivers.CLITEMP = { value: '', uom: this.temperature_uom_index };
+      this.drivers.ST = { value: '', uom: this.temperature_uom_index };
       
       logger.debug('VehicleClimate.initializeUOM done');
     }
@@ -411,7 +411,7 @@ module.exports = function(Polyglot) {
         // It must be already correct.
         
         // Current temperature inside the vehicle.
-        this.setDriver('CLITEMP', this.fromStdTemp(climateState.inside_temp), false, false, this.temperature_uom_index);
+        this.setDriver('ST', this.fromStdTemp(climateState.inside_temp), false, false, this.temperature_uom_index);
         // Status of climate conditioning.
         this.setDriver('CLIEMD', climateState.is_auto_conditioning_on, false);
 
