@@ -61,7 +61,7 @@
       <st id="GV3" editor="I_OPEN_STATUS"/> <!-- Frunk Status -->
       <st id="GV4" editor="I_OPEN_STATUS"/> <!-- Trunk Status -->
       <st id="GV5" editor="I_SECURITY_ENABLED"/> <!-- Security Command Status -->
-      <st id="GV8" editor="BOOLEAN"/> <!-- Locked -->
+      <st id="ST" editor="I_LOCKED_STATUS"/> <!-- Locked -->
       <st id="GV9" editor="I_SUNROOF"/> <!-- Sunroof opened -->
       <st id="GV11" editor="I_SENTRY_MODE" hide="T"/> <!-- Sentry Mode -->
       <st id="GV17" editor="I_SOFTWARE_UPDATE_STATUS"/> <!-- Software update availability status -->
@@ -74,8 +74,8 @@
       <sends/>
       <accepts>
         <cmd id="QUERY_NOW"/>
-        <cmd id="LOCK"/>
-        <cmd id="UNLOCK"/>
+        <cmd id="DON"/>
+        <cmd id="DOF"/>
         <cmd id="SUNROOF_OPEN"/>
         <cmd id="SUNROOF_CLOSE"/>
         <cmd id="WINDOWS_VENT"/>

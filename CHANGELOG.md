@@ -2,8 +2,10 @@
 
 V2.3.0 (2020-02-23)
 * Split out the wake mode into a dedicated node
-* Optional seat heaters now show "Unavailable" if not available.
-* Replaced CLITMP with ST in the Climate node, so the status of the node is now the internal temperature of the vehicle.
+* Optional seat heaters now show "Unavailable" if not available
+* Replaced CLITMP with ST in the Climate node, so the status of the node is now the internal temperature of the vehicle
+* The Security node ST driver is now used instead of GV8 to represent whether the vehicle is locked or not
+* The Security node now responds to DON/DOF commands for Lock and Unlock of the vehicle - if enabled
 
 V2.2.1 (2020-02-22)
 * Fixed configuration documentation for underscores

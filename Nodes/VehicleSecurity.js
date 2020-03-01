@@ -42,8 +42,8 @@ module.exports = function(Polyglot) {
       // Should match the 'accepts' section of the nodedef.
       this.commands = {
         QUERY_NOW: this.queryNow, // force a query now to update the status.
-        LOCK: this.onLock,
-        UNLOCK: this.onUnlock,
+        DON: this.onLock,
+        DOF: this.onUnlock,
         SUNROOF_OPEN: this.onSunroofOpen,
         SUNROOF_CLOSE: this.onSunroofClose,
         WINDOWS_VENT: this.onWindowsVent, // vent all the windows
@@ -66,7 +66,7 @@ module.exports = function(Polyglot) {
         GV3: { value: '', uom: 25 }, // Frunk status
         GV4: { value: '', uom: 25 }, // Trunk Status
         GV5: { value: '', uom: 25 }, // Security Command Status
-        GV8: { value: '', uom: 2 }, // Locked?
+        ST: { value: '', uom: 25 }, // Locked?
         GV9: { value: '', uom: 51 }, // Sunroof open%
         GV11:  { value: '', uom: 25 }, // Sentry mode on
         GV17: { value: '', uom: 25 }, // Software Update Availability Status
@@ -336,7 +336,7 @@ module.exports = function(Polyglot) {
         this.setDriver('GV3', vehicleState.ft === 0 ? 0 : 1, false);
         this.setDriver('GV4', vehicleState.rt === 0 ? 0 : 1, false);
 
-        this.setDriver('GV8', vehicleState.locked, false);
+        this.setDriver('ST', vehicleState.locked ? 1 : 0, false);
 
         logger.debug('vehicleState.sun_roof_percent_open %s', vehicleState.sun_roof_percent_open);
         if (typeof vehicleState.sun_roof_percent_open != 'undefined') {
