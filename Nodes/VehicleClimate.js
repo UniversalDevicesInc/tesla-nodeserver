@@ -39,8 +39,6 @@ module.exports = function(Polyglot) {
       // Should match the 'accepts' section of the nodedef.
       this.commands = {
         QUERY_NOW: this.queryNow, // Force a query now to update the status
-        CLIMATE_OFF: this.onClimateOff, // stop pre-heat or pre-cool of the car
-        CLIMATE_ON: this.onClimateOn, // pre-heat or pre-cool the car
         HEATED_SEAT_LEVEL_DRIVER: this.onHeatedSeatDriver, // set the level on the heated seat for the driver
         HEATED_SEAT_LEVEL_PASSENGER: this.onHeatedSeatPassenger, // set the level on the heated seat for the passenger
         HEATED_SEAT_LEVEL_REAR_LEFT: this.onHeatedSeatRearLeft, // set the level on the heated seat for the rear left seat
@@ -73,7 +71,6 @@ module.exports = function(Polyglot) {
         GV15:  { value: '', uom: 2 }, // Max Defrost
         GV19: { value: '', uom: 56 }, // Last updated unix timestamp
         GV20: { value: id, uom: 56 }, // ID used for the Tesla API
-        CLIEMD: { value: '', uom: 2 }, // Climate conditioning on
         ERR: { value: '', uom: 2 } // In error?
       };
 
@@ -119,20 +116,6 @@ module.exports = function(Polyglot) {
         }
       }
     }
-
-	async onClimateOn() {
-        const id = this.vehicleId();
-        logger.info('CLIMATE_ON (%s)', this.address);
-        await this.tesla.cmdHvacStart(id);
-        await this.queryNow();
-      }
-
-	async onClimateOff() {
-        const id = this.vehicleId();
-        logger.info('CLIMATE_OFF (%s)', this.address);
-        await this.tesla.cmdHvacStop(id);
-        await this.queryNow();
-      }
 
     async onHeatedSeatDriver(message) {
       const id = this.vehicleId();
@@ -412,8 +395,6 @@ module.exports = function(Polyglot) {
         
         // Current temperature inside the vehicle.
         this.setDriver('ST', this.fromStdTemp(climateState.inside_temp), false, false, this.temperature_uom_index);
-        // Status of climate conditioning.
-        this.setDriver('CLIEMD', climateState.is_auto_conditioning_on, false);
 
         this.setDriver('ERR', '0', false);
         this.reportDrivers(); // Reports only changed values
