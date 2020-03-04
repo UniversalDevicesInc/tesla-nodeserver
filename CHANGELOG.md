@@ -7,8 +7,6 @@ V2.3.0 (2020-02-23)
 * The Security node ST driver is now used instead of GV8 to represent whether the vehicle is locked or not
 * The Security node now responds to DON/DOF commands for Lock and Unlock of the vehicle - if enabled
 * Removed CLIEMD Climate conditioning status and Conditioning controls from Climate node because that information is now available from the Auto Conditioning node
-
-V2.2.1 (2020-02-22)
 * Fixed configuration documentation for underscores
 * Added cmd HEATED\_SEAT\_LEVEL\_THIRD\_ROW\_LEFT to set the level on the heated seat for the third row left seat
 * Added cmd HEATED\_SEAT\_LEVEL\_THIRD\_ROW\_RIGHT to set the level on the heated seat for the third row right seat
