@@ -5,6 +5,10 @@
     <!-- 2 is boolean -->
     <range uom="2" subset="0-1"/>
   </editor>
+  <editor id="I_LOCKED_STATUS">
+    <!-- 0 is locked, 1 is unlocked -->
+    <range uom="25" subset="0,1" nls="EN_I_LOCKED_STATUS"/>
+  </editor>
   <editor id="I_OFFON">
     <!-- 0 is off, 1 is on -->
     <range uom="25" subset="0,255" nls="EN_I_OFFON" />
@@ -41,8 +45,8 @@
   </editor>
   <editor id="I_TEMP_DEG">
     <!-- 4 is celsius (C) -->
-    <range uom="4" min="-40" max="60" step="1" prec="0" />
-    <range uom="17" min="-40" max="140" step="1" prec="0" />
+    <range uom="4" min="-90" max="60" step="1" prec="0" />
+    <range uom="17" min="-130" max="140" step="1" prec="0" />
   </editor>
   <editor id="I_SUNROOF">
     <!-- 0 not available -->
