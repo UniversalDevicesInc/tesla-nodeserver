@@ -1,16 +1,11 @@
 'use strict';
-// This is the general node for the vehicle.
-// This node can be set in the "wake" mode which updates on the short poll.
-// The other nodes are updated by calling the controller node on the short poll when queryVehicle() is called here.
+// This is the charging node for the vehicle.
 
 const AsyncLock = require('async-lock');
-const lock = new AsyncLock({ timeout: 10000 });
+const lock = new AsyncLock({ timeout: 500 });
 
 // nodeDefId must match the nodedef in the profile
 const nodeDefId = 'VEHICLE';
-
-const customLoggingLevel = 'Custom Logging Level';
-const validLoggingLevels = ['error', 'warn', 'info', 'verbose', 'debug'];
 
 function delay(delay) {
   return new Promise(function(waitforit) {
@@ -46,8 +41,6 @@ module.exports = function(Polyglot) {
       this.commands = {
         DON: this.onDON, // Charge On, up to
         DOF: this.onDOF, // Charge off
-        WAKE: this.onWake,
-        LETSLEEP: this.onLetSleep, // call to let the vehicle sleep (disables short polling)
         HORN: this.onHorn,
         FLASH: this.onFlash,
         CHARGE_SET_TO: this.onChargeSetTo,
@@ -70,8 +63,6 @@ module.exports = function(Polyglot) {
         CV: { value: '', uom: 72 }, // Charger voltage
         CPW: { value: '', uom: 73 }, // Charger power
 //        GV10: { value: '', uom: 116 }, // Odometer (default mile, but multi-editor supports kilometer too)
-        AWAKE: { value: '', uom: 25 }, // vehicle status
-        GV18: { value: '', uom: 2 }, // wake mode
         GV19: { value: '', uom: 56 }, // Last updated unix timestamp
         GV20: { value: id, uom: 56 }, // ID used for the Tesla API
         ERR: { value: '', uom: 2 } // In error?
@@ -79,9 +70,6 @@ module.exports = function(Polyglot) {
 
       this.distance_uom = 'mi'; // defaults to miles. Pulls data from vehicle GUI to change to KM where appropriate.
       
-      this.let_sleep = true; // this will be used to disable short polling
-
-      this.last_wake_time = 0;  //  epoch time of last wake.
     }
 
     async initializeUOM() {
@@ -131,23 +119,22 @@ module.exports = function(Polyglot) {
       await this.queryNow();
     }
 
-    async onWake() {
+    async pushedData (key, vehicleMessage) {
       const id = this.vehicleId();
-      logger.info('WAKE (%s)', this.address);
-      this.let_sleep = false;
-      this.last_wake_time = this.nowEpochToTheSecond();
-      await this.tesla.wakeUp(id);
-    }
-
-    async onLetSleep() {
-      this.setLetSleep();
-      await this.queryNow();
-    }
-
-    setLetSleep() {
-      logger.info('LET SLEEP (%s)', this.address);
-      this.let_sleep = true;
-      this.setDriver('GV18', false, true); // Set Wake Mode to false
+      logger.debug('Vehicle pushedData() received id %s, key %s', id, key);
+      if (vehicleMessage && vehicleMessage.response) {
+        logger.debug('Vehicle pushedData() vehicleMessage.response.isy_nodedef %s, nodeDefId %s'
+            , vehicleMessage.response.isy_nodedef, nodeDefId);
+        if (key === id
+            && vehicleMessage.response.isy_nodedef != nodeDefId) {
+          // process the message for this vehicle sent from a different node.
+          this.processDrivers(vehicleMessage);
+        }
+      } else {
+        logger.error('API result for pushedData is incorrect: %o',
+            vehicleMessage);
+          this.setDriver('ERR', '1'); // Will be reported if changed
+      }
     }
 
     async onHorn() {
@@ -173,26 +160,32 @@ module.exports = function(Polyglot) {
     }
 
     async queryNow() {
-      await this.query(true);
+      await this.asyncQuery(true);
     }
 
-    async query(longPoll) {
-      try {
-        const _this = this;
-        // Run query only one at a time
-        await lock.acquire('query', function() {
-          _this.setDebugLevel(_this.polyInterface);
-          _this.updateSleepStatus();
-          if (!_this.let_sleep || longPoll) {
-            return _this.queryVehicle(longPoll);
-          } else {
-            logger.info('SKIPPING POLL TO LET THE VEHICLE SLEEP - ISSUE WAKE CMD TO VEHICLE TO ENABLE SHORT POLLING');
-            return _this.checkVehicleOnline();
-          }
-        });
-      } catch (err) {
-        logger.error('Error while querying vehicle: %s', err.stack);
+    async query(ignored) {
+      // This is overridden and does nothing because the only time
+      // this will be called is on the long poll, and the long poll
+      // refresh is done from the Vehicle node.
+    }
+
+    async asyncQuery(now) {
+      const _this = this;
+      if (now) {
+        try {
+          // Run query only one at a time
+          logger.info('Vehicle now');
+
+          await lock.acquire('query', function() {
+            return _this.queryVehicle(now);
+          });
+        } catch (err) {
+          logger.error('Vehicle Error while querying vehicle: %s', err.message);
+        }
+      } else {
+        logger.info('Vehicle SKIPPING POLL');
       }
+
     }
 
     vehicleUOM(guisettings) {
@@ -209,43 +202,6 @@ module.exports = function(Polyglot) {
 	      logger.error('GUI Distance Units missing from gui_settings');
 	    }
 	      
-    }
-
-    updateOtherNodes(vehicleData) {
-      logger.debug('Vehicle.updateOtherNodes(%s)', this.address);
-      const controllerNode = this.polyInterface.getNode(this.primary);
-      controllerNode.updateOtherNodes(this.address, this.vehicleId(), vehicleData);
-    }
-
-    setDebugLevel(polyInterface) {
-      const config = polyInterface.getConfig();
-      const params = config.customParams;
-      let newLoggingLevel = '';
-      if (customLoggingLevel in params) {
-        newLoggingLevel = params[customLoggingLevel];
-      }
-      logger.debug('Configured logging level: %s', newLoggingLevel);
-      if (validLoggingLevels.includes(newLoggingLevel)) {
-        logger.debug('Found logging level');
-        for (const transport of logger.transports) {
-          logger.debug('Setting logging level: %s', newLoggingLevel);
-          transport.level = newLoggingLevel;
-        }
-      } else {
-        for (const transport of logger.transports) {
-          logger.warn('Ignoring bad logging level.  Using: %s', transport.level);
-        }
-      }
-    }
-
-    // Check when the wake period expires, and then disable short polling.
-    updateSleepStatus() {
-      const longPoll = this.polyInterface.getConfig().longPoll;
-      const now = this.nowEpochToTheSecond();
-      if (now > (this.last_wake_time + longPoll)) {
-        logger.debug("updateSleepStatus(%s): %s, nowEpochToTheSecond() %s", this.let_sleep, this.last_wake_time, now);
-        this.setLetSleep();
-      }
     }
     
     nowEpochToTheSecond() {
@@ -269,30 +225,6 @@ module.exports = function(Polyglot) {
       return chargingStateIndex;
     }
 
-    // Assume the app is allowing the vehicle to sleep, but we want to know if it has actually gone offline
-    async checkVehicleOnline() {
-      const id = this.vehicleId();
-      const vehicleSummary = await this.tesla.getVehicle(id);
-      if (vehicleSummary === 408) {
-        this.setDriver('AWAKE', false, true); // car is offline
-        logger.info('API ERROR CAUGHT: %s', vehicleData);
-        return 0;
-      }
-
-      if (vehicleSummary && vehicleSummary.response && vehicleSummary.response.state) {
-        const vehicleState = vehicleSummary.response.state;
-        if (vehicleState === 'asleep') {
-          this.setDriver('AWAKE', 0, true); // car is asleep
-        } else if (vehicleState === 'online') {
-          this.setDriver('AWAKE', 1, true); // car is online
-        } else if (vehicleState === 'offline') {
-          this.setDriver('AWAKE', 2, true); // car is offline
-        } else {
-          logger.warn("Vehicle.checkVehicleOnline() unexpected state: %s", vehicleState);
-        }
-      }
-    }
-
     async queryVehicle(longPoll) {
       logger.debug('Vehicle.queryVehicle(%s)', longPoll);
       const id = this.vehicleId();
@@ -312,11 +244,20 @@ module.exports = function(Polyglot) {
         }
       }
       if (vehicleData === 408) {
-        this.setDriver('GV18', false, true); // car is offline
         logger.info('API ERROR CAUGHT: %s', vehicleData);
         return 0;
       }
 
+      if (vehicleData) {
+        this.processDrivers(vehicleData);
+      } else {
+        logger.error('API result for getVehicleClimateState is incorrect: %o',
+            vehicleMessage);
+          this.setDriver('ERR', '1'); // Will be reported if changed
+      }
+		}
+
+    processDrivers(vehicleData) {
       // Gather basic vehicle & charge state
       // (same as getVehicleData with less clutter)
       // let vehicleData = await this.tesla.getVehicle(id);
@@ -328,13 +269,8 @@ module.exports = function(Polyglot) {
         vehicleData.response.vehicle_state &&
         vehicleData.response.gui_settings) {
 
-        // Forward the vehicleData to the other nodes so they also update.
-        vehicleData.response.isy_nodedef = nodeDefId;
-        this.updateOtherNodes(vehicleData);
-
         const chargeState = vehicleData.response.charge_state;
-        const vehiculeState = vehicleData.response.vehicle_state;
-        const timestamp = this.nowEpochToTheSecond().toString();
+        const vehicleState = vehicleData.response.vehicle_state;
 
         this.vehicleUOM(vehicleData.response.gui_settings);
 
@@ -357,17 +293,12 @@ module.exports = function(Polyglot) {
 
         // Odometer reading
         if (this.distance_uom === 'km') {
-          this.setDriver('GV10', Math.round(parseFloat(vehiculeState.odometer) * 1.609344).toString(), true, false, 8);
+          this.setDriver('GV10', Math.round(parseFloat(vehicleState.odometer) * 1.609344).toString(), true, false, 8);
         } else {
-          this.setDriver('GV10', Math.round(parseFloat(vehiculeState.odometer)).toString(), true, false, 116);
+          this.setDriver('GV10', Math.round(parseFloat(vehicleState.odometer)).toString(), true, false, 116);
         }
 
-        if (this.let_sleep) {
-          this.setDriver('GV18', false, false); // this way we know if we have to wake up the car or not
-        } else {
-          this.setDriver('GV18', true, false);
-        }
-
+        const timestamp = this.nowEpochToTheSecond().toString();
         this.setDriver('GV19', timestamp, false);
         // GV20 is not updated. This is the id we use to find this vehicle.
         // It must be already correct.

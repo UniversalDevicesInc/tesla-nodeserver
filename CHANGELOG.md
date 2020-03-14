@@ -1,5 +1,16 @@
 # Change Log
 
+V2.3.0 (2020-02-23)
+* Split out the wake mode into a dedicated node
+* Optional seat heaters now show "Unavailable" if not available
+* Replaced CLITMP with ST in the Climate node, so the status of the node is now the internal temperature of the vehicle
+* The Security node ST driver is now used instead of GV8 to represent whether the vehicle is locked or not
+* The Security node now responds to DON/DOF commands for Lock and Unlock of the vehicle - if enabled
+* Removed CLIEMD Climate conditioning status and Conditioning controls from Climate node because that information is now available from the Auto Conditioning node
+* Fixed configuration documentation for underscores
+* Added cmd HEATED\_SEAT\_LEVEL\_THIRD\_ROW\_LEFT to set the level on the heated seat for the third row left seat
+* Added cmd HEATED\_SEAT\_LEVEL\_THIRD\_ROW\_RIGHT to set the level on the heated seat for the third row right seat
+
 V2.2.0 (2020-02-09)
 * Limit the amount of time the system may be in the Wake mode to the long poll time
 * Fixed optional rear seat heater handling
@@ -44,22 +55,22 @@ v1.0.4 (2019-09-19)
 * Added GV13 for passengers side climate control temperature (celsius only)
 * Added GV14 for outside temperature (celsius only)
 * Added GV17 for software update availability status (not confirmed workings since no updates from Tesla yet)
-* Added cmd WINDOWS_VENT to vent all the windows (requires Tesla V10 firmware)
-* Added cmd WINDOWS_CLOSE to close all the windows (requires Tesla V10 firmware)
-* Added cmd TRUNK_OPEN to open the rear trunk
-* Added cmd FRUNK_OPEN to open the front trunk (frunk)
-* Added cmd HEATED_SEAT_LEVEL_DRIVER to set the level on the heated seat for the driver
-* Added cmd HEATED_SEAT_LEVEL_PASSENGER to set the level on the heated seat for the passenger
-* Added cmd HEATED_SEAT_LEVEL_REAR_LEFT to set the level on the heated seat for the rear left seat
-* Added cmd HEATED_SEAT_LEVEL_REAR_CENTER to set the level on the heated seat for the rear center seat
-* Added cmd HEATED_SEAT_LEVEL_REAR_RIGHT to set the level on the heated seat for the rear right seat
-* Added cmd SENTRY_MODE_ON to turn on Sentry Mode
-* Added cmd SENTRY_MODE_OFF to turn off Sentry Mode
-* Added cmd START_SOFTWARE_UPDATE to start the Tesla software update if one is available.
-* Added cmd MAX_DEFROST_ON to turn on the Max Defrost
-* Added cmd MAX_DEFROST_OFF to turn off the Max Defrost
-* Added cmd CLIMATE_TEMP_SETTING_DRIVER to set the climate control temperature for the drivers side (celsius only)
-* Added cmd CLIMATE_TEMP_SETTING_PASSENGER to set the climate control temperature for the passengers side (celsius only)
+* Added cmd WINDOWS\_VENT to vent all the windows (requires Tesla V10 firmware)
+* Added cmd WINDOWS\_CLOSE to close all the windows (requires Tesla V10 firmware)
+* Added cmd TRUNK\_OPEN to open the rear trunk
+* Added cmd FRUNK\_OPEN to open the front trunk (frunk)
+* Added cmd HEATED\_SEAT\_LEVEL\_DRIVER to set the level on the heated seat for the driver
+* Added cmd HEATED\_SEAT\_LEVEL\_PASSENGER to set the level on the heated seat for the passenger
+* Added cmd HEATED\_SEAT\_LEVEL\_REAR\_LEFT to set the level on the heated seat for the rear left seat
+* Added cmd HEATED\_SEAT\_LEVEL\_REAR\_CENTER to set the level on the heated seat for the rear center seat
+* Added cmd HEATED\_SEAT\_LEVEL\_REAR\_RIGHT to set the level on the heated seat for the rear right seat
+* Added cmd SENTRY\_MODE\_ON to turn on Sentry Mode
+* Added cmd SENTRY\_MODE\_OFF to turn off Sentry Mode
+* Added cmd START\_SOFTWARE\_UPDATE to start the Tesla software update if one is available.
+* Added cmd MAX\_DEFROST\_ON to turn on the Max Defrost
+* Added cmd MAX\_DEFROST\_OFF to turn off the Max Defrost
+* Added cmd CLIMATE\_TEMP\_SETTING\_DRIVER to set the climate control temperature for the drivers side (celsius only)
+* Added cmd CLIMATE\_TEMP\_SETTING\_PASSENGER to set the climate control temperature for the passengers side (celsius only)
 * Added cmd LETSLEEP to allow the vehicle to sleep. This disables short polling from contacting the Tesla API
 * Added check for distance units. Will display KMs if the vehicle GUI is in KM/HR
 * Will now use both the short poll and long poll. Short poll off unless WAKE cmd called first.
@@ -69,8 +80,8 @@ v1.0.4 (2019-09-19)
 
 v1.0.3 (2019-06-14)
 * Added CLITEMP internal temperature
-* Added cmd CLIMATE_ON to start conditioning the vehicle
-* Added cmd CLIMATE_OFF to stop conditioning the vehicle
+* Added cmd CLIMATE\_ON to start conditioning the vehicle
+* Added cmd CLIMATE\_OFF to stop conditioning the vehicle
 * Added CLIEMD Climate conditioning status
 * Fixed spelling of vehicle.
 * Fixed sunroof data parsing when the vehicle does not have a sunroof. 

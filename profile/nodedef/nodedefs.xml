@@ -29,8 +29,6 @@
       <st id="CV" editor="I_VOLT"/> <!-- Charger voltage -->
       <st id="CPW" editor="I_WATT"/> <!-- Charger power -->
       <st id="GV10" editor="I_ODO"/> <!-- Odometer -->
-      <st id="AWAKE" editor="I_VEHICLE_STATE"/> <!-- Vehicle State -->
-      <st id="GV18" editor="BOOLEAN"/> <!-- Wake mode? -->
       <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
       <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
       <st id="ERR" editor="BOOLEAN" hide="T" />
@@ -51,8 +49,6 @@
           <p id="" editor="I_PERCENT" init="GV7" optional="F"/>
         </cmd>
         <cmd id="QUERY_NOW"/>
-        <cmd id="WAKE"/>
-        <cmd id="LETSLEEP"/>
       </accepts>
     </cmds>
   </nodedef>
@@ -65,7 +61,7 @@
       <st id="GV3" editor="I_OPEN_STATUS"/> <!-- Frunk Status -->
       <st id="GV4" editor="I_OPEN_STATUS"/> <!-- Trunk Status -->
       <st id="GV5" editor="I_SECURITY_ENABLED"/> <!-- Security Command Status -->
-      <st id="GV8" editor="BOOLEAN"/> <!-- Locked -->
+      <st id="ST" editor="I_LOCKED_STATUS"/> <!-- Locked -->
       <st id="GV9" editor="I_SUNROOF"/> <!-- Sunroof opened -->
       <st id="GV11" editor="I_SENTRY_MODE" hide="T"/> <!-- Sentry Mode -->
       <st id="GV17" editor="I_SOFTWARE_UPDATE_STATUS"/> <!-- Software update availability status -->
@@ -78,8 +74,8 @@
       <sends/>
       <accepts>
         <cmd id="QUERY_NOW"/>
-        <cmd id="LOCK"/>
-        <cmd id="UNLOCK"/>
+        <cmd id="DON"/>
+        <cmd id="DOF"/>
         <cmd id="SUNROOF_OPEN"/>
         <cmd id="SUNROOF_CLOSE"/>
         <cmd id="WINDOWS_VENT"/>
@@ -106,12 +102,13 @@
       <st id="GV3" editor="I_HEATED_SEAT_LEVEL_RANGE" hide="T"/> <!-- Rear Left seat heat level -->
       <st id="GV4" editor="I_HEATED_SEAT_LEVEL_RANGE" hide="T"/> <!-- Rear Center seat heat level -->
       <st id="GV5" editor="I_HEATED_SEAT_LEVEL_RANGE" hide="T"/> <!-- Rear Right seat heat level -->
+      <st id="GV6" editor="I_HEATED_SEAT_LEVEL_RANGE" hide="T"/> <!-- Third Row Left seat heat level -->
+      <st id="GV7" editor="I_HEATED_SEAT_LEVEL_RANGE" hide="T"/> <!-- Third Row Right seat heat level -->
 
       <st id="GV12" editor="I_CLIMATE_TEMP_RANGE" hide="T"/> <!-- Driver side temp -->
       <st id="GV13" editor="I_CLIMATE_TEMP_RANGE" hide="T"/> <!-- Passenger side temp -->
       <st id="GV14" editor="I_TEMP_DEG"/> <!-- Exterior temp -->
-      <st id="CLITEMP" editor="I_TEMP_DEG"/> <!-- Interior temperature -->
-      <st id="CLIEMD" editor="BOOLEAN"/> <!-- Climate Conditioning On -->
+      <st id="ST" editor="I_TEMP_DEG"/> <!-- Interior temperature -->
       <st id="GV15" editor="BOOLEAN"/> <!-- Max Defrost -->
       <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
       <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
@@ -121,8 +118,6 @@
       <sends/>
       <accepts>
         <cmd id="QUERY_NOW"/>
-        <cmd id="CLIMATE_ON"/>
-        <cmd id="CLIMATE_OFF"/>
         <cmd id="MAX_DEFROST_ON"/>
         <cmd id="MAX_DEFROST_OFF"/>
         <cmd id="HEATED_SEAT_LEVEL_DRIVER">
@@ -140,6 +135,12 @@
         <cmd id="HEATED_SEAT_LEVEL_REAR_RIGHT">
           <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" init="GV5" optional="F"/>
         </cmd>
+        <cmd id="HEATED_SEAT_LEVEL_THIRD_ROW_LEFT">
+          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" init="GV6" optional="F"/>
+        </cmd>
+        <cmd id="HEATED_SEAT_LEVEL_THIRD_ROW_RIGHT">
+          <p id="" editor="I_HEATED_SEAT_LEVEL_RANGE" init="GV7" optional="F"/>
+        </cmd>
         <cmd id="CLIMATE_TEMP_SETTING_DRIVER">
           <p id="" editor="I_CLIMATE_TEMP_RANGE" init="GV12" optional="F"/>
         </cmd>
@@ -153,7 +154,7 @@
   <!-- Vehicle Auto Conditioning info -->
   <nodedef id="VEHICLECOND" nls="AC">
     <sts>
-      <st id="ST" editor="ONOFF"/>
+      <st id="ST" editor="I_OFFON"/>
       <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
       <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
       <st id="ERR" editor="BOOLEAN" hide="T" />
@@ -166,6 +167,26 @@
       <accepts>
         <cmd id="DON"/> <!-- Auto Conditioning On -->
         <cmd id="DOF"/> <!-- Auto Conditioning Off -->
+        <cmd id="QUERY_NOW"/>
+      </accepts>
+    </cmds>
+  </nodedef>
+
+  <!-- Vehicle Wake Mode info -->
+  <nodedef id="VEHICLEWAKEMODE" nls="WM">
+    <sts>
+      <st id="ST" editor="I_OFFON" hide="T"/>
+      <st id="AWAKE" editor="I_VEHICLE_STATE"/> <!-- Vehicle State -->
+      <st id="GV19" editor="I_RAW" hide="T" /> <!-- Last updated unix timestamp -->
+      <st id="GV20" editor="I_RAW" hide="T" /> <!-- ID used in the Tesla API -->
+      <st id="ERR" editor="BOOLEAN" hide="T" />
+    </sts>
+    <cmds>
+      <sends/>
+      <accepts>
+        <cmd id="WAKE_MODE">
+          <p id="" editor="I_OFFON" init="ST"/>
+        </cmd>
         <cmd id="QUERY_NOW"/>
       </accepts>
     </cmds>

@@ -5,9 +5,13 @@
     <!-- 2 is boolean -->
     <range uom="2" subset="0-1"/>
   </editor>
-  <editor id="ONOFF">
-    <!-- 78 is off/on -->
-    <range uom="78" />
+  <editor id="I_LOCKED_STATUS">
+    <!-- 0 is locked, 1 is unlocked -->
+    <range uom="25" subset="0,1" nls="EN_I_LOCKED_STATUS"/>
+  </editor>
+  <editor id="I_OFFON">
+    <!-- 0 is off, 1 is on -->
+    <range uom="25" subset="0,255" nls="EN_I_OFFON" />
   </editor>
   <editor id="I_AMP">
     <!-- 1 is Ampere -->
@@ -41,8 +45,8 @@
   </editor>
   <editor id="I_TEMP_DEG">
     <!-- 4 is celsius (C) -->
-    <range uom="4" min="-40" max="60" step="1" prec="0" />
-    <range uom="17" min="-40" max="140" step="1" prec="0" />
+    <range uom="4" min="-90" max="60" step="1" prec="0" />
+    <range uom="17" min="-130" max="140" step="1" prec="0" />
   </editor>
   <editor id="I_SUNROOF">
     <!-- 0 not available -->
@@ -50,16 +54,16 @@
     <range uom="51" subset="0-100" />
   </editor>
   <editor id="I_HEATED_SEAT_LEVEL_RANGE">
-    <!-- 0 is off 4 is full heat -->
-    <range uom="25" subset="0-3" nls="EN_I_SEAT_HEATER_LEVEL" />
+    <!-- 0 is off 3 is full heat, 10 is unavailable -->
+    <range uom="25" subset="0-3,10" nls="EN_I_SEAT_HEATER_LEVEL" />
   </editor>
   <editor id="I_CHARGING_STATE">
     <!-- 0 is Stopped, 1 is Disconnected, 2 is Charging, 3 is Complete -->
     <range uom="25" subset="0-3" nls="EN_I_CHARGING_STATE" />
   </editor>
   <editor id="I_VEHICLE_STATE">
-    <!-- 0 is asleep, 1 is online -->
-    <range uom="25" subset="0-2" nls="EN_I_VEHICLE_STATE" />
+    <!-- 0 is asleep, 1 is online, 2 is offline, 3 is not responding -->
+    <range uom="25" subset="0-3" nls="EN_I_VEHICLE_STATE" />
   </editor>
   <editor id="I_CLIMATE_TEMP_RANGE">
     <!-- 15 to 28 degrees C -->
