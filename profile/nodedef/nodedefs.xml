@@ -61,6 +61,7 @@
       <st id="GV3" editor="I_OPEN_STATUS"/> <!-- Frunk Status -->
       <st id="GV4" editor="I_OPEN_STATUS"/> <!-- Trunk Status -->
       <st id="GV5" editor="I_SECURITY_ENABLED"/> <!-- Security Command Status -->
+      <st id="GV6" editor="I_VEHICLE_LOCATION"/> <!-- Vehicle Location -->
       <st id="ST" editor="I_LOCKED_STATUS"/> <!-- Locked -->
       <st id="GV9" editor="I_SUNROOF"/> <!-- Sunroof opened -->
       <st id="GV11" editor="I_SENTRY_MODE" hide="T"/> <!-- Sentry Mode -->

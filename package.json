@@ -1,7 +1,7 @@
 {
   "name": "tesla",
   "description": "Tesla NodeServer",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "author": "Benoit Mercier",
   "license": "MIT",
   "main": "nodeserver.js",
