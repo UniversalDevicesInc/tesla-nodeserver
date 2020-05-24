@@ -1,7 +1,7 @@
 'use strict';
 
 const AsyncLock = require('async-lock');
-import LatLon from 'geodesy/latlon-spherical.js'
+const Math = require('mathjs');
 const lock = new AsyncLock({ timeout: 2000 });
 
 //Must be the same in nodeserver.js
@@ -14,6 +14,27 @@ function delay(delay) {
   return new Promise(function(waitforit) {
     setTimeout(waitforit, delay);
   });
+}
+
+
+function distance( lat1,  lng1,  lat2,  lng2) {
+// return the distance between to locations
+  const earthRadius = 6371000; // meters
+
+  const dLat = Math.unit(lat2-lat1, 'deg').toNumber('rad');
+  const dLng = Math.unit(lng2-lng1, 'deg').toNumber('rad');
+
+  const sindLat = Math.sin(dLat / 2);
+  const sindLng = Math.sin(dLng / 2);
+
+  const a = Math.pow(sindLat, 2) + Math.pow(sindLng, 2)
+      * Math.cos(Math.unit(lat1, 'deg').toNumber('rad')) * Math.cos(Math.unit(lat2, 'deg').toNumber('rad'));
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+  const dist = earthRadius * c;
+
+  return dist; // output distance, in meters
 }
 
 module.exports = function(Polyglot) {
@@ -286,12 +307,10 @@ module.exports = function(Polyglot) {
     }
 
     decodeLocation(vehicleLat, vehicleLon) {
-      const vehicleLocation = new LatLon(vehicleLat, vehicleLon);
       const homeLat = 45.027933;
       const homeLon = -93.365416;
-      const homeLocation = new LatLon(homeLat, homeLon);
       
-      const distanceFromHome = vehicleLocation.distanceTo(homeLocation);
+      const distanceFromHome = distance(vehicleLat, vehicleLon, homeLat, homeLon);
       logger.debug('distanceFromHome %s', distanceFromHome);
       
       if (distanceFromHome < 50) {
