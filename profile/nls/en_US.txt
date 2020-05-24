@@ -81,6 +81,7 @@ ST-S-GV2-NAME = Charge port latch engaged
 ST-S-GV3-NAME = Frunk Status
 ST-S-GV4-NAME = Trunk Status
 ST-S-GV5-NAME = Command Status
+ST-S-GV6-NAME = Vehicle Location
 ST-S-ST-NAME = Locked Status
 ST-S-GV9-NAME = % Sunroof
 ST-S-GV11-NAME = Sentry mode on
