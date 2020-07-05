@@ -36,7 +36,7 @@ const defaultParams = {
   [emailParam]: 'Tesla email',
   [pwParam]: 'password',
   [enableSecurityCommandsParam]: 'false',
-  [customLoggingLevel]: '',
+  [homeLatLon]: '',
   [customLoggingLevel]: 'info',
 };
 
