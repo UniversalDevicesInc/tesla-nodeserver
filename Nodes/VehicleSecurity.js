@@ -6,7 +6,7 @@ const lock = new AsyncLock({ timeout: 2000 });
 
 //Must be the same in nodeserver.js
 const enableSecurityCommandsParam = 'Enable Security Commands';
-const homeLatLon = 'Home Lat,Lon';
+const homeLatLon = 'Home Lat Lon';
 
 // nodeDefId must match the nodedef in the profile
 const nodeDefId = 'VEHSEC';
@@ -145,7 +145,7 @@ module.exports = function(Polyglot) {
       const params = config.customParams;
       const latLon = params[homeLatLon];
       if (latLon != null) {
-        const values = latLon.split(',');
+        const values = latLon.split(' ');
         if (values.length > 0) {
           return Number(values[0]);
         }
@@ -157,7 +157,7 @@ module.exports = function(Polyglot) {
       const params = config.customParams;
       const latLon = params[homeLatLon];
       if (latLon != null) {
-        const values = latLon.split(',');
+        const values = latLon.split(' ');
         if (values.length > 1) {
           return Number(values[1]);
         }
