@@ -6,6 +6,7 @@ const lock = new AsyncLock({ timeout: 2000 });
 
 //Must be the same in nodeserver.js
 const enableSecurityCommandsParam = 'Enable Security Commands';
+const homeLatLon = 'Home Lat,Lon';
 
 // nodeDefId must match the nodedef in the profile
 const nodeDefId = 'VEHSEC';
@@ -137,6 +138,30 @@ module.exports = function(Polyglot) {
       const values = securitySettings.split(',');
       logger.debug('checkSecuritySetting %s', values);
       return values.includes(setting) ? true : false;
+    }
+
+    getHomeLat() {
+      const config = this.polyInterface.getConfig();
+      const params = config.customParams;
+      const latLon = params[homeLatLon];
+      if (latLon != null) {
+        const values = latLon.split(',');
+        if (values.length > 0) {
+          return Number(values[0]);
+        }
+      }
+    }
+
+    getHomeLon() {
+      const config = this.polyInterface.getConfig();
+      const params = config.customParams;
+      const latLon = params[homeLatLon];
+      if (latLon != null) {
+        const values = latLon.split(',');
+        if (values.length > 1) {
+          return Number(values[1]);
+        }
+      }
     }
 
     async onLock() {
@@ -307,18 +332,25 @@ module.exports = function(Polyglot) {
     }
 
     decodeLocation(vehicleLat, vehicleLon) {
-      const homeLat = 45.027933;
-      const homeLon = -93.365416;
-      
-      const distanceFromHome = distance(vehicleLat, vehicleLon, homeLat, homeLon);
-      logger.debug('distanceFromHome %s', distanceFromHome);
-      
-      if (distanceFromHome < 50) {
-        logger.debug('car is home');
-        return 0;
-      } else {
-        logger.debug('car is remote');
-        return 1;
+//      const homeLat = 45.027933;
+//      const homeLon = -93.365416;
+      try {
+        const homeLat = getHomeLat();
+        const homeLon = getHomeLon();
+        
+        const distanceFromHome = distance(vehicleLat, vehicleLon, homeLat, homeLon);
+        logger.debug('distanceFromHome %s', distanceFromHome);
+        
+        if (distanceFromHome < 50) {
+          logger.debug('car is home');
+          return 0;
+        } else {
+          logger.debug('car is remote');
+          return 1;
+        }
+        
+      } catch (err) {
+        logger.error('Invalid Home Lat,Lon value: %s', err.message);
       }
     }
 
