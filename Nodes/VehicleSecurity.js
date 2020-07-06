@@ -335,22 +335,23 @@ module.exports = function(Polyglot) {
 //      const homeLat = 45.027933;
 //      const homeLon = -93.365416;
       try {
-        const homeLat = getHomeLat();
-        const homeLon = getHomeLon();
+        const homeLat = this.getHomeLat();
+        const homeLon = this.getHomeLon();
         
         const distanceFromHome = distance(vehicleLat, vehicleLon, homeLat, homeLon);
         logger.debug('distanceFromHome %s', distanceFromHome);
         
         if (distanceFromHome < 50) {
           logger.debug('car is home');
-          return 0;
+          return 1;
         } else {
           logger.debug('car is remote');
-          return 1;
+          return 2;
         }
         
       } catch (err) {
         logger.error('Invalid Home Lat,Lon value: %s', err.message);
+        return 0;
       }
     }
 
