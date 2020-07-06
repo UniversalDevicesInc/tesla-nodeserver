@@ -26,7 +26,7 @@ const emailParam = 'Tesla account email';
 const pwParam = 'Tesla account password';
 // Must be the same in VehicleSecurity.js
 const enableSecurityCommandsParam = 'Enable Security Commands';
-const homeLatLon = 'Home Lat,Lon';
+const homeLatLon = 'Home Lat Lon';
 // Must be the same in Vehicle.js
 const customLoggingLevel = 'Custom Logging Level';
 
