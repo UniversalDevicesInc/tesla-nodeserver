@@ -18,7 +18,7 @@ function delay(delay) {
 }
 
 
-function distance( lat1,  lng1,  lat2,  lng2) {
+function distanceInMeters( lat1,  lng1,  lat2,  lng2) {
 // return the distance between to locations
   const earthRadius = 6371000; // meters
 
@@ -332,16 +332,17 @@ module.exports = function(Polyglot) {
     }
 
     decodeLocation(vehicleLat, vehicleLon) {
-//      const homeLat = 45.027933;
-//      const homeLon = -93.365416;
       try {
-        const homeLat = this.getHomeLat();
-        const homeLon = this.getHomeLon();
+        const homeLat = this.getHomeLat();  // 45.027933;
+        const homeLon = this.getHomeLon();  // -93.365416;
         
-        const distanceFromHome = distance(vehicleLat, vehicleLon, homeLat, homeLon);
-        logger.debug('distanceFromHome %s', distanceFromHome);
+        const distanceFromHome = distanceInMeters(vehicleLat, vehicleLon, homeLat, homeLon);
+        logger.debug('distanceFromHome (Meters) %s', distanceFromHome);
         
-        if (distanceFromHome < 50) {
+        if (isNaN(distanceFromHome)) {
+          return 0;
+        }
+        else if (distanceFromHome < 50) {
           logger.debug('car is home');
           return 1;
         } else {
