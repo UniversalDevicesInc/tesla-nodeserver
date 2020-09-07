@@ -1,7 +1,7 @@
 'use strict';
 // This is the charging node for the vehicle.
 
-const AsyncLock = require('async-lock');
+import AsyncLock from 'async-lock';
 const lock = new AsyncLock({ timeout: 500 });
 
 // nodeDefId must match the nodedef in the profile
@@ -13,7 +13,7 @@ function delay(delay) {
   });
 }
 
-module.exports = function(Polyglot) {
+export default function(Polyglot) {
   // Utility function provided to facilitate logging.
   const logger = Polyglot.logger;
 
