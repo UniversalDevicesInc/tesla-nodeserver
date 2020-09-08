@@ -9,16 +9,20 @@
     "linter": "eslint --ignore-path .gitignore ."
   },
   "dependencies": {
-    "async-lock": "^1.1.4",
+    "async-lock": "^1.2.2",
     "markdown": "^0.5.0",
     "mathjs": "^7.0.0",
     "polyinterface": "^1.2.3",
-    "pgc_interface": "^1.0.3",
-    "request": "^2.88.0",
-    "request-promise-native": "^1.0.7"
+    "pgc_interface": "^1.0.10",
+    "request": "^2.88.2",
+    "request-promise-native": "^1.0.8"
   },
   "devDependencies": {
-    "eslint": "^5.12.0",
+    "eslint": "^5.16.0",
     "eslint-config-strongloop": "^2.1.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/UniversalDevicesInc/tesla-nodeserver.git"
   }
 }
