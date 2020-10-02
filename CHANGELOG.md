@@ -1,6 +1,6 @@
 # Change Log
 
-V2.3.0 (2020-05-23)
+V2.3.1 (2020-05-23)
 * Add vehicle at home status
 
 V2.3.0 (2020-02-23)
