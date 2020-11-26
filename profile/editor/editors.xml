@@ -96,5 +96,8 @@
   <editor id="I_VEHICLE_LOCATION">
     <range uom="25" subset="0-2" nls="EN_I_VEHICLE_LOCATION" />
   </editor>
+  <editor id="I_TIME_TO_FULL_CHARGE_HOURS">
+    <range uom="20" min="0" max="48" step="0.1" prec="1" />
+  </editor>
 
 </editors>

@@ -13,6 +13,7 @@ ST-V-GV4-NAME = Charge enabled
 ST-V-GV5-NAME = Charging state
 ST-V-GV6-NAME = Fast charger present
 ST-V-GV7-NAME = Charge limit
+ST-V-TIMEREM-NAME = Charge complete time
 ST-V-GV10-NAME = Odometer
 ST-V-GV19-NAME = Timestamp
 ST-V-GV20-NAME = Car ID

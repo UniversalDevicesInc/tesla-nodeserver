@@ -25,6 +25,7 @@
       <st id="GV5" editor="I_CHARGING_STATE"/> <!-- Charging state -->
       <st id="GV6" editor="BOOLEAN"/> <!-- Fast charger present -->
       <st id="GV7" editor="I_PERCENT" hide="T"/> <!-- charge limit soc -->
+      <st id="TIMEREM" editor="I_TIME_TO_FULL_CHARGE_HOURS" /> <!-- Time to charge complete -->
       <st id="CC" editor="I_AMP"/> <!-- Charger actual current -->
       <st id="CV" editor="I_VOLT"/> <!-- Charger voltage -->
       <st id="CPW" editor="I_WATT"/> <!-- Charger power -->
