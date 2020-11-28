@@ -43,4 +43,6 @@ You can adjust in Polyglot the short and long poll values which represents how f
 
 The configuration setting "Enable Security Commands" allows you to limit security sensitive controls like your vehicle's doors, frunk, trunk, or windows.  Values for the configuration are "true/false".  Enter the value "true" to enable all the security commands.  Or, individual commands may be enabled with a comma separated list of values from "lock", "sunroof", "charge\_port", "windows", "trunk", "frunk", "sentry", and "software\_update".
 
+If you want to use the Home Location functionality, enter your home latitude and longitude in the *Home Lat Lon*.  The decimal values must be separated by a space.  e.g. 37.4924845 -121.944623
+
 The configuration setting *Custom Logging Level* may have the values "error", "warn", "info", "verbose", "debug".
