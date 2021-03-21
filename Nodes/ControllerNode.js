@@ -61,8 +61,7 @@ module.exports = function(Polyglot) {
       try {
         logger.info('Discovering new vehicles');
 
-        const getVehiclesResult = await this.tesla.getVehicles();
-        const vehicles = getVehiclesResult.response;
+        const vehicles = await this.tesla.getVehicles();
 
         logger.info('Vehicles: %o', vehicles);
 
