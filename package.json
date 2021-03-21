@@ -15,7 +15,8 @@
     "polyinterface": "^1.2.3",
     "pgc_interface": "^1.0.10",
     "request": "^2.88.2",
-    "request-promise-native": "^1.0.8"
+    "request-promise-native": "^1.0.8",
+    "teslajs": "^4.9.8"
   },
   "devDependencies": {
     "eslint": "^5.16.0",
