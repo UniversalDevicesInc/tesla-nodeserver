@@ -33,7 +33,7 @@ module.exports = function(Polyglot) {
     constructor(polyInterface, primary, address, name, id) {
       super(nodeDefId, polyInterface, primary, address, name);
 
-      this.tesla = require('../lib/tesla.js')(Polyglot, polyInterface);
+      this.tesla = require('../lib/tesla_v3.js')(Polyglot, polyInterface);
 
       // PGC supports setting the node hint when creating a node
       // REF: https://github.com/UniversalDevicesInc/hints
