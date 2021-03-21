@@ -2,8 +2,8 @@
 
 Before saving the following information, please make sure your car is awake.  It is sufficient to go into the Tesla app on your phone to wake your car.
 
-Please enter your Tesla account email and password. Once saved,
-you should see your vehicle node appear in the admin console. You
+Please enter your Tesla account email, password, and if appropriate your Multi-factor type and Multi-factor passcode.  Please note that the passcode is time sensitive, so entering that should be the last thing you configure before pressing save.
+Once saved, you should see your vehicle node appear in the admin console. You
 may have to restart the admin console. 
 
 You can also fine tune how often the node data is refreshed by 
