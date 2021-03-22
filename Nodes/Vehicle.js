@@ -73,15 +73,31 @@ module.exports = function(Polyglot) {
       
     }
 
+    async initializeUOMRetry(id)
+    {
+      const MAX_RETRIES = 1;
+      for (let i = 0; i <= MAX_RETRIES; i++) {
+        try {
+          return await this.tesla.getVehicleGuiSettings(id);
+        } catch (err) {
+          await delay(3000);
+          logger.debug('VehicleGuiSettings Retrying', err, i);
+        }
+      }
+      return "Error timed out";
+    }
+
     async initializeUOM() {
       const id = this.vehicleId();
-      let vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
-      if (vehicleGuiSettings === 408) {
-        logger.info('initializeUOM waking vehicle');
-        await this.tesla.wakeUp(id);
-        await delay(5000); // Wait 5 seconds before trying again.
+      let vehicleGuiSettings;
+      try {
         vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
+      } catch (err) {
+        await this.tesla.wakeUp(id);
+        await delay(3000); // Wait 3 seconds before trying again.
+        vehicleGuiSettings = await initializeUOMRetry(id);
       }
+
       this.vehicleUOM(vehicleGuiSettings);
       
       if (this.distance_uom === 'mi') {
@@ -262,38 +278,6 @@ module.exports = function(Polyglot) {
       } else {
         logger.error('API for getVehicleData failed');
         this.setDriver('ERR', '1'); // Will be reported if changed
-      }
-    }
-
-    async queryVehicle2(longPoll) {
-      logger.debug('Vehicle.queryVehicle(%s)', longPoll);
-      const id = this.vehicleId();
-      let vehicleData = await this.tesla.getVehicleData(id);
-
-      // check if Tesla is sleeping and sent an error code 408
-      if (vehicleData === 408) {
-        if (longPoll) {
-          // wake the car and try again
-          await this.tesla.wakeUp(id);
-          await delay(3000); // Wait 3 seconds before trying again.
-          vehicleData = await this.tesla.getVehicleData(id);
-          if (vehicleData === 408) {
-            await delay(3000); // Wait another 3 seconds before trying again.
-            vehicleData = await this.tesla.getVehicleData(id);
-          }
-        }
-      }
-      if (vehicleData === 408) {
-        logger.info('API ERROR CAUGHT: %s', vehicleData);
-        return 0;
-      }
-
-      if (vehicleData) {
-        this.processDrivers(vehicleData);
-      } else {
-        logger.error('API result for getVehicleClimateState is incorrect: %o',
-            vehicleMessage);
-          this.setDriver('ERR', '1'); // Will be reported if changed
       }
     }
 
