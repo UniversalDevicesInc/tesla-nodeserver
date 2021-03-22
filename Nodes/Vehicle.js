@@ -95,7 +95,7 @@ module.exports = function(Polyglot) {
       } catch (err) {
         await this.tesla.wakeUp(id);
         await delay(3000); // Wait 3 seconds before trying again.
-        vehicleGuiSettings = await initializeUOMRetry(id);
+        vehicleGuiSettings = await this.initializeUOMRetry(id);
       }
 
       this.vehicleUOM(vehicleGuiSettings);
