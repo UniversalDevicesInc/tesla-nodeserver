@@ -226,7 +226,7 @@ module.exports = function(Polyglot) {
       return chargingStateIndex;
     }
 
-    async function queryVehiclRetry(id)
+    async queryVehicleRetry(id)
     {
       const MAX_RETRIES = 1;
       for (let i = 0; i <= MAX_RETRIES; i++) {
