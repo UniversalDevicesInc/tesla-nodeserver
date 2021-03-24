@@ -123,35 +123,47 @@ module.exports = function(Polyglot) {
       } else {
         logger.info('VehicleConditioning SKIPPING POLL');
       }
+    }
 
+    async queryVehicleClimateStateRetry(id)
+    {
+      const MAX_RETRIES = 1;
+      for (let i = 0; i <= MAX_RETRIES; i++) {
+        try {
+          return { response: await this.tesla.getVehicleClimateState(id) };
+        } catch (err) {
+          await delay(3000);
+          logger.debug('VehicleConditioning.getVehicleClimateState Retrying %d %s', i, err);
+        }
+      }
+      return {error: "Error timed out"};
     }
 
     async queryVehicle(longPoll) {
       const id = this.vehicleId();
-      let climateData = await this.tesla.getVehicleClimateState(id);
-
-      // check if Tesla is sleeping and sent an error code 408
-      if (climateData === 408) {
+      let climateData;
+      try {
+        climateData = {response: await this.tesla.getVehicleClimateState(id) }; 
+      } catch (err) {
         if (longPoll) {
           // wake the car and try again
+          logger.debug('VehicleClimate.getVehicleData Retrying %s', err);
           await this.tesla.wakeUp(id);
-          await delay(3000); // Wait 3 seconds before trying again.
-          climateData = await this.tesla.getVehicleClimateState(id);
+          await delay(3000); // Wait another 3 seconds before trying again.
+          climateData = await queryVehicleClimateStateRetry(id);
+        } else {
+          logger.info('API ERROR CAUGHT: %s', climateState);
+          return 0;
         }
       }
-      if (climateData === 408) {
-        logger.info('API ERROR CAUGHT: %s', climateData);
-        return 0;
-      }
 
-      if (climateData) {
-        this.processDrivers(climateData);
-      } else {
+      if (climateData && climateData.response) {
+        this.processDrivers(climateData.response);
+      } else (climateData && climateData.error) {
         logger.error('API result for getVehicleClimateState is incorrect: %o',
-            vehicleMessage);
-          this.setDriver('ERR', '1'); // Will be reported if changed
+            climateData.error);
+        this.setDriver('ERR', '1'); // Will be reported if changed
       }
-
     }
 
     processDrivers(climateState) {

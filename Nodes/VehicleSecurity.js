@@ -356,28 +356,45 @@ module.exports = function(Polyglot) {
       }
     }
 
-    async queryVehicle(longPoll) {
-      logger.debug('VehicleSecurity queryVehicle(%s)', longPoll);
-      const id = this.vehicleId();
-      let vehicleData = await this.tesla.getVehicleData(id);
-
-      // check if Tesla is sleeping and sent an error code 408
-      if (vehicleData === 408) {
-        if (longPoll) {
-          // wake the car and try again
-          await this.tesla.wakeUp(id);
-          await delay(2000); // Wait 2 seconds before trying again.
-          vehicleData = await this.tesla.getVehicleData(id);
+    async queryVehicleRetry(id)
+    {
+      const MAX_RETRIES = 1;
+      for (let i = 0; i <= MAX_RETRIES; i++) {
+        try {
+          return { response: await this.tesla.getVehicleData(id) };
+        } catch (err) {
+          await delay(3000);
+          logger.debug('VehicleSecurity.getVehicleData Retrying %d %s', i, err);
         }
       }
-      if (vehicleData === 408) {
-        logger.info('API ERROR CAUGHT: %s', vehicleData);
-        return 0;
+      return {error: "Error timed out"};
+    }
+
+    async queryVehicle(longPoll) {
+      const id = this.vehicleId();
+
+      let vehicleData;
+      try {
+        vehicleData = { response: await this.tesla.getVehicleData(id) };
+      } catch (err) {
+        if (longPoll) {
+          // wake the car and try again
+          logger.debug('Vehicle.getVehicleData Retrying %s', err);
+          await this.tesla.wakeUp(id);
+          await delay(3000); // Wait another 3 seconds before trying again.
+          vehicleData = await queryVehicleRetry(id);
+        } else {
+          logger.info('API ERROR CAUGHT: %s', vehicleData);
+          return 0;
+        }
       }
 
-      this.processDrivers(vehicleData);
-
-        // logger.info('This vehicle Data %o', vehicleData);
+      if (vehicleData && vehicleData.response) {
+        this.processDrivers(vehicleData.response);
+      } else if (vehicleData && vehicleData.error) {
+        logger.error('API for getVehicleData failed: %s', vehicleData.error);
+      }
+      // logger.info('This vehicle Data %o', vehicleData);
     }
 
     processDrivers(vehicleData) {
