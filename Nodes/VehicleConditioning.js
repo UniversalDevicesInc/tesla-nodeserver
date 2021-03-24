@@ -159,7 +159,7 @@ module.exports = function(Polyglot) {
 
       if (climateData && climateData.response) {
         this.processDrivers(climateData.response);
-      } else (climateData && climateData.error) {
+      } else if (climateData && climateData.error) {
         logger.error('API result for getVehicleClimateState is incorrect: %o',
             climateData.error);
         this.setDriver('ERR', '1'); // Will be reported if changed
