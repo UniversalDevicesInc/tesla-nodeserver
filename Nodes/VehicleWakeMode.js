@@ -236,11 +236,11 @@ module.exports = function(Polyglot) {
         return 0;
       }
 
-      if (vehicleData && vehicleData.response) {
+      if (vehicleData) {
         this.processDrivers(vehicleData);
       } else {
         logger.error('API result for getVehicleData is incorrect: %o',
-            vehicleMessage);
+            vehicleData);
           this.setDriver('ERR', '1'); // Will be reported if changed
       }
 
@@ -249,7 +249,7 @@ module.exports = function(Polyglot) {
     processDrivers(vehicleData) {
       logger.debug('VehicleWakeMode processDrivers');
       // Gather basic vehicle climate data
-      if (vehicleData && vehicleData.response) {
+      if (vehicleData) {
 
         // Forward the vehicleData to the other nodes so they also update.
         vehicleData.isy_nodedef = nodeDefId;
@@ -268,7 +268,7 @@ module.exports = function(Polyglot) {
         this.reportDrivers(); // Reports only changed values
       } else {
         logger.error('API result for getVehicleData is incorrect: %o',
-          climateData);
+            vehicleData);
         this.setDriver('ERR', '1'); // Will be reported if changed
       }
     }

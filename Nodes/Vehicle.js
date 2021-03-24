@@ -247,13 +247,13 @@ module.exports = function(Polyglot) {
       const MAX_RETRIES = 1;
       for (let i = 0; i <= MAX_RETRIES; i++) {
         try {
-          return await this.tesla.getVehicleData(id);
+          return { response: await this.tesla.getVehicleData(id) };
         } catch (err) {
           await delay(3000);
           logger.debug('Retrying', err, i);
         }
       }
-      return "Error timed out";
+      return {error: "Error timed out"};
     }
 
     async queryVehicle(longPoll) {
@@ -262,7 +262,7 @@ module.exports = function(Polyglot) {
 
       let vehicleData;
       try {
-        vehicleData = await this.tesla.getVehicleData(id);
+        vehicleData = { response: await this.tesla.getVehicleData(id) };
       } catch (err) {
         // wake the car and try again
         if (longPoll) {
@@ -273,10 +273,10 @@ module.exports = function(Polyglot) {
         }
       }
 
-      if (vehicleData) {
-        this.processDrivers(vehicleData);
+      if (vehicleData && vehicleData.response) {
+        this.processDrivers(vehicleDataresponse);
       } else {
-        logger.error('API for getVehicleData failed');
+        logger.error('API for getVehicleData failed: %0', vehicleData.error);
         this.setDriver('ERR', '1'); // Will be reported if changed
       }
     }
