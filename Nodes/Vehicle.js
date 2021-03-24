@@ -81,7 +81,7 @@ module.exports = function(Polyglot) {
           return await this.tesla.getVehicleGuiSettings(id);
         } catch (err) {
           await delay(3000);
-          logger.debug('VehicleGuiSettings Retrying', err, i);
+          logger.debug('Vehicle.getVehicleGuiSettings Retrying', err, i);
         }
       }
       return "Error timed out";
@@ -139,8 +139,8 @@ module.exports = function(Polyglot) {
     async pushedData (key, vehicleMessage) {
       const id = this.vehicleId();
       logger.debug('Vehicle pushedData() received id %s, key %s', id, key);
-      if (vehicleMessage) {
-        logger.debug('Vehicle pushedData() vehicleMessage.response.isy_nodedef %s, nodeDefId %s'
+      if (vehicleMessage && vehicleMessage.isy_nodedef) {
+        logger.debug('Vehicle pushedData() vehicleMessage.isy_nodedef %s, nodeDefId %s'
             , vehicleMessage.isy_nodedef, nodeDefId);
         if (key === id
             && vehicleMessage.isy_nodedef != nodeDefId) {
@@ -286,7 +286,7 @@ module.exports = function(Polyglot) {
       // (same as getVehicleData with less clutter)
       // let vehicleData = await this.tesla.getVehicle(id);
       // const chargeState = await this.tesla.getVehicleChargeState(id);
-      // vehicleData.response.charge_state = chargeState.response;
+      // vehicleData.charge_state = chargeState;
 
       if (vehicleData &&
         vehicleData.charge_state &&

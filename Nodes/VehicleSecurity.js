@@ -111,12 +111,12 @@ module.exports = function(Polyglot) {
     async pushedData (key, vehicleMessage) {
       const id = this.vehicleId();
       logger.debug('VehicleSecurity pushedData() received id %s, key %s', id, key);
-      if (vehicleMessage && vehicleMessage.response) {
-        logger.debug('VehicleSecurity pushedData() vehicleMessage.response.isy_nodedef %s, nodeDefId %s'
-            , vehicleMessage.response.isy_nodedef, nodeDefId);
+      if (vehicleMessage && vehicleMessage.isy_nodedef) {
+        logger.debug('VehicleSecurity pushedData() vehicleMessage.isy_nodedef %s, nodeDefId %s'
+            , vehicleMessage.isy_nodedef, nodeDefId);
         // process the message for this vehicle sent from a different node.
         if (key === id
-            && vehicleMessage.response.isy_nodedef != nodeDefId) {
+            && vehicleMessage.isy_nodedef != nodeDefId) {
           this.processDrivers(vehicleMessage);
         }
       }
@@ -386,19 +386,19 @@ module.exports = function(Polyglot) {
       // (same as getVehicleData with less clutter)
       // let vehicleData = await this.tesla.getVehicle(id);
       // const chargeState = await this.tesla.getVehicleChargeState(id);
-      // vehicleData.response.charge_state = chargeState.response;
+      // vehicleData.charge_state = chargeState;
 
       this.setDriver('GV5', this.areCommandsEnabled() ? 1 : 0, false); // commands enabled/disabled status
 
-      if (vehicleData && vehicleData.response &&
-        vehicleData.response.charge_state &&
-        vehicleData.response.vehicle_state &&
-        vehicleData.response.drive_state &&
-        vehicleData.response.gui_settings) {
+      if (vehicleData &&
+        vehicleData.charge_state &&
+        vehicleData.vehicle_state &&
+        vehicleData.drive_state &&
+        vehicleData.gui_settings) {
 
-        const chargeState = vehicleData.response.charge_state;
-        const vehicleState = vehicleData.response.vehicle_state;
-        const driveState = vehicleData.response.drive_state;
+        const chargeState = vehicleData.charge_state;
+        const vehicleState = vehicleData.vehicle_state;
+        const driveState = vehicleData.drive_state;
         const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
 
         this.setDriver('GV1', chargeState.charge_port_door_open ? 1 : 0, false);

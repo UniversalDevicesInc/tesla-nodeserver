@@ -66,14 +66,14 @@ module.exports = function(Polyglot) {
     async pushedData (key, vehicleMessage) {
       const id = this.vehicleId();
       logger.debug('VehicleConditioning pushedData() received id %s, key %s', id, key);
-      if (vehicleMessage && vehicleMessage.response) {
-        logger.debug('VehicleConditioning pushedData() vehicleMessage.response.isy_nodedef %s, nodeDefId %s'
-            , vehicleMessage.response.isy_nodedef, nodeDefId);
+      if (vehicleMessage && vehicleMessage.isy_nodedef) {
+        logger.debug('VehicleConditioning pushedData() vehicleMessage.isy_nodedef %s, nodeDefId %s'
+            , vehicleMessage.isy_nodedef, nodeDefId);
         if (key === id
-            && vehicleMessage.response.isy_nodedef != nodeDefId) {
+            && vehicleMessage.isy_nodedef != nodeDefId) {
           // process the message for this vehicle sent from a different node.
-          if (vehicleMessage.response.climate_state) {
-            this.processDrivers(vehicleMessage.response.climate_state);
+          if (vehicleMessage.climate_state) {
+            this.processDrivers(vehicleMessage.climate_state);
           } else {
             logger.error('API result for pushedData is incorrect: %o',
                 vehicleMessage);

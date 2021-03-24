@@ -146,8 +146,8 @@ module.exports = function(Polyglot) {
         return 0;
       }
 
-      if (vehicleSummary && vehicleSummary.response && vehicleSummary.response.state) {
-        const vehicleState = vehicleSummary.response.state;
+      if (vehicleSummary && vehicleSummary.state) {
+        const vehicleState = vehicleSummary.state;
         if (vehicleState === 'asleep') {
           this.setDriver('AWAKE', 0, true); // car is asleep
         } else if (vehicleState === 'online') {
@@ -252,7 +252,7 @@ module.exports = function(Polyglot) {
       if (vehicleData && vehicleData.response) {
 
         // Forward the vehicleData to the other nodes so they also update.
-        vehicleData.response.isy_nodedef = nodeDefId;
+        vehicleData.isy_nodedef = nodeDefId;
         this.updateOtherNodes(vehicleData);
 
         if (this.let_sleep) {

@@ -78,16 +78,32 @@ module.exports = function(Polyglot) {
       
     }
 
+    async initializeUOMRetry(id)
+    {
+      const MAX_RETRIES = 1;
+      for (let i = 0; i <= MAX_RETRIES; i++) {
+        try {
+          return await this.tesla.getVehicleGuiSettings(id);
+        } catch (err) {
+          await delay(3000);
+          logger.debug('VehicleClimate.getVehicleGuiSettings Retrying', err, i);
+        }
+      }
+      return "Error timed out";
+    }
+
     async initializeUOM() {
       const id = this.vehicleId();
-      let vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
-      if (vehicleGuiSettings === 408) {
-        logger.info('initializeUOM waking vehicle');
-        await this.tesla.wakeUp(id);
-        await delay(5000); // Wait 5 seconds before trying again.
+      let vehicleGuiSettings;
+      try {
         vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
+      } catch (err) {
+        await this.tesla.wakeUp(id);
+        await delay(3000); // Wait 3 seconds before trying again.
+        vehicleGuiSettings = await this.initializeUOMRetry(id);
       }
-      this.vehicleUOM(vehicleGuiSettings.response);
+
+      this.vehicleUOM(vehicleGuiSettings);
       logger.debug('VehicleClimate.initializeUOM (%s)', this.temperature_uom_index);
       this.drivers.GV12 = { value: '', uom: this.temperature_uom_index };
       this.drivers.GV13 = { value: '', uom: this.temperature_uom_index };
@@ -106,11 +122,11 @@ module.exports = function(Polyglot) {
     async pushedData (key, vehicleMessage) {
       const id = this.vehicleId();
       logger.debug('VehicleClimate pushedData() received id %s, key %s', id, key);
-      if (vehicleMessage && vehicleMessage.response) {
-        logger.debug('VehicleClimate pushedData() vehicleMessage.response.isy_nodedef %s, nodeDefId %s'
-            , vehicleMessage.response.isy_nodedef, nodeDefId);
+      if (vehicleMessage && vehicleMessage.isy_nodedef) {
+        logger.debug('VehicleClimate pushedData() vehicleMessage.isy_nodedef %s, nodeDefId %s'
+            , vehicleMessage.isy_nodedef, nodeDefId);
         if (key === id
-            && vehicleMessage.response.isy_nodedef != nodeDefId) {
+            && vehicleMessage.isy_nodedef != nodeDefId) {
           // process the message for this vehicle sent from a different node.
           this.processDrivers(vehicleMessage);
         }
@@ -350,13 +366,13 @@ module.exports = function(Polyglot) {
     processDrivers(vehicleData) {
       logger.debug('VehicleClimate processDrivers');
       // Gather basic vehicle climate data
-      if (vehicleData && vehicleData.response &&
-          vehicleData.response.climate_state &&
-            vehicleData.response.gui_settings) {
-        const climateState = vehicleData.response.climate_state;
+      if (vehicleData &&
+          vehicleData.climate_state &&
+            vehicleData.gui_settings) {
+        const climateState = vehicleData.climate_state;
         const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
   
-        this.vehicleUOM(vehicleData.response.gui_settings);
+        this.vehicleUOM(vehicleData.gui_settings);
   
         this.setDriverValues('GV1', climateState.seat_heater_left, false);
         this.setDriverValues('GV2', climateState.seat_heater_right, false);
