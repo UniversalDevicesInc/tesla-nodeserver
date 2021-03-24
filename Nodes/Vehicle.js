@@ -81,7 +81,7 @@ module.exports = function(Polyglot) {
           return await this.tesla.getVehicleGuiSettings(id);
         } catch (err) {
           await delay(3000);
-          logger.debug('Vehicle.getVehicleGuiSettings Retrying', err, i);
+          logger.debug('Vehicle.getVehicleGuiSettings Retrying %d %s', i, err);
         }
       }
       return "Error timed out";
@@ -250,7 +250,7 @@ module.exports = function(Polyglot) {
           return { response: await this.tesla.getVehicleData(id) };
         } catch (err) {
           await delay(3000);
-          logger.debug('Retrying', err, i);
+          logger.debug('Vehicle.getVehicleData Retrying %d %s', i, err);
         }
       }
       return {error: "Error timed out"};
@@ -264,19 +264,21 @@ module.exports = function(Polyglot) {
       try {
         vehicleData = { response: await this.tesla.getVehicleData(id) };
       } catch (err) {
-        // wake the car and try again
         if (longPoll) {
-          logger.debug('Retrying', err, i);
+          // wake the car and try again
+          logger.debug('Vehicle.getVehicleData Retrying %s', err);
           await this.tesla.wakeUp(id);
           await delay(3000); // Wait another 3 seconds before trying again.
           vehicleData = await queryVehicleRetry(id);
+        } else {
+          vehicleData.error = err;
         }
       }
 
       if (vehicleData && vehicleData.response) {
         this.processDrivers(vehicleDataresponse);
       } else {
-        logger.error('API for getVehicleData failed: %0', vehicleData.error);
+        logger.error('API for getVehicleData failed: %s', vehicleData.error);
         this.setDriver('ERR', '1'); // Will be reported if changed
       }
     }

@@ -216,31 +216,50 @@ module.exports = function(Polyglot) {
 
     }
 
-    async queryVehicle(longPoll) {
-      const id = this.vehicleId();
-      let vehicleData = await this.tesla.getVehicleData(id);
-
-      // check if Tesla is sleeping and sent an error code 408
-      if (vehicleData === 408) {
-        if (longPoll) {
-          // wake the car and try again
-          await this.tesla.wakeUp(id);
-          await delay(3000); // Wait 3 seconds before trying again.
-          vehicleData = await this.tesla.getVehicleData(id);
+    async queryVehicleRetry(id)
+    {
+      const MAX_RETRIES = 1;
+      for (let i = 0; i <= MAX_RETRIES; i++) {
+        try {
+          return { response: await this.tesla.getVehicleData(id) };
+        } catch (err) {
+          await delay(3000);
+          logger.debug('VehicleWakeMode.getVehicleData Retrying %d %s', i, err);
         }
       }
-      if (vehicleData === 408) {
+      return {error: "Error timed out"};
+    }
+
+    async queryVehicle(longPoll) {
+      const id = this.vehicleId();
+
+      let vehicleData;
+      try {
+        vehicleData = { response: await this.tesla.getVehicleData(id) };
+      } catch (err) {
+        // wake the car and try again
+        if (longPoll) {
+          logger.debug('VehicleWakeMode.getVehicleData Retrying %s', err);
+          await this.tesla.wakeUp(id);
+          await delay(3000); // Wait another 3 seconds before trying again.
+          vehicleData = await queryVehicleRetry(id);
+        } else {
+          vehicleData.error = err;
+        }
+      }
+
+      if (vehicleData.error) {
         this.setDriver('AWAKE', 3); // the car API is not responding
         this.setDriver('ERR', '1'); // Will be reported if changed
-        logger.info('API ERROR CAUGHT: %s', vehicleData);
+        logger.info('API ERROR CAUGHT: %s', vehicleData.error);
         return 0;
       }
 
-      if (vehicleData) {
-        this.processDrivers(vehicleData);
+      if (vehicleData && vehicleData.response) {
+        this.processDrivers(vehicleData.response);
       } else {
         logger.error('API result for getVehicleData is incorrect: %o',
-            vehicleData);
+            vehicleData.error);
           this.setDriver('ERR', '1'); // Will be reported if changed
       }
 
