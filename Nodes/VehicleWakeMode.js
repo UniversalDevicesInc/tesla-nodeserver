@@ -218,14 +218,14 @@ module.exports = function(Polyglot) {
 
     }
 
-    async queryVehicleRetry(id)
+    async queryVehicleRetry(id, delayTime)
     {
-      const MAX_RETRIES = 1;
+      const MAX_RETRIES = 2;
       for (let i = 0; i <= MAX_RETRIES; i++) {
         try {
+          await delay(delayTime);
           return { response: await this.tesla.getVehicleData(id) };
         } catch (err) {
-          await delay(3000);
           logger.debug('VehicleWakeMode.getVehicleData Retrying %d %s', i, err);
         }
       }
@@ -243,8 +243,7 @@ module.exports = function(Polyglot) {
         if (longPoll) {
           logger.debug('VehicleWakeMode.getVehicleData Retrying %s', err);
           await this.tesla.wakeUp(id);
-          await delay(3000); // Wait another 3 seconds before trying again.
-          vehicleData = await this.queryVehicleRetry(id);
+          vehicleData = await this.queryVehicleRetry(id, 5000);
         } else {
           vehicleData.error = err;
         }
