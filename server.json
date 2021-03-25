@@ -8,7 +8,7 @@
   "description": "Tesla NodeServer",
   "notice": "",
   "shortPoll": "15",
-  "longPoll": "2700",
+  "longPoll": "180",
   "profile_version": "0.0.2",
   "credits": [
     {
