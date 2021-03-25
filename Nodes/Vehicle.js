@@ -269,7 +269,7 @@ module.exports = function(Polyglot) {
           logger.debug('Vehicle.getVehicleData Retrying %s', err);
           await this.tesla.wakeUp(id);
           await delay(3000); // Wait another 3 seconds before trying again.
-          vehicleData = await queryVehicleRetry(id);
+          vehicleData = await this.queryVehicleRetry(id);
         } else {
           vehicleData.error = err;
         }
