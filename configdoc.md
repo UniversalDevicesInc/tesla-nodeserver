@@ -2,12 +2,10 @@
 
 Before saving the following information, please make sure your car is awake.  It is sufficient to go into the Tesla app on your phone to wake your car.
 
-Please enter your Tesla account email, password, and if appropriate your Multi-factor type and Multi-factor passcode.  Please note that the passcode is time sensitive, so entering that should be the last thing you configure before pressing save.
-Once saved, you should see your vehicle node appear in the admin console. You
-may have to restart the admin console. 
+Please enter your Tesla account email, password, and if appropriate your Multi-factor Device (optional) and Multi-factor passcode (optional).  Please note that the passcode is time sensitive, so entering that should be the last thing you configure before pressing save.  The Multi-Factor Device needs to be specified if you have more than one MFA device registered.
+Once saved, you should see your vehicle node appear in the ISY admin console. The ISY admin console may need to be restarted.
 
-You can also fine tune how often the node data is refreshed by 
-configuring the Short Poll. The Long Poll is used as a timeout for limiting the amount of "wake" time.
+You can also fine tune how often the node data is refreshed by configuring the Short Poll. The Long Poll is used as a timeout for limiting the amount of "wake" time.  The default is set to 2700 seconds (45 minutes).
 
 The setting *Enable Security Commands* may be set to either "true" or "false".  The value "true" will enable all commands.  Or, individual commands may be enabled with a comma separated list of values from "lock", "sunroof", "charge\_port", "windows", "trunk", "frunk", "sentry", and "software\_update".
 
