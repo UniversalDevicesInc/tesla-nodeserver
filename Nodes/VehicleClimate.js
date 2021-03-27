@@ -134,97 +134,137 @@ module.exports = function(Polyglot) {
     }
 
     async onHeatedSeatDriver(message) {
-      const id = this.vehicleId();
-
-      logger.info('SET DRIVERS HEATED SEAT (%s): %s', this.address,
-          message.value ? message.value : 'No value');
-
-      await this.tesla.cmdHeatedSeats(id, '0', message.value);
-      await this.queryNow();
+      try {
+        const id = this.vehicleId();
+  
+        logger.info('SET DRIVERS HEATED SEAT (%s): %s', this.address,
+            message.value ? message.value : 'No value');
+  
+        await this.tesla.cmdHeatedSeats(id, '0', message.value);
+        await this.queryNow();
+      } catch (err) {
+        logger.errorStack(err, 'Error onHeatedSeatDriver:');
+      }
     }
 
     async onHeatedSeatPassenger(message) {
-      const id = this.vehicleId();
-
-      logger.info('SET PASSENGER HEATED SEAT (%s): %s', this.address,
-          message.value ? message.value : 'No value');
-
-      await this.tesla.cmdHeatedSeats(id, '1', message.value);
-      await this.queryNow();
+      try {
+        const id = this.vehicleId();
+  
+        logger.info('SET PASSENGER HEATED SEAT (%s): %s', this.address,
+            message.value ? message.value : 'No value');
+  
+        await this.tesla.cmdHeatedSeats(id, '1', message.value);
+        await this.queryNow();
+      } catch (err) {
+        logger.errorStack(err, 'Error onHeatedSeatDriver:');
+      }
     }
 
     async onHeatedSeatRearLeft(message) {
-      const id = this.vehicleId();
-
-      logger.info('SET REAR LEFT HEATED SEAT (%s): %s', this.address,
-          message.value ? message.value : 'No value');
-
-      await this.tesla.cmdHeatedSeats(id, '2', message.value);
-      await this.queryNow();
-    }
+      try {
+        const id = this.vehicleId();
+  
+        logger.info('SET REAR LEFT HEATED SEAT (%s): %s', this.address,
+            message.value ? message.value : 'No value');
+  
+        await this.tesla.cmdHeatedSeats(id, '2', message.value);
+        await this.queryNow();
+      } catch (err) {
+        logger.errorStack(err, 'Error onHeatedSeatRearLeft:');
+      }
+   }
 
     async onHeatedSeatRearCenter(message) {
-      const id = this.vehicleId();
-
-      logger.info('SET REAR CENTER HEATED SEAT (%s): %s', this.address,
-          message.value ? message.value : 'No value');
-
-      await this.tesla.cmdHeatedSeats(id, '4', message.value);
-      await this.queryNow();
+      try {
+        const id = this.vehicleId();
+  
+        logger.info('SET REAR CENTER HEATED SEAT (%s): %s', this.address,
+            message.value ? message.value : 'No value');
+  
+        await this.tesla.cmdHeatedSeats(id, '4', message.value);
+        await this.queryNow();
+      } catch (err) {
+        logger.errorStack(err, 'Error onHeatedSeatRearCenter:');
+      }
     }
 
     async onHeatedSeatRearRight(message) {
-      const id = this.vehicleId();
-
-      logger.info('SET REAR RIGHT HEATED SEAT (%s): %s', this.address,
-          message.value ? message.value : 'No value');
-
-      await this.tesla.cmdHeatedSeats(id, '5', message.value);
-      await this.queryNow();
+      try {
+        const id = this.vehicleId();
+  
+        logger.info('SET REAR RIGHT HEATED SEAT (%s): %s', this.address,
+            message.value ? message.value : 'No value');
+  
+        await this.tesla.cmdHeatedSeats(id, '5', message.value);
+        await this.queryNow();
+      } catch (err) {
+        logger.errorStack(err, 'Error onHeatedSeatRearRight:');
+      }
     }
 
     async onHeatedSeatThirdRowLeft(message) {
-      const id = this.vehicleId();
-
-      logger.info('SET THIRD_ROW_LEFT HEATED SEAT (%s): %s', this.address,
-          message.value ? message.value : 'No value');
-
-      await this.tesla.cmdHeatedSeats(id, '7', message.value);
-      await this.queryNow();
+      try {
+        const id = this.vehicleId();
+  
+        logger.info('SET THIRD_ROW_LEFT HEATED SEAT (%s): %s', this.address,
+            message.value ? message.value : 'No value');
+  
+        await this.tesla.cmdHeatedSeats(id, '7', message.value);
+        await this.queryNow();
+      } catch (err) {
+        logger.errorStack(err, 'Error onHeatedSeatThirdRowLeft:');
+      }
     }
 
     async onHeatedSeatThirdRowRight(message) {
-      const id = this.vehicleId();
-
-      logger.info('SET THIRD_ROW_RIGHT HEATED SEAT (%s): %s', this.address,
-          message.value ? message.value : 'No value');
-
-      await this.tesla.cmdHeatedSeats(id, '8', message.value);
-      await this.queryNow();
+      try {
+        const id = this.vehicleId();
+  
+        logger.info('SET THIRD_ROW_RIGHT HEATED SEAT (%s): %s', this.address,
+            message.value ? message.value : 'No value');
+  
+        await this.tesla.cmdHeatedSeats(id, '8', message.value);
+        await this.queryNow();
+      } catch (err) {
+        logger.errorStack(err, 'Error onHeatedSeatThirdRowRight:');
+      }
     }
 
     async onMaxDefrostOn() {
-      const id = this.vehicleId();
-      logger.info('MAX DEFROST MODE ON (%s)', this.address);
-      await this.tesla.cmdMaxDefrost(id, 'on');
-      await this.queryNow();
+      try {
+        const id = this.vehicleId();
+        logger.info('MAX DEFROST MODE ON (%s)', this.address);
+        await this.tesla.cmdMaxDefrost(id, 'on');
+        await this.queryNow();
+      } catch (err) {
+        logger.errorStack(err, 'Error onMaxDefrostOn:');
+      }
     }
 
     async onMaxDefrostOff() {
-      const id = this.vehicleId();
-      logger.info('MAX DEFROST OFF (%s)', this.address);
-      await this.tesla.cmdMaxDefrost(id, 'off');
-      await this.queryNow();
+      try {
+        const id = this.vehicleId();
+        logger.info('MAX DEFROST OFF (%s)', this.address);
+        await this.tesla.cmdMaxDefrost(id, 'off');
+        await this.queryNow();
+      } catch (err) {
+        logger.errorStack(err, 'Error onMaxDefrostOff:');
+      }
     }
 
     async onSetClimateTempDriver(message) {
-      const id = this.vehicleId();
-      const celsiusDeg = this.toStdTemp(message.value, Number(message.uom));
-      logger.info('SETTING DRIVERS SIDE CLIMATE TEMP (%s): D_Raw %s, D_Value %s, passenger %s', this.address,
-          message.value, celsiusDeg, this.stdPassengerTemp());
-      logger.debug('message uom: %s', message.uom);
-      await this.tesla.cmdSetClimateTemp(id, celsiusDeg, this.stdPassengerTemp());
-      await this.queryNow();
+      try {
+        const id = this.vehicleId();
+        const celsiusDeg = this.toStdTemp(message.value, Number(message.uom));
+        logger.info('SETTING DRIVERS SIDE CLIMATE TEMP (%s): D_Raw %s, D_Value %s, passenger %s', this.address,
+            message.value, celsiusDeg, this.stdPassengerTemp());
+        logger.debug('message uom: %s', message.uom);
+        await this.tesla.cmdSetClimateTemp(id, celsiusDeg, this.stdPassengerTemp());
+        await this.queryNow();
+      } catch (err) {
+        logger.errorStack(err, 'Error onSetClimateTempDriver:');
+      }
     }
 
     // The passenger temperature is stored in GV13
@@ -234,13 +274,17 @@ module.exports = function(Polyglot) {
     }
 
     async onSetClimateTempPassenger(message) {
-      const id = this.vehicleId();
-      const celsiusDeg = this.toStdTemp(message.value, Number(message.uom));
-      logger.info('SETTING PASSENGERS SIDE CLIMATE TEMP (%s): D_Raw %s, D_Value %s, driver %s', this.address,
-          message.value, celsiusDeg, this.stdDriverTemp());
-      logger.debug('message uom: %s', message.uom);
-      await this.tesla.cmdSetClimateTemp(id, this.stdDriverTemp(), celsiusDeg);
-      await this.queryNow();
+      try {
+        const id = this.vehicleId();
+        const celsiusDeg = this.toStdTemp(message.value, Number(message.uom));
+        logger.info('SETTING PASSENGERS SIDE CLIMATE TEMP (%s): D_Raw %s, D_Value %s, driver %s', this.address,
+            message.value, celsiusDeg, this.stdDriverTemp());
+        logger.debug('message uom: %s', message.uom);
+        await this.tesla.cmdSetClimateTemp(id, this.stdDriverTemp(), celsiusDeg);
+        await this.queryNow();
+      } catch (err) {
+        logger.errorStack(err, 'Error onSetClimateTempPassenger:');
+      }
     }
 
     // The driver temperature is stored in GV12

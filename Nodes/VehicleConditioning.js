@@ -83,19 +83,27 @@ module.exports = function(Polyglot) {
       }
     }
 
-	async onClimateOn() {
+	  async onClimateOn() {
+      try {
         const id = this.vehicleId();
         logger.info('CLIMATE_ON (%s)', this.address);
         await this.tesla.cmdHvacStart(id);
         await this.queryNow();
+      } catch (err) {
+        logger.errorStack(err, 'Error onClimateOn:');
       }
+    }
 
-	async onClimateOff() {
+	  async onClimateOff() {
+      try {
         const id = this.vehicleId();
         logger.info('CLIMATE_OFF (%s)', this.address);
         await this.tesla.cmdHvacStop(id);
         await this.queryNow();
+      } catch (err) {
+        logger.errorStack(err, 'Error onClimateOff:');
       }
+    }
 
     async queryNow() {
       await this.asyncQuery(true);

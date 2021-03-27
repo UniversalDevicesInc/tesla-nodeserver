@@ -90,15 +90,19 @@ module.exports = function(Polyglot) {
     }
 
     async setWakeMode(decodeValue) {
-      if (decodeValue) {
-        const id = this.vehicleId();
-        this.let_sleep = false;
-        this.last_wake_time = this.nowEpochToTheSecond();
-        this.setDriver('ST', 255);  // wake mode on
-        await this.tesla.wakeUp(id);
-      } else {
-        this.setLetSleep();
-        this.reportDrivers(); // Reports only changed values
+      try {
+        if (decodeValue) {
+          const id = this.vehicleId();
+          this.let_sleep = false;
+          this.last_wake_time = this.nowEpochToTheSecond();
+          this.setDriver('ST', 255);  // wake mode on
+          await this.tesla.wakeUp(id);
+        } else {
+          this.setLetSleep();
+          this.reportDrivers(); // Reports only changed values
+        }
+      } catch (err) {
+        logger.errorStack(err, 'Error setWakeMode:');
       }
     }
     

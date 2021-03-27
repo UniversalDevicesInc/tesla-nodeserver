@@ -117,23 +117,31 @@ module.exports = function(Polyglot) {
     }
 
     async onDON(message) {
-      const id = this.vehicleId();
+      try {
+        const id = this.vehicleId();
 
-      logger.info('DON-Charge Start (%s): %s', this.address,
-        message.value ? message.value : 'No value');
+        logger.info('DON-Charge Start (%s): %s', this.address,
+          message.value ? message.value : 'No value');
 
-      if (message.value) {
-        await this.tesla.cmdChargeLimitSetTo(id, message.value);
+        if (message.value) {
+          await this.tesla.cmdChargeLimitSetTo(id, message.value);
+        }
+        await this.tesla.cmdChargeStart(id);
+        await this.queryNow();
+      } catch (err) {
+        logger.errorStack(err, 'Error onDON:');
       }
-      await this.tesla.cmdChargeStart(id);
-      await this.queryNow();
     }
 
     async onDOF() {
-      const id = this.vehicleId();
-      logger.info('DOF-Charge Stop (%s)', this.address);
-      await this.tesla.cmdChargeStop(id);
-      await this.queryNow();
+      try {
+        const id = this.vehicleId();
+        logger.info('DOF-Charge Stop (%s)', this.address);
+        await this.tesla.cmdChargeStop(id);
+        await this.queryNow();
+      } catch (err) {
+        logger.errorStack(err, 'Error onDOF:');
+      }
     }
 
     async pushedData (key, vehicleMessage) {
@@ -155,18 +163,27 @@ module.exports = function(Polyglot) {
     }
 
     async onHorn() {
-      const id = this.vehicleId();
-      logger.info('HORN (%s)', this.address);
-      await this.tesla.cmdHonkHorn(id);
+      try {
+        const id = this.vehicleId();
+        logger.info('HORN (%s)', this.address);
+        await this.tesla.cmdHonkHorn(id);
+      } catch (err) {
+        logger.errorStack(err, 'Error onHorn:');
+      }
     }
 
     async onFlash() {
-      const id = this.vehicleId();
-      logger.info('FLASH (%s)', this.address);
-      await this.tesla.cmdFlashLights(id);
+      try {
+        const id = this.vehicleId();
+        logger.info('FLASH (%s)', this.address);
+        await this.tesla.cmdFlashLights(id);
+      } catch (err) {
+        logger.errorStack(err, 'Error onFlash:');
+      }
     }
 
     async onChargeSetTo(message) {
+      try {
         const id = this.vehicleId();
 
         logger.info('CHARGE_SET_TO (%s): %s', this.address,
@@ -174,6 +191,9 @@ module.exports = function(Polyglot) {
 
         await this.tesla.cmdChargeLimitSetTo(id, message.value);
         await this.queryNow();
+      } catch (err) {
+        logger.errorStack(err, 'Error onFlash:');
+      }
     }
 
     async queryNow() {
