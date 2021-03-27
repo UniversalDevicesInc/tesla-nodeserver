@@ -146,7 +146,7 @@ module.exports = function(Polyglot) {
       let vehicleSummary;
       try {
         vehicleSummary = await this.tesla.getVehicle(id);
-        logger.debug("checkVehicleOnline %s", vehicleSummary);
+        logger.debug("checkVehicleOnline %o", vehicleSummary);
       } catch (err) {
         this.setDriver('AWAKE', 3, true); // api not responding
         logger.info('API ERROR CAUGHT: %s', vehicleSummary);
