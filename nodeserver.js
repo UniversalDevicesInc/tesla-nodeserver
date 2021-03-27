@@ -24,7 +24,7 @@ const VehicleWakeMode = require('./Nodes/VehicleWakeMode.js')(Polyglot);
 // Must be the same as in tesla.js
 const emailParam = 'Tesla account email';
 const pwParam = 'Tesla account password';
-const mmfaPassCodeParam = 'MFA code';
+const mfaPassCodeParam = 'MFA code';
 const mfaDeviceNameParam = 'MFA Device Name';
 
 // Must be the same in VehicleSecurity.js
@@ -42,7 +42,7 @@ const defaultParams = {
   [homeLatLon]: '',
   [customLoggingLevel]: 'debug',
   [mfaDeviceNameParam]: '',
-  [mmfaPassCodeParam]: '',
+  [mfaPassCodeParam]: '',
 };
 
 const controllerAddress = 'controller';
