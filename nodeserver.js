@@ -40,7 +40,7 @@ const defaultParams = {
   [pwParam]: 'password',
   [enableSecurityCommandsParam]: 'false',
   [homeLatLon]: '',
-  [customLoggingLevel]: 'debug',
+  [customLoggingLevel]: 'info',
   [mfaDeviceNameParam]: '',
   [mfaPassCodeParam]: '',
 };
