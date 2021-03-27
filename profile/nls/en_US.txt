@@ -13,6 +13,7 @@ ST-V-GV4-NAME = Charge enabled
 ST-V-GV5-NAME = Charging state
 ST-V-GV6-NAME = Fast charger present
 ST-V-GV7-NAME = Charge limit
+ST-V-TIMEREM-NAME = Charge complete time
 ST-V-GV10-NAME = Odometer
 ST-V-GV19-NAME = Timestamp
 ST-V-GV20-NAME = Car ID
@@ -63,6 +64,10 @@ EN_I_SEAT_HEATER_LEVEL-10 = Unavailable
 EN_I_SECURITY_ENABLED-0 = Commands Disabled
 EN_I_SECURITY_ENABLED-1 = Commands Enabled
 
+EN_I_VEHICLE_LOCATION-0 = Not Defined
+EN_I_VEHICLE_LOCATION-1 = Home
+EN_I_VEHICLE_LOCATION-2 = Remote
+
 EN_I_SUNROOF-101 = Unavailable
 
 EN_I_OFFON-0 = Off
@@ -78,6 +83,7 @@ ST-S-GV2-NAME = Charge port latch engaged
 ST-S-GV3-NAME = Frunk Status
 ST-S-GV4-NAME = Trunk Status
 ST-S-GV5-NAME = Command Status
+ST-S-GV6-NAME = Vehicle Location
 ST-S-ST-NAME = Locked Status
 ST-S-GV9-NAME = % Sunroof
 ST-S-GV11-NAME = Sentry mode on

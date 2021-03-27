@@ -1,10 +1,12 @@
 'use strict';
 
 const AsyncLock = require('async-lock');
+const Math = require('mathjs');
 const lock = new AsyncLock({ timeout: 2000 });
 
 //Must be the same in nodeserver.js
 const enableSecurityCommandsParam = 'Enable Security Commands';
+const homeLatLon = 'Home Lat Lon';
 
 // nodeDefId must match the nodedef in the profile
 const nodeDefId = 'VEHSEC';
@@ -13,6 +15,27 @@ function delay(delay) {
   return new Promise(function(waitforit) {
     setTimeout(waitforit, delay);
   });
+}
+
+
+function distanceInMeters( lat1,  lng1,  lat2,  lng2) {
+// return the distance between to locations
+  const earthRadius = 6371000; // meters
+
+  const dLat = Math.unit(lat2-lat1, 'deg').toNumber('rad');
+  const dLng = Math.unit(lng2-lng1, 'deg').toNumber('rad');
+
+  const sindLat = Math.sin(dLat / 2);
+  const sindLng = Math.sin(dLng / 2);
+
+  const a = Math.pow(sindLat, 2) + Math.pow(sindLng, 2)
+      * Math.cos(Math.unit(lat1, 'deg').toNumber('rad')) * Math.cos(Math.unit(lat2, 'deg').toNumber('rad'));
+
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+  const dist = earthRadius * c;
+
+  return dist; // output distance, in meters
 }
 
 module.exports = function(Polyglot) {
@@ -66,6 +89,7 @@ module.exports = function(Polyglot) {
         GV3: { value: '', uom: 25 }, // Frunk status
         GV4: { value: '', uom: 25 }, // Trunk Status
         GV5: { value: '', uom: 25 }, // Security Command Status
+        GV6: { value: '', uom: 25 }, // Vehicle Location
         ST: { value: '', uom: 25 }, // Locked?
         GV9: { value: '', uom: 51 }, // Sunroof open%
         GV11:  { value: '', uom: 25 }, // Sentry mode on
@@ -114,6 +138,30 @@ module.exports = function(Polyglot) {
       const values = securitySettings.split(',');
       logger.debug('checkSecuritySetting %s', values);
       return values.includes(setting) ? true : false;
+    }
+
+    getHomeLat() {
+      const config = this.polyInterface.getConfig();
+      const params = config.customParams;
+      const latLon = params[homeLatLon];
+      if (latLon != null) {
+        const values = latLon.split(' ');
+        if (values.length > 0) {
+          return Number(values[0]);
+        }
+      }
+    }
+
+    getHomeLon() {
+      const config = this.polyInterface.getConfig();
+      const params = config.customParams;
+      const latLon = params[homeLatLon];
+      if (latLon != null) {
+        const values = latLon.split(' ');
+        if (values.length > 1) {
+          return Number(values[1]);
+        }
+      }
     }
 
     async onLock() {
@@ -283,6 +331,31 @@ module.exports = function(Polyglot) {
       }
     }
 
+    decodeLocation(vehicleLat, vehicleLon) {
+      try {
+        const homeLat = this.getHomeLat();  // 45.027933;
+        const homeLon = this.getHomeLon();  // -93.365416;
+        
+        const distanceFromHome = distanceInMeters(vehicleLat, vehicleLon, homeLat, homeLon);
+        logger.debug('distanceFromHome (Meters) %s', distanceFromHome);
+        
+        if (isNaN(distanceFromHome)) {
+          return 0;
+        }
+        else if (distanceFromHome < 50) {
+          logger.debug('car is home');
+          return 1;
+        } else {
+          logger.debug('car is remote');
+          return 2;
+        }
+        
+      } catch (err) {
+        logger.error('Invalid Home Lat,Lon value: %s', err.message);
+        return 0;
+      }
+    }
+
     async queryVehicle(longPoll) {
       logger.debug('VehicleSecurity queryVehicle(%s)', longPoll);
       const id = this.vehicleId();
@@ -320,10 +393,12 @@ module.exports = function(Polyglot) {
       if (vehicleData && vehicleData.response &&
         vehicleData.response.charge_state &&
         vehicleData.response.vehicle_state &&
+        vehicleData.response.drive_state &&
         vehicleData.response.gui_settings) {
 
         const chargeState = vehicleData.response.charge_state;
         const vehicleState = vehicleData.response.vehicle_state;
+        const driveState = vehicleData.response.drive_state;
         const timestamp = Math.round((new Date().valueOf() / 1000)).toString();
 
         this.setDriver('GV1', chargeState.charge_port_door_open ? 1 : 0, false);
@@ -335,6 +410,10 @@ module.exports = function(Polyglot) {
         logger.debug("Frunk: %s, Trunk: %s", vehicleState.ft, vehicleState.rt);
         this.setDriver('GV3', vehicleState.ft === 0 ? 0 : 1, false);
         this.setDriver('GV4', vehicleState.rt === 0 ? 0 : 1, false);
+
+        // Software Update Availability Status
+        logger.debug("driveState.latitude %s, longitude %s", driveState.latitude, driveState.longitude);
+        this.setDriver('GV6', this.decodeLocation(driveState.latitude, driveState.longitude), true);
 
         this.setDriver('ST', vehicleState.locked ? 1 : 0, false);
 

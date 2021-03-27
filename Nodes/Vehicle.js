@@ -59,6 +59,7 @@ module.exports = function(Polyglot) {
         GV5: { value: '', uom: 25 }, // Charging state
         GV6: { value: '', uom: 2 }, // Fast charger present
         GV7: { value: '', uom: 51 }, // Charge limit SOC%
+        TIMEREM: { value: '', uom: 20 }, // Hours to charge complete
         CC: { value: '', uom: 1 }, // Charger actual current
         CV: { value: '', uom: 72 }, // Charger voltage
         CPW: { value: '', uom: 73 }, // Charger power
@@ -287,6 +288,7 @@ module.exports = function(Polyglot) {
         this.setDriver('GV5', this.resolveChargingState(chargeState.charging_state), false);
         this.setDriver('GV6', chargeState.fast_charger_present, false);
         this.setDriver('GV7', chargeState.charge_limit_soc, false);
+        this.setDriver('TIMEREM', chargeState.time_to_full_charge, false);
         this.setDriver('CC', chargeState.charger_actual_current, false);
         this.setDriver('CV', chargeState.charger_voltage, false);
         this.setDriver('CPW', chargeState.charger_power * 1000, false);
