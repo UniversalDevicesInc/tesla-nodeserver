@@ -147,7 +147,7 @@ module.exports = function(Polyglot) {
       let vehicleSummary;
       try {
         vehicleSummary = await this.tesla.getVehicle(id);
-        logger.debug("checkVehicleOnline %o", vehicleSummary);
+        //logger.debug("checkVehicleOnline %o", vehicleSummary);
       } catch (err) {
         this.setDriver('AWAKE', 3, true); // api not responding
         logger.info('API ERROR CAUGHT: %s', vehicleSummary);
@@ -156,6 +156,7 @@ module.exports = function(Polyglot) {
 
       if (vehicleSummary && vehicleSummary.state) {
         const vehicleState = vehicleSummary.state;
+        logger.debug("checkVehicleOnline %s", vehicleState);
         if (vehicleState === 'asleep') {
           this.setDriver('AWAKE', 0, true); // car is asleep
         } else if (vehicleState === 'online') {
