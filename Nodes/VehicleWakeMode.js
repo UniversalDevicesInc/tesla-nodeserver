@@ -153,8 +153,8 @@ module.exports = function(Polyglot) {
         return 0;
       }
 
-      if (vehicleSummary && vehicleSummary[0]) {
-        const vehicleState = vehicleSummary[0].state;
+      if (vehicleSummary && vehicleSummary.state) {
+        const vehicleState = vehicleSummary.state;
         if (vehicleState === 'asleep') {
           this.setDriver('AWAKE', 0, true); // car is asleep
         } else if (vehicleState === 'online') {
