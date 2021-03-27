@@ -271,7 +271,6 @@ module.exports = function(Polyglot) {
             vehicleData.error);
           this.setDriver('ERR', '1'); // Will be reported if changed
       }
-
     }
 
     processDrivers(vehicleData) {

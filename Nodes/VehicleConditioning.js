@@ -138,9 +138,9 @@ module.exports = function(Polyglot) {
       const MAX_RETRIES = 1;
       for (let i = 0; i <= MAX_RETRIES; i++) {
         try {
+          await delay(3000); // Wait another 3 seconds before trying again.
           return { response: await this.tesla.getVehicleClimateState(id) };
         } catch (err) {
-          await delay(3000);
           logger.debug('VehicleConditioning.getVehicleClimateState Retrying %d %s', i, err);
         }
       }
@@ -157,7 +157,6 @@ module.exports = function(Polyglot) {
           // wake the car and try again
           logger.debug('VehicleClimate.getVehicleData Retrying %s', err);
           await this.tesla.wakeUp(id);
-          await delay(3000); // Wait another 3 seconds before trying again.
           climateData = await queryVehicleClimateStateRetry(id);
         } else {
           logger.info('API ERROR CAUGHT: %s', climateState);
