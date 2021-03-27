@@ -4,7 +4,8 @@
 // The other nodes are updated by calling the controller node on the short poll when queryVehicle() is called here.
 
 const AsyncLock = require('async-lock');
-const lock = new AsyncLock({ timeout: 10000 });
+// The lock time needs to be longer than the retry time on the wake calls.
+const lock = new AsyncLock({ timeout: 20000 });
 
 // nodeDefId must match the nodedef in the profile
 const nodeDefId = 'VEHICLEWAKEMODE';
@@ -223,6 +224,7 @@ module.exports = function(Polyglot) {
 
     }
 
+    // If the retry time is increased, the lock timeout also needs to be increased.
     async queryVehicleRetry(id, delayTime)
     {
       const MAX_RETRIES = 2;
@@ -250,7 +252,7 @@ module.exports = function(Polyglot) {
           await this.tesla.wakeUp(id);
           vehicleData = await this.queryVehicleRetry(id, 5000);
         } else {
-          vehicleData.error = err;
+          vehicleData = {error: err};
         }
       }
 
