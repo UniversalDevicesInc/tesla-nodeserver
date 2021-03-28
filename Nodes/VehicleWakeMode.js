@@ -128,11 +128,11 @@ module.exports = function(Polyglot) {
         await lock.acquire('query', function() {
           _this.setDebugLevel(_this.polyInterface);
           _this.updateSleepStatus();
-          _this.checkVehicleOnline();
           if (!_this.let_sleep || longPoll) {
             return _this.queryVehicle(longPoll);
           } else {
             logger.info('SKIPPING POLL TO LET THE VEHICLE SLEEP - ISSUE WAKE CMD TO VEHICLE TO ENABLE SHORT POLLING');
+            _this.checkVehicleOnline();
           }
         });
       } catch (err) {
@@ -156,16 +156,20 @@ module.exports = function(Polyglot) {
 
       if (vehicleSummary && vehicleSummary.state) {
         const vehicleState = vehicleSummary.state;
-        logger.debug("checkVehicleOnline %s", vehicleState);
-        if (vehicleState === 'asleep') {
-          this.setDriver('AWAKE', 0, true); // car is asleep
-        } else if (vehicleState === 'online') {
-          this.setDriver('AWAKE', 1, true); // car is online
-        } else if (vehicleState === 'offline') {
-          this.setDriver('AWAKE', 2, true); // car is offline
-        } else {
-          logger.warn("VehicleWakeMode.checkVehicleOnline() unexpected state: %s", vehicleState);
-        }
+        this.updateState(vehicleState);
+      }
+    }
+
+    updateState(vehicleState) {
+      logger.debug("checkVehicleOnline %s", vehicleState);
+      if (vehicleState === 'asleep') {
+        this.setDriver('AWAKE', 0, true); // car is asleep
+      } else if (vehicleState === 'online') {
+        this.setDriver('AWAKE', 1, true); // car is online
+      } else if (vehicleState === 'offline') {
+        this.setDriver('AWAKE', 2, true); // car is offline
+      } else {
+        logger.warn("VehicleWakeMode.checkVehicleOnline() unexpected state: %s", vehicleState);
       }
     }
 
@@ -277,6 +281,8 @@ module.exports = function(Polyglot) {
       logger.debug('VehicleWakeMode processDrivers');
       // Gather basic vehicle climate data
       if (vehicleData) {
+
+        this.updateState(vehicleData.vehicle_state);
 
         // Forward the vehicleData to the other nodes so they also update.
         vehicleData.isy_nodedef = nodeDefId;
