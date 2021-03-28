@@ -83,33 +83,35 @@ module.exports = function(Polyglot) {
       const MAX_RETRIES = 1;
       for (let i = 0; i <= MAX_RETRIES; i++) {
         try {
-          return await this.tesla.getVehicleGuiSettings(id);
+          await delay(3000); // Wait 3 seconds before trying again.
+          return await {response: this.tesla.getVehicleGuiSettings(id) };
         } catch (err) {
-          await delay(3000);
-          logger.debug('VehicleClimate.getVehicleGuiSettings Retrying', err, i);
+          logger.debug('VehicleClimate.initializeUOMRetry Retrying', err, i);
         }
       }
-      return "Error timed out";
+      return {error: "Error timed out"};
     }
 
     async initializeUOM() {
       const id = this.vehicleId();
       let vehicleGuiSettings;
       try {
-        vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
+        vehicleGuiSettings = {response: await this.tesla.getVehicleGuiSettings(id)};
       } catch (err) {
         await this.tesla.wakeUp(id);
-        await delay(3000); // Wait 3 seconds before trying again.
         vehicleGuiSettings = await this.initializeUOMRetry(id);
       }
 
-      this.vehicleUOM(vehicleGuiSettings);
-      logger.debug('VehicleClimate.initializeUOM (%s)', this.temperature_uom_index);
-      this.drivers.GV12 = { value: '', uom: this.temperature_uom_index };
-      this.drivers.GV13 = { value: '', uom: this.temperature_uom_index };
-      this.drivers.GV14 = { value: '', uom: this.temperature_uom_index };
-      this.drivers.ST = { value: '', uom: this.temperature_uom_index };
-      
+      if (vehicleGuiSettings && vehicleGuiSettings.response) {
+        this.vehicleUOM(vehicleGuiSettings.response);
+        logger.debug('VehicleClimate.initializeUOM (%s)', this.temperature_uom_index);
+        this.drivers.GV12 = { value: '', uom: this.temperature_uom_index };
+        this.drivers.GV13 = { value: '', uom: this.temperature_uom_index };
+        this.drivers.GV14 = { value: '', uom: this.temperature_uom_index };
+        this.drivers.ST = { value: '', uom: this.temperature_uom_index };
+      } else {
+        logger.error('Vehicle.initializeUOM() %s', vehicleGuiSettings.error);
+      }
       logger.debug('VehicleClimate.initializeUOM done');
     }
 

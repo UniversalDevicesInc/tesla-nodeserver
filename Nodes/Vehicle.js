@@ -78,34 +78,37 @@ module.exports = function(Polyglot) {
       const MAX_RETRIES = 1;
       for (let i = 0; i <= MAX_RETRIES; i++) {
         try {
-          return await this.tesla.getVehicleGuiSettings(id);
+          await delay(3000); // Wait 3 seconds before trying again.
+          return await {response: this.tesla.getVehicleGuiSettings(id)};
         } catch (err) {
-          await delay(3000);
-          logger.debug('Vehicle.getVehicleGuiSettings Retrying %d %s', i, err);
+          logger.debug('Vehicle.initializeUOMRetry Retrying %d %s', i, err);
         }
       }
-      return "Error timed out";
+      return {error: "Error timed out"};
     }
 
     async initializeUOM() {
       const id = this.vehicleId();
       let vehicleGuiSettings;
       try {
-        vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
+        vehicleGuiSettings = {response: await this.tesla.getVehicleGuiSettings(id)};
       } catch (err) {
         await this.tesla.wakeUp(id);
-        await delay(3000); // Wait 3 seconds before trying again.
         vehicleGuiSettings = await this.initializeUOMRetry(id);
       }
 
-      this.vehicleUOM(vehicleGuiSettings);
-      
-      if (this.distance_uom === 'mi') {
-        this.drivers.GV1 = { value: '', uom: 116 };
-        this.drivers.GV10 = { value: '', uom: 116 };
+      if (vehicleGuiSettings && vehicleGuiSettings.response) {
+        this.vehicleUOM(vehicleGuiSettings.response);
+        
+        if (this.distance_uom === 'mi') {
+          this.drivers.GV1 = { value: '', uom: 116 };
+          this.drivers.GV10 = { value: '', uom: 116 };
+        } else {
+          this.drivers.GV1 = { value: '', uom: 83 };
+          this.drivers.GV10 = { value: '', uom: 83 };
+        }
       } else {
-        this.drivers.GV1 = { value: '', uom: 83 };
-        this.drivers.GV10 = { value: '', uom: 83 };
+        logger.error('Vehicle.initializeUOM() %s', vehicleGuiSettings.error);
       }
       logger.info('Vehicle.initializeUOM() done');
     }
