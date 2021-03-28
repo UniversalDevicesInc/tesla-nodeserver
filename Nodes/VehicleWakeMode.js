@@ -155,8 +155,7 @@ module.exports = function(Polyglot) {
       }
 
       if (vehicleSummary && vehicleSummary.state) {
-        const vehicleState = vehicleSummary.state;
-        this.updateState(vehicleState);
+        this.updateState(vehicleSummary.state);
       }
     }
 
@@ -282,7 +281,7 @@ module.exports = function(Polyglot) {
       // Gather basic vehicle climate data
       if (vehicleData) {
 
-        this.updateState(vehicleData.vehicle_state);
+        this.updateState(vehicleData.state);
 
         // Forward the vehicleData to the other nodes so they also update.
         vehicleData.isy_nodedef = nodeDefId;
