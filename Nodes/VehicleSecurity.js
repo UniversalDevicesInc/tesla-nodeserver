@@ -170,6 +170,7 @@ module.exports = function(Polyglot) {
           const id = this.vehicleId();
           logger.info('LOCK (%s)', this.address);
           await this.tesla.cmdDoorLock(id);
+          await this.queryNow();
         } else {
           logger.info('LOCK disabled');
         }
