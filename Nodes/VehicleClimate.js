@@ -1,7 +1,7 @@
 'use strict';
 
 const AsyncLock = require('async-lock');
-const lock = new AsyncLock({ timeout: 500 });
+const lock = new AsyncLock({ timeout: 15000 });
 
 // nodeDefId must match the nodedef in the profile
 const nodeDefId = 'VEHICLECLIMATE';

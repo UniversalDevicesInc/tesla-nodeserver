@@ -2,7 +2,7 @@
 
 const AsyncLock = require('async-lock');
 const Math = require('mathjs');
-const lock = new AsyncLock({ timeout: 2000 });
+const lock = new AsyncLock({ timeout: 20000 });
 
 //Must be the same in nodeserver.js
 const enableSecurityCommandsParam = 'Enable Security Commands';
