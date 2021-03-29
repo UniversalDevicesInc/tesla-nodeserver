@@ -29,7 +29,7 @@ module.exports = function(Polyglot) {
     constructor(polyInterface, primary, address, name) {
       super(nodeDefId, polyInterface, primary, address, name);
 
-      this.tesla = require('../lib/tesla.js')(Polyglot, polyInterface);
+      this.tesla = require('../lib/tesla_v3.js')(Polyglot, polyInterface);
 
       // Commands that this controller node can handle.
       // Should match the 'accepts' section of the nodedef.
@@ -61,8 +61,7 @@ module.exports = function(Polyglot) {
       try {
         logger.info('Discovering new vehicles');
 
-        const getVehiclesResult = await this.tesla.getVehicles();
-        const vehicles = getVehiclesResult.response;
+        const vehicles = await this.tesla.getVehicles();
 
         logger.info('Vehicles: %o', vehicles);
 

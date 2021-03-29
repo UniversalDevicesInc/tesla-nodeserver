@@ -1,5 +1,9 @@
 # Change Log
 
+V3.0.0 (2021-03-27)
+* Support for Tesla AUTH 3
+* Support for Tesla Multi Factor Authentication
+
 V2.3.1 (2020-05-23)
 * Add vehicle at home status
 * Add Hours to charge complete
