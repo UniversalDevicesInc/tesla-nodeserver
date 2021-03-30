@@ -1,7 +1,7 @@
 'use strict';
 
 const AsyncLock = require('async-lock');
-const lock = new AsyncLock({ timeout: 500 });
+const lock = new AsyncLock({ timeout: 15000 });
 
 // nodeDefId must match the nodedef in the profile
 const nodeDefId = 'VEHICLECOND';
@@ -27,7 +27,7 @@ module.exports = function(Polyglot) {
     constructor(polyInterface, primary, address, name, id) {
       super(nodeDefId, polyInterface, primary, address, name);
 
-      this.tesla = require('../lib/tesla.js')(Polyglot, polyInterface);
+      this.tesla = require('../lib/tesla_v3.js')(Polyglot, polyInterface);
 
       // PGC supports setting the node hint when creating a node
       // REF: https://github.com/UniversalDevicesInc/hints
@@ -66,14 +66,14 @@ module.exports = function(Polyglot) {
     async pushedData (key, vehicleMessage) {
       const id = this.vehicleId();
       logger.debug('VehicleConditioning pushedData() received id %s, key %s', id, key);
-      if (vehicleMessage && vehicleMessage.response) {
-        logger.debug('VehicleConditioning pushedData() vehicleMessage.response.isy_nodedef %s, nodeDefId %s'
-            , vehicleMessage.response.isy_nodedef, nodeDefId);
+      if (vehicleMessage && vehicleMessage.isy_nodedef) {
+        logger.debug('VehicleConditioning pushedData() vehicleMessage.isy_nodedef %s, nodeDefId %s'
+            , vehicleMessage.isy_nodedef, nodeDefId);
         if (key === id
-            && vehicleMessage.response.isy_nodedef != nodeDefId) {
+            && vehicleMessage.isy_nodedef != nodeDefId) {
           // process the message for this vehicle sent from a different node.
-          if (vehicleMessage.response.climate_state) {
-            this.processDrivers(vehicleMessage.response.climate_state);
+          if (vehicleMessage.climate_state) {
+            this.processDrivers(vehicleMessage.climate_state);
           } else {
             logger.error('API result for pushedData is incorrect: %o',
                 vehicleMessage);
@@ -83,19 +83,27 @@ module.exports = function(Polyglot) {
       }
     }
 
-	async onClimateOn() {
+	  async onClimateOn() {
+      try {
         const id = this.vehicleId();
         logger.info('CLIMATE_ON (%s)', this.address);
         await this.tesla.cmdHvacStart(id);
         await this.queryNow();
+      } catch (err) {
+        logger.errorStack(err, 'Error onClimateOn:');
       }
+    }
 
-	async onClimateOff() {
+	  async onClimateOff() {
+      try {
         const id = this.vehicleId();
         logger.info('CLIMATE_OFF (%s)', this.address);
         await this.tesla.cmdHvacStop(id);
         await this.queryNow();
+      } catch (err) {
+        logger.errorStack(err, 'Error onClimateOff:');
       }
+    }
 
     async queryNow() {
       await this.asyncQuery(true);
@@ -123,35 +131,46 @@ module.exports = function(Polyglot) {
       } else {
         logger.info('VehicleConditioning SKIPPING POLL');
       }
+    }
 
+    async queryVehicleClimateStateRetry(id)
+    {
+      const MAX_RETRIES = 1;
+      for (let i = 0; i <= MAX_RETRIES; i++) {
+        try {
+          await delay(3000); // Wait another 3 seconds before trying again.
+          return { response: await this.tesla.getVehicleClimateState(id) };
+        } catch (err) {
+          logger.debug('VehicleConditioning.getVehicleClimateState Retrying %d %s', i, err);
+        }
+      }
+      return {error: "Error timed out"};
     }
 
     async queryVehicle(longPoll) {
       const id = this.vehicleId();
-      let climateData = await this.tesla.getVehicleClimateState(id);
-
-      // check if Tesla is sleeping and sent an error code 408
-      if (climateData === 408) {
+      let climateData;
+      try {
+        climateData = {response: await this.tesla.getVehicleClimateState(id) }; 
+      } catch (err) {
         if (longPoll) {
           // wake the car and try again
+          logger.debug('VehicleClimate.getVehicleData Retrying %s', err);
           await this.tesla.wakeUp(id);
-          await delay(3000); // Wait 3 seconds before trying again.
-          climateData = await this.tesla.getVehicleClimateState(id);
+          climateData = await queryVehicleClimateStateRetry(id);
+        } else {
+          logger.info('API ERROR CAUGHT: %s', climateState);
+          return 0;
         }
-      }
-      if (climateData === 408) {
-        logger.info('API ERROR CAUGHT: %s', climateData);
-        return 0;
       }
 
       if (climateData && climateData.response) {
         this.processDrivers(climateData.response);
-      } else {
+      } else if (climateData && climateData.error) {
         logger.error('API result for getVehicleClimateState is incorrect: %o',
-            vehicleMessage);
-          this.setDriver('ERR', '1'); // Will be reported if changed
+            climateData.error);
+        this.setDriver('ERR', '1'); // Will be reported if changed
       }
-
     }
 
     processDrivers(climateState) {

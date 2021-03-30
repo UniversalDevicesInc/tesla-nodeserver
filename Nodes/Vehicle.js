@@ -2,7 +2,7 @@
 // This is the charging node for the vehicle.
 
 const AsyncLock = require('async-lock');
-const lock = new AsyncLock({ timeout: 500 });
+const lock = new AsyncLock({ timeout: 15000 });
 
 // nodeDefId must match the nodedef in the profile
 const nodeDefId = 'VEHICLE';
@@ -28,7 +28,7 @@ module.exports = function(Polyglot) {
     constructor(polyInterface, primary, address, name, id) {
       super(nodeDefId, polyInterface, primary, address, name);
 
-      this.tesla = require('../lib/tesla.js')(Polyglot, polyInterface);
+      this.tesla = require('../lib/tesla_v3.js')(Polyglot, polyInterface);
 
       // PGC supports setting the node hint when creating a node
       // REF: https://github.com/UniversalDevicesInc/hints
@@ -73,23 +73,42 @@ module.exports = function(Polyglot) {
       
     }
 
+    async initializeUOMRetry(id)
+    {
+      const MAX_RETRIES = 1;
+      for (let i = 0; i <= MAX_RETRIES; i++) {
+        try {
+          await delay(3000); // Wait 3 seconds before trying again.
+          return await {response: this.tesla.getVehicleGuiSettings(id)};
+        } catch (err) {
+          logger.debug('Vehicle.initializeUOMRetry Retrying %d %s', i, err);
+        }
+      }
+      return {error: "Error timed out"};
+    }
+
     async initializeUOM() {
       const id = this.vehicleId();
-      let vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
-      if (vehicleGuiSettings === 408) {
-        logger.info('initializeUOM waking vehicle');
+      let vehicleGuiSettings;
+      try {
+        vehicleGuiSettings = {response: await this.tesla.getVehicleGuiSettings(id)};
+      } catch (err) {
         await this.tesla.wakeUp(id);
-        await delay(5000); // Wait 5 seconds before trying again.
-        vehicleGuiSettings = await this.tesla.getVehicleGuiSettings(id);
+        vehicleGuiSettings = await this.initializeUOMRetry(id);
       }
-      this.vehicleUOM(vehicleGuiSettings.response);
-      
-      if (this.distance_uom === 'mi') {
-        this.drivers.GV1 = { value: '', uom: 116 };
-        this.drivers.GV10 = { value: '', uom: 116 };
+
+      if (vehicleGuiSettings && vehicleGuiSettings.response) {
+        this.vehicleUOM(vehicleGuiSettings.response);
+        
+        if (this.distance_uom === 'mi') {
+          this.drivers.GV1 = { value: '', uom: 116 };
+          this.drivers.GV10 = { value: '', uom: 116 };
+        } else {
+          this.drivers.GV1 = { value: '', uom: 83 };
+          this.drivers.GV10 = { value: '', uom: 83 };
+        }
       } else {
-        this.drivers.GV1 = { value: '', uom: 83 };
-        this.drivers.GV10 = { value: '', uom: 83 };
+        logger.error('Vehicle.initializeUOM() %s', vehicleGuiSettings.error);
       }
       logger.info('Vehicle.initializeUOM() done');
     }
@@ -101,33 +120,41 @@ module.exports = function(Polyglot) {
     }
 
     async onDON(message) {
-      const id = this.vehicleId();
+      try {
+        const id = this.vehicleId();
 
-      logger.info('DON-Charge Start (%s): %s', this.address,
-        message.value ? message.value : 'No value');
+        logger.info('DON-Charge Start (%s): %s', this.address,
+          message.value ? message.value : 'No value');
 
-      if (message.value) {
-        await this.tesla.cmdChargeLimitSetTo(id, message.value);
+        if (message.value) {
+          await this.tesla.cmdChargeLimitSetTo(id, message.value);
+        }
+        await this.tesla.cmdChargeStart(id);
+        await this.queryNow();
+      } catch (err) {
+        logger.errorStack(err, 'Error onDON:');
       }
-      await this.tesla.cmdChargeStart(id);
-      await this.queryNow();
     }
 
     async onDOF() {
-      const id = this.vehicleId();
-      logger.info('DOF-Charge Stop (%s)', this.address);
-      await this.tesla.cmdChargeStop(id);
-      await this.queryNow();
+      try {
+        const id = this.vehicleId();
+        logger.info('DOF-Charge Stop (%s)', this.address);
+        await this.tesla.cmdChargeStop(id);
+        await this.queryNow();
+      } catch (err) {
+        logger.errorStack(err, 'Error onDOF:');
+      }
     }
 
     async pushedData (key, vehicleMessage) {
       const id = this.vehicleId();
       logger.debug('Vehicle pushedData() received id %s, key %s', id, key);
-      if (vehicleMessage && vehicleMessage.response) {
-        logger.debug('Vehicle pushedData() vehicleMessage.response.isy_nodedef %s, nodeDefId %s'
-            , vehicleMessage.response.isy_nodedef, nodeDefId);
+      if (vehicleMessage && vehicleMessage.isy_nodedef) {
+        logger.debug('Vehicle pushedData() vehicleMessage.isy_nodedef %s, nodeDefId %s'
+            , vehicleMessage.isy_nodedef, nodeDefId);
         if (key === id
-            && vehicleMessage.response.isy_nodedef != nodeDefId) {
+            && vehicleMessage.isy_nodedef != nodeDefId) {
           // process the message for this vehicle sent from a different node.
           this.processDrivers(vehicleMessage);
         }
@@ -139,18 +166,27 @@ module.exports = function(Polyglot) {
     }
 
     async onHorn() {
-      const id = this.vehicleId();
-      logger.info('HORN (%s)', this.address);
-      await this.tesla.cmdHonkHorn(id);
+      try {
+        const id = this.vehicleId();
+        logger.info('HORN (%s)', this.address);
+        await this.tesla.cmdHonkHorn(id);
+      } catch (err) {
+        logger.errorStack(err, 'Error onHorn:');
+      }
     }
 
     async onFlash() {
-      const id = this.vehicleId();
-      logger.info('FLASH (%s)', this.address);
-      await this.tesla.cmdFlashLights(id);
+      try {
+        const id = this.vehicleId();
+        logger.info('FLASH (%s)', this.address);
+        await this.tesla.cmdFlashLights(id);
+      } catch (err) {
+        logger.errorStack(err, 'Error onFlash:');
+      }
     }
 
     async onChargeSetTo(message) {
+      try {
         const id = this.vehicleId();
 
         logger.info('CHARGE_SET_TO (%s): %s', this.address,
@@ -158,6 +194,9 @@ module.exports = function(Polyglot) {
 
         await this.tesla.cmdChargeLimitSetTo(id, message.value);
         await this.queryNow();
+      } catch (err) {
+        logger.errorStack(err, 'Error onFlash:');
+      }
     }
 
     async queryNow() {
@@ -226,54 +265,62 @@ module.exports = function(Polyglot) {
       return chargingStateIndex;
     }
 
+    async queryVehicleRetry(id)
+    {
+      const MAX_RETRIES = 1;
+      for (let i = 0; i <= MAX_RETRIES; i++) {
+        try {
+          await delay(3000); // Wait another 3 seconds before trying again.
+          return { response: await this.tesla.getVehicleData(id) };
+        } catch (err) {
+          logger.debug('Vehicle.getVehicleData Retrying %d %s', i, err);
+        }
+      }
+      return {error: "Error timed out"};
+    }
+
     async queryVehicle(longPoll) {
       logger.debug('Vehicle.queryVehicle(%s)', longPoll);
       const id = this.vehicleId();
-      let vehicleData = await this.tesla.getVehicleData(id);
 
-      // check if Tesla is sleeping and sent an error code 408
-      if (vehicleData === 408) {
+      let vehicleData;
+      try {
+        vehicleData = { response: await this.tesla.getVehicleData(id) };
+      } catch (err) {
         if (longPoll) {
           // wake the car and try again
+          logger.debug('Vehicle.getVehicleData Retrying %s', err);
           await this.tesla.wakeUp(id);
-          await delay(3000); // Wait 3 seconds before trying again.
-          vehicleData = await this.tesla.getVehicleData(id);
-          if (vehicleData === 408) {
-            await delay(3000); // Wait another 3 seconds before trying again.
-            vehicleData = await this.tesla.getVehicleData(id);
-          }
+          vehicleData = await this.queryVehicleRetry(id);
+        } else {
+          vehicleData = {error: err};
         }
       }
-      if (vehicleData === 408) {
-        logger.info('API ERROR CAUGHT: %s', vehicleData);
-        return 0;
-      }
 
-      if (vehicleData) {
-        this.processDrivers(vehicleData);
+      if (vehicleData && vehicleData.response) {
+        this.processDrivers(vehicleDataresponse);
       } else {
-        logger.error('API result for getVehicleClimateState is incorrect: %o',
-            vehicleMessage);
-          this.setDriver('ERR', '1'); // Will be reported if changed
+        logger.error('API for getVehicleData failed: %s', vehicleData.error);
+        this.setDriver('ERR', '1'); // Will be reported if changed
       }
-		}
+    }
 
     processDrivers(vehicleData) {
       // Gather basic vehicle & charge state
       // (same as getVehicleData with less clutter)
       // let vehicleData = await this.tesla.getVehicle(id);
       // const chargeState = await this.tesla.getVehicleChargeState(id);
-      // vehicleData.response.charge_state = chargeState.response;
+      // vehicleData.charge_state = chargeState;
 
-      if (vehicleData && vehicleData.response &&
-        vehicleData.response.charge_state &&
-        vehicleData.response.vehicle_state &&
-        vehicleData.response.gui_settings) {
+      if (vehicleData &&
+        vehicleData.charge_state &&
+        vehicleData.vehicle_state &&
+        vehicleData.gui_settings) {
 
-        const chargeState = vehicleData.response.charge_state;
-        const vehicleState = vehicleData.response.vehicle_state;
+        const chargeState = vehicleData.charge_state;
+        const vehicleState = vehicleData.vehicle_state;
 
-        this.vehicleUOM(vehicleData.response.gui_settings);
+        this.vehicleUOM(vehicleData.gui_settings);
 
         this.setDriver('ST', chargeState.battery_level, false);
 

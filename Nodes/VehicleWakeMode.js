@@ -4,7 +4,8 @@
 // The other nodes are updated by calling the controller node on the short poll when queryVehicle() is called here.
 
 const AsyncLock = require('async-lock');
-const lock = new AsyncLock({ timeout: 10000 });
+// The lock time needs to be longer than the retry time on the wake calls.
+const lock = new AsyncLock({ timeout: 20000 });
 
 // nodeDefId must match the nodedef in the profile
 const nodeDefId = 'VEHICLEWAKEMODE';
@@ -33,7 +34,7 @@ module.exports = function(Polyglot) {
     constructor(polyInterface, primary, address, name, id) {
       super(nodeDefId, polyInterface, primary, address, name);
 
-      this.tesla = require('../lib/tesla.js')(Polyglot, polyInterface);
+      this.tesla = require('../lib/tesla_v3.js')(Polyglot, polyInterface);
 
       // PGC supports setting the node hint when creating a node
       // REF: https://github.com/UniversalDevicesInc/hints
@@ -90,15 +91,19 @@ module.exports = function(Polyglot) {
     }
 
     async setWakeMode(decodeValue) {
-      if (decodeValue) {
-        const id = this.vehicleId();
-        this.let_sleep = false;
-        this.last_wake_time = this.nowEpochToTheSecond();
-        this.setDriver('ST', 255);  // wake mode on
-        await this.tesla.wakeUp(id);
-      } else {
-        this.setLetSleep();
-        this.reportDrivers(); // Reports only changed values
+      try {
+        if (decodeValue) {
+          const id = this.vehicleId();
+          this.let_sleep = false;
+          this.last_wake_time = this.nowEpochToTheSecond();
+          this.setDriver('ST', 255);  // wake mode on
+          await this.tesla.wakeUp(id);
+        } else {
+          this.setLetSleep();
+          this.reportDrivers(); // Reports only changed values
+        }
+      } catch (err) {
+        logger.errorStack(err, 'Error setWakeMode:');
       }
     }
     
@@ -127,7 +132,7 @@ module.exports = function(Polyglot) {
             return _this.queryVehicle(longPoll);
           } else {
             logger.info('SKIPPING POLL TO LET THE VEHICLE SLEEP - ISSUE WAKE CMD TO VEHICLE TO ENABLE SHORT POLLING');
-            return _this.checkVehicleOnline();
+            _this.checkVehicleOnline();
           }
         });
       } catch (err) {
@@ -139,24 +144,31 @@ module.exports = function(Polyglot) {
     // but we want to know if the vehicle has actually gone offline
     async checkVehicleOnline() {
       const id = this.vehicleId();
-      const vehicleSummary = await this.tesla.getVehicle(id);
-      if (vehicleSummary === 408) {
+      let vehicleSummary;
+      try {
+        vehicleSummary = await this.tesla.getVehicle(id);
+        //logger.debug("checkVehicleOnline %o", vehicleSummary);
+      } catch (err) {
         this.setDriver('AWAKE', 3, true); // api not responding
-        logger.info('API ERROR CAUGHT: %s', vehicleData);
+        logger.info('API ERROR CAUGHT: %s', vehicleSummary);
         return 0;
       }
 
-      if (vehicleSummary && vehicleSummary.response && vehicleSummary.response.state) {
-        const vehicleState = vehicleSummary.response.state;
-        if (vehicleState === 'asleep') {
-          this.setDriver('AWAKE', 0, true); // car is asleep
-        } else if (vehicleState === 'online') {
-          this.setDriver('AWAKE', 1, true); // car is online
-        } else if (vehicleState === 'offline') {
-          this.setDriver('AWAKE', 2, true); // car is offline
-        } else {
-          logger.warn("VehicleWakeMode.checkVehicleOnline() unexpected state: %s", vehicleState);
-        }
+      if (vehicleSummary && vehicleSummary.state) {
+        this.updateState(vehicleSummary.state);
+      }
+    }
+
+    updateState(vehicleState) {
+      logger.debug("checkVehicleOnline %s", vehicleState);
+      if (vehicleState === 'asleep') {
+        this.setDriver('AWAKE', 0, true); // car is asleep
+      } else if (vehicleState === 'online') {
+        this.setDriver('AWAKE', 1, true); // car is online
+      } else if (vehicleState === 'offline') {
+        this.setDriver('AWAKE', 2, true); // car is offline
+      } else {
+        logger.warn("VehicleWakeMode.checkVehicleOnline() unexpected state: %s", vehicleState);
       }
     }
 
@@ -216,43 +228,63 @@ module.exports = function(Polyglot) {
 
     }
 
-    async queryVehicle(longPoll) {
-      const id = this.vehicleId();
-      let vehicleData = await this.tesla.getVehicleData(id);
-
-      // check if Tesla is sleeping and sent an error code 408
-      if (vehicleData === 408) {
-        if (longPoll) {
-          // wake the car and try again
-          await this.tesla.wakeUp(id);
-          await delay(3000); // Wait 3 seconds before trying again.
-          vehicleData = await this.tesla.getVehicleData(id);
+    // If the retry time is increased, the lock timeout also needs to be increased.
+    async queryVehicleRetry(id, delayTime)
+    {
+      const MAX_RETRIES = 2;
+      for (let i = 0; i <= MAX_RETRIES; i++) {
+        try {
+          await delay(delayTime);
+          return { response: await this.tesla.getVehicleData(id) };
+        } catch (err) {
+          logger.debug('VehicleWakeMode.getVehicleData Retrying %d %s', i, err);
         }
       }
-      if (vehicleData === 408) {
+      return {error: "Error timed out"};
+    }
+
+    async queryVehicle(longPoll) {
+      const id = this.vehicleId();
+
+      let vehicleData;
+      try {
+        vehicleData = { response: await this.tesla.getVehicleData(id) };
+      } catch (err) {
+        // wake the car and try again
+        if (longPoll) {
+          logger.debug('VehicleWakeMode.getVehicleData Retrying %s', err);
+          await this.tesla.wakeUp(id);
+          vehicleData = await this.queryVehicleRetry(id, 5000);
+        } else {
+          vehicleData = {error: err};
+        }
+      }
+
+      if (vehicleData.error) {
         this.setDriver('AWAKE', 3); // the car API is not responding
         this.setDriver('ERR', '1'); // Will be reported if changed
-        logger.info('API ERROR CAUGHT: %s', vehicleData);
+        logger.info('API ERROR CAUGHT: %s', vehicleData.error);
         return 0;
       }
 
       if (vehicleData && vehicleData.response) {
-        this.processDrivers(vehicleData);
+        this.processDrivers(vehicleData.response);
       } else {
         logger.error('API result for getVehicleData is incorrect: %o',
-            vehicleMessage);
+            vehicleData.error);
           this.setDriver('ERR', '1'); // Will be reported if changed
       }
-
     }
 
     processDrivers(vehicleData) {
       logger.debug('VehicleWakeMode processDrivers');
       // Gather basic vehicle climate data
-      if (vehicleData && vehicleData.response) {
+      if (vehicleData) {
+
+        this.updateState(vehicleData.state);
 
         // Forward the vehicleData to the other nodes so they also update.
-        vehicleData.response.isy_nodedef = nodeDefId;
+        vehicleData.isy_nodedef = nodeDefId;
         this.updateOtherNodes(vehicleData);
 
         if (this.let_sleep) {
@@ -268,7 +300,7 @@ module.exports = function(Polyglot) {
         this.reportDrivers(); // Reports only changed values
       } else {
         logger.error('API result for getVehicleData is incorrect: %o',
-          climateData);
+            vehicleData);
         this.setDriver('ERR', '1'); // Will be reported if changed
       }
     }
