@@ -181,9 +181,9 @@ poly.on('mqttEnd', function() {
 // Can be used for troubleshooting.
 poly.on('messageReceived', function(message) {
   // Only display messages other than config
-  // if (!message['config']) {
-  //   logger.debug('Message: %o', message);
-  // }
+   if (!message['config']) {
+     logger.debug('Message: %o', message);
+   }
 });
 
 // Triggered for every message received from polyglot.
