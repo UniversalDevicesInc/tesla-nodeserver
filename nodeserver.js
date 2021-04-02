@@ -12,7 +12,7 @@ const Polyglot = useCloud() ?
   require('polyinterface'); // Polyglot V2 module (On-Premise)
 
 const logger = Polyglot.logger;
-const lock = new AsyncLock({ timeout: 500 });
+const lock = new AsyncLock({ timeout: 20000 });
 
 const ControllerNode = require('./Nodes/ControllerNode.js')(Polyglot);
 const Vehicle = require('./Nodes/Vehicle.js')(Polyglot);
