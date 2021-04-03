@@ -1,5 +1,8 @@
 # Change Log
 
+V3.0.1 (2021-04-01)
+* Fixed login issues on cloud
+
 V3.0.0 (2021-03-27)
 * Support for Tesla AUTH 3
 * Support for Tesla Multi Factor Authentication
