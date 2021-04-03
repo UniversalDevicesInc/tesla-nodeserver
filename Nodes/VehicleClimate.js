@@ -84,7 +84,7 @@ module.exports = function(Polyglot) {
       for (let i = 0; i <= MAX_RETRIES; i++) {
         try {
           await delay(3000); // Wait 3 seconds before trying again.
-          return await {response: this.tesla.getVehicleGuiSettings(id) };
+          return {response: await this.tesla.getVehicleGuiSettings(id) };
         } catch (err) {
           logger.debug('VehicleClimate.initializeUOMRetry Retrying', err, i);
         }
