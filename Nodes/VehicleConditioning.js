@@ -159,7 +159,7 @@ module.exports = function(Polyglot) {
           await this.tesla.wakeUp(id);
           climateData = await queryVehicleClimateStateRetry(id);
         } else {
-          logger.info('VehicleConditioning.queryVehicle() API ERROR CAUGHT: %s', climateData);
+          logger.info('VehicleConditioning.queryVehicle() API ERROR CAUGHT: %s', err);
           return 0;
         }
       }

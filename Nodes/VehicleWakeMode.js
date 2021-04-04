@@ -150,7 +150,7 @@ module.exports = function(Polyglot) {
         //logger.debug("checkVehicleOnline %o", vehicleSummary);
       } catch (err) {
         this.setDriver('AWAKE', 3, true); // api not responding
-        logger.info('VehicleWakeMode.getVehicle() API ERROR CAUGHT: %s', vehicleSummary);
+        logger.info('VehicleWakeMode.getVehicle() API ERROR CAUGHT: %s', err);
         return 0;
       }
 

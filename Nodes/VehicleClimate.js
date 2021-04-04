@@ -405,7 +405,7 @@ module.exports = function(Polyglot) {
           await this.tesla.wakeUp(id);
           vehicleData = await this.queryVehicleRetry(id);
         } else {
-          logger.info('VehicleClimate.getVehicleData() API ERROR CAUGHT: %s', vehicleData);
+          logger.info('VehicleClimate.getVehicleData() API ERROR CAUGHT: %s', err);
           return 0;
         }
       }
