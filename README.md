@@ -35,7 +35,7 @@ Go to Nodeservers|Nodeserver Store, and add the Tesla Nodeserver.
 6. As of version 2.1.0 the ability to enable/disable the security commands.  By default "Enable Security Commands" is set to false.
 7. As of version 2.1.0 a configuration value to change the logging level to help in debugging.
 8. As of 2.2.0 the long poll is used to limit the "wake" period.  The Query command may be used to refresh the nodes independent of the wake status.
-9. As of 3.0.0, Multi-Factor Authentication is required on the Tesla account
+9. As of 3.0.0, Multi-Factor Authentication is available and optional on the Tesla account
 
 Note that when setting up your Tesla account, you may add up to two Multi-Factor Authentication devices.  If you have more than one device they are named.  In the nodeserver configuration, specifying the name of the device is optional but will need to be specified if you have more than one device registered. The Multi-Factor Device name should be entered in the nodeserver configuration along with the generated passcode.  The passcodes are time limited so it is best to enter the passcode last before saving the configuration.  Also, the best practice is to enter the passcode right after it changes to give the system time to save and use the passcode before it expires. 
 

@@ -155,11 +155,11 @@ module.exports = function(Polyglot) {
       } catch (err) {
         if (longPoll) {
           // wake the car and try again
-          logger.debug('VehicleClimate.getVehicleData Retrying %s', err);
+          logger.debug('VehicleConditioning.getVehicleClimateState Retrying %s', err);
           await this.tesla.wakeUp(id);
           climateData = await queryVehicleClimateStateRetry(id);
         } else {
-          logger.info('API ERROR CAUGHT: %s', climateState);
+          logger.info('VehicleConditioning.queryVehicle() API ERROR CAUGHT: %s', err);
           return 0;
         }
       }

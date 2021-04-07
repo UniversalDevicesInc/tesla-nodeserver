@@ -2,7 +2,7 @@
 // This is the charging node for the vehicle.
 
 const AsyncLock = require('async-lock');
-const lock = new AsyncLock({ timeout: 15000 });
+const lock = new AsyncLock({ timeout: 20000 });
 
 // nodeDefId must match the nodedef in the profile
 const nodeDefId = 'VEHICLE';
@@ -75,11 +75,11 @@ module.exports = function(Polyglot) {
 
     async initializeUOMRetry(id)
     {
-      const MAX_RETRIES = 1;
+      const MAX_RETRIES = 2;
       for (let i = 0; i <= MAX_RETRIES; i++) {
         try {
-          await delay(3000); // Wait 3 seconds before trying again.
-          return await {response: this.tesla.getVehicleGuiSettings(id)};
+          await delay(5000); // Wait 5 seconds before trying again.
+          return {response: await this.tesla.getVehicleGuiSettings(id)};
         } catch (err) {
           logger.debug('Vehicle.initializeUOMRetry Retrying %d %s', i, err);
         }
@@ -93,8 +93,7 @@ module.exports = function(Polyglot) {
       try {
         vehicleGuiSettings = {response: await this.tesla.getVehicleGuiSettings(id)};
       } catch (err) {
-        await this.tesla.wakeUp(id);
-        vehicleGuiSettings = await this.initializeUOMRetry(id);
+        vehicleGuiSettings = await this.wakeupAndRetry(id);
       }
 
       if (vehicleGuiSettings && vehicleGuiSettings.response) {
@@ -111,6 +110,15 @@ module.exports = function(Polyglot) {
         logger.error('Vehicle.initializeUOM() %s', vehicleGuiSettings.error);
       }
       logger.info('Vehicle.initializeUOM() done');
+    }
+    
+    async wakeupAndRetry(id) {
+      try {
+        await this.tesla.wakeUp(id);
+      } catch (err) {
+        logger.error('Vehicle.wakeupAndRetry() %s', err);
+      }
+      return await this.initializeUOMRetry(id);
     }
 
     // The id is stored in GV20
@@ -230,7 +238,8 @@ module.exports = function(Polyglot) {
 
     vehicleUOM(guisettings) {
 	    // this will take the units set from the Tesla GUI in the vehicle
-      // and we'll use that to match what is displayed by the nodeserver 
+      // and we'll use that to match what is displayed by the nodeserver
+      logger.debug('Vehicle.vehidleUOM() guisettings %o', guisettings);
 	    if (guisettings.gui_distance_units) {
 	      if (guisettings.gui_distance_units.includes('mi')) {
 	        this.distance_uom = 'mi';
